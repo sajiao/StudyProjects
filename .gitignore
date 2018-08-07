@@ -1,0 +1,15 @@
+!*.exe
+!*.dll
+!*.ide
+
+DotNet/packages/*
+DotNet/.vs/*
+DotNet/DotNet/bin
+DotNet/DotNet/obj
+DotNet/DotNet.Common/bin
+DotNet/DotNet.Common/obj
+DotNet/Entities/bin
+DotNet/Entities/obj
+DotNet/TestApp/bin
+DotNet/TestApp/obj
+
