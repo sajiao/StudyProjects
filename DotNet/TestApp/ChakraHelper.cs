@@ -8,13 +8,13 @@ namespace TestApp
 {
     public static class ChakraHelper
     {
-        public static ChakraContext CreateChakra()
-        {
+        //public static ChakraContext CreateChakra()
+        //{
 
-            ChakraRuntime runtime = ChakraRuntime.Create();
-            ChakraContext context = runtime.CreateContext(true);
+        //    ChakraRuntime runtime = ChakraRuntime.Create();
+        //    ChakraContext context = runtime.CreateContext(true);
 
-            return context;
-        }
+        //    return context;
+        //}
     }
 }
