@@ -178,5 +178,35 @@ namespace DotNet.Common
             return string.Empty;
         }
 
+
+        /// <summary>
+        /// 将字符串分割为数字集合,默认是","
+        /// </summary>
+        /// <param name="s">要分割的字符串,格式为：value1,value2</param>
+        /// <returns>分割之后的数字集合</returns>
+        public static List<Int32> SplitToList(this String s, char split = ',')
+        {
+            try
+            {
+                if (String.IsNullOrWhiteSpace(s) == false)
+                {
+                    String[] nums = s.Split(split);
+                   var  tempList = new List<Int32>(nums.Length);
+                    foreach (var item in nums)
+                    {
+                        if (String.IsNullOrWhiteSpace(item) == false)
+                            tempList.Add(Convert.ToInt32(item));
+                    }
+                    return tempList;
+                }
+
+                return new List<Int32>();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message + "  s:" + s, ex);
+            }
+        }
+
     }
 }

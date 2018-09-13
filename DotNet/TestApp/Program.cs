@@ -24,8 +24,21 @@ namespace TestApp
             //Console.WriteLine(nameof(str));
             //(var a, var b, var c) = GetTest();
             //Console.WriteLine(a +" " + b + " "+ c);
+            setData();
+            foreach (var item in mData)
+            {
+                Console.WriteLine(item.Num + " score: " + item.RankScore);
+            }
+
+            
+            Console.ReadLine();
+
+        }
+
+        private static void setData()
+        {
             mData = new List<RebelRank>();
-            mData.Add(new RebelRank() { Num = 1, RankScore = 200});
+            mData.Add(new RebelRank() { Num = 1, RankScore = 200 });
             mData.Add(new RebelRank() { Num = 2, RankScore = 199 });
             mData.Add(new RebelRank() { Num = 3, RankScore = 100 });
             mData.Add(new RebelRank() { Num = 4, RankScore = 100 });
@@ -34,14 +47,8 @@ namespace TestApp
             mData.Add(new RebelRank() { Num = 7, RankScore = 30 });
             mData.Add(new RebelRank() { Num = 8, RankScore = 10 });
             AddRank(new RebelRank() { Num = 0, RankScore = 10 });
-            foreach (var item in mData)
-            {
-                Console.WriteLine(item.Num +" score: "+ item.RankScore);
-            }
-          
-            Console.ReadLine();
-
         }
+
         private static List<RebelRank> mData = null;
 
         private static void AddRank(RebelRank req)

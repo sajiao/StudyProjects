@@ -29,6 +29,11 @@ namespace DotNet.Common
             return source != null && source.Count > 0;
         }
 
+        public static bool IsNullOrEmpty<T>(this List<T> source)
+        {
+            return source == null || source.Count == 0;
+        }
+
         public static string StringConvertToStrings(this List<String> source, string format)
         {
             if (source != null && source.Count > 0)
@@ -40,6 +45,7 @@ namespace DotNet.Common
                 return string.Empty;
             }
         }
+
 
     }
 }
