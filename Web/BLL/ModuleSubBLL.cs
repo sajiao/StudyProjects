@@ -2,12 +2,13 @@
 using Entities.DB;
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace BLL
 {
-    public class ModuleBLL: DbContext, IInits
+    public class ModuleSubBLL : DbContext, IInits
     {
-        private static Dictionary<int, DBModule> mDict = null;
+        private static Dictionary<int, DBModuleSub> mDict = null;
 
         public void Init()
         {
@@ -15,7 +16,7 @@ namespace BLL
 
             if (all != null && all.Count > 0)
             {
-                mDict = new Dictionary<int, DBModule>(all.Count);
+                mDict = new Dictionary<int, DBModuleSub>(all.Count);
                 foreach (var item in all)
                 {
                     mDict[item.Id] = item;
@@ -23,11 +24,11 @@ namespace BLL
             }
             else
             {
-                mDict = new Dictionary<int, DBModule>();
+                mDict = new Dictionary<int, DBModuleSub>();
             }
         }
 
-        private static DBModule GetItem(int id)
+        private static DBModuleSub GetItem(int id)
         {
             if (mDict.ContainsKey(id))
             {
@@ -37,34 +38,34 @@ namespace BLL
             return null;
         }
 
-        public static DBModule GetById(int id)
+        public static DBModuleSub GetById(int id)
         {
             return GetItem(id);
         }
 
-        public static List<DBModule> GetAll()
-        {
-           var dbContext = new DbContext();
-           return dbContext.ModuleDb.GetList();
-        }
-
-        public static DBModule Insert(DBModule param)
+        public static List<DBModuleSub> GetAll()
         {
             var dbContext = new DbContext();
-            var id = dbContext.ModuleDb.InsertReturnIdentity(param);
+            return dbContext.ModuleSubDb.GetList();
+        }
+
+        public static DBModuleSub Insert(DBModuleSub param)
+        {
+            var dbContext = new DbContext();
+            var id = dbContext.ModuleSubDb.InsertReturnIdentity(param);
             return GetById(id);
         }
 
-        public static DBModule Update(DBModule param)
+        public static DBModuleSub Update(DBModuleSub param)
         {
             var dbContext = new DbContext();
-            dbContext.ModuleDb.Update(param);
+            dbContext.ModuleSubDb.Update(param);
             return GetById(param.Id);
         }
         public static bool Delete(int id)
         {
             var dbContext = new DbContext();
-            return dbContext.ModuleDb.DeleteById(id);
+            return dbContext.ModuleSubDb.DeleteById(id);
         }
     }
 }

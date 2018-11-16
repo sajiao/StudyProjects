@@ -13,7 +13,6 @@ namespace Web.Controllers
     [ApiController]
     public class RefreshInitController : BaseController
     {
-        // GET api/values/5
         [HttpGet("{name}")]
         public ResponseResult Get(string name)
         {
