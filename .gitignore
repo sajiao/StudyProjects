@@ -15,6 +15,7 @@ DotNet/TestApp/obj
 
 Web/packages/*
 Web/.vs/*
+Web/Web/appsettings.json
 Web/Web/bin
 Web/Web/obj
 Web/DotNet.Common/bin
@@ -25,4 +26,5 @@ Web/Biz/bin
 Web/Biz/obj
 Web/DAL/bin
 Web/DAL/obj
+
 
