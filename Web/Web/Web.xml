@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Web</name>
+    </assembly>
+    <members>
+        <member name="T:Web.Filters.CustomExceptionFilterAttribute">
+            <summary>
+            项目异常处理器
+            </summary>
+        </member>
+        <member name="T:Web.Filters.ModelIsValidFilter">
+            <summary>
+            项目参数校验处理器
+            </summary>
+        </member>
+    </members>
+</doc>

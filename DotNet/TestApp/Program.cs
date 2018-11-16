@@ -1,4 +1,5 @@
-﻿using Fleck;
+﻿using DotNet.Common;
+using Fleck;
 using ProtoBuf;
 using System;
 using System.Collections.Generic;
@@ -30,7 +31,9 @@ namespace TestApp
                 Console.WriteLine(item.Num + " score: " + item.RankScore);
             }
 
-            
+            string str = "1,2,3";
+            str = str.Append("4");
+            Console.WriteLine(str);
             Console.ReadLine();
 
         }

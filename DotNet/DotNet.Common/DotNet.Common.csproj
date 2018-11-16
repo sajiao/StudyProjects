@@ -63,6 +63,7 @@
     <Compile Include="Helper\FileHelper.cs" />
     <Compile Include="Helper\ObjectXmlSerializer.cs" />
     <Compile Include="Helper\RandomHelper.cs" />
+    <Compile Include="Helper\ReflectionHelper.cs" />
     <Compile Include="Helper\StringHelper.cs" />
     <Compile Include="Helper\TaskParallelHelper.cs" />
     <Compile Include="Helper\WebRequestHelper.cs" />

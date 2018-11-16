@@ -9,6 +9,25 @@ namespace DotNet.Common
 {
    public static class StringExtenstions
     {
+        /// <summary>
+        /// 追加字符串
+        /// </summary>
+        /// <param name="s"></param>
+        /// <param name="format">分割符号</param>
+        /// <returns></returns>
+        public static String Append(this String s, string str, char format = ',')
+        {
+            try
+            {
+                s += format.ToString() + str;
+                return s.Trim(format);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message + "  s:" + s + "; str:" + str, ex);
+            }
+        }
+
         public static bool IsNumerics(this string source)
         {
             if (!string.IsNullOrEmpty(source) && Regex.IsMatch(source, @"^[\+\-]?\d*([\.]\d+)?$"))
