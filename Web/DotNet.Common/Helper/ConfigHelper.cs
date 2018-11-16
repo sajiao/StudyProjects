@@ -1,15 +1,18 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using System;
+using System.Configuration;
 using System.IO;
 
 namespace DotNet.Common
 {
-    public class ConfigurationUtil
+   public static  class ConfigHelper
     {
         public static readonly IConfiguration Configuration;
 
-        static ConfigurationUtil()
+        static ConfigHelper()
         {
             Configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())

@@ -22,8 +22,8 @@ Web/DotNet.Common/bin
 Web/DotNet.Common/obj
 Web/Entities/bin
 Web/Entities/obj
-Web/Biz/bin
-Web/Biz/obj
+Web/BLL/bin
+Web/BLL/obj
 Web/DAL/bin
 Web/DAL/obj
 

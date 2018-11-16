@@ -9,9 +9,10 @@ using System.Linq.Expressions;
 
 namespace DAL
 {
+
     public class DB
     {
-        private static string dbConnection = ConfigurationUtil.GetSection("DBConnection");
+        internal static string dbConnection = ConfigHelper.GetSection("DBConnection");
 
         static DB()
         {

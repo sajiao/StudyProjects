@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Biz\Biz.csproj" />
+    <ProjectReference Include="..\BLL\BLL.csproj" />
     <ProjectReference Include="..\DotNet.Common\DotNet.Common.csproj" />
     <ProjectReference Include="..\Entities\Entities.csproj" />
   </ItemGroup>

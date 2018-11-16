@@ -9,13 +9,13 @@ namespace Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ModuleController : ControllerBase
+    public class ModuleController : BaseController
     {
         // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<DBModule>> Get()
         {
-            return Biz.Module.GetList();
+            return BLL.ModuleBLL.GetAll();
         }
 
         // GET api/values/5
@@ -29,7 +29,7 @@ namespace Web.Controllers
         [HttpPost]
         public DBModule Post([FromBody]DBModule value)
         {
-           return Biz.Module.Insert(value);
+           return BLL.ModuleBLL.Insert(value);
         }
 
         // PUT api/values/5
