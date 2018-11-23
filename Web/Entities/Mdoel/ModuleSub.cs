@@ -1,9 +1,9 @@
 ﻿using SqlSugar;
 
-namespace Entities.DB
+namespace Entities
 {
     [SugarTable("ModuleSub", "子模块")]
-    public class DBModuleSub
+    public class ModuleSub
     {
         [SugarColumn(IsNullable = false, IsPrimaryKey = true, IsIdentity = true)]
         public int Id { get; set; }

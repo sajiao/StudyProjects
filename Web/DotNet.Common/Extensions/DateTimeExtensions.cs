@@ -9,6 +9,18 @@ namespace DotNet.Common.Extensions
 {
   public static  class DateTimeExtensions
     {
+        /// <summary>
+        /// 是否在输入时间之间(包含开始结束)
+        /// </summary>
+        /// <param name="thisValue">待比较时间</param>
+        /// <param name="begin">开始</param>
+        /// <param name="end">结束</param>
+        /// <returns>包含返回true,不包含返回false</returns>
+        public static bool IsInRange(this DateTime thisValue, DateTime begin, DateTime end)
+        {
+            return thisValue >= begin && thisValue <= end;
+        }
+
         public static string ToFormatString(this DateTime source)
         {
             if (source == DateTime.MinValue) return string.Empty;
@@ -136,8 +148,6 @@ namespace DotNet.Common.Extensions
             return (n % 400 == 0) || (n % 4 == 0 && n % 100 != 0);
         }
         #endregion
-
-
 
         private static string GetDayOfWeek(DayOfWeek dayOfWeek, bool isChinese)
         {

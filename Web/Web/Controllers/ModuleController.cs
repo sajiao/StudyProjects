@@ -2,22 +2,33 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Entities.DB;
+using Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    /// <summary>
+    /// 模块接口
+    /// </summary>
+    [Produces("application/json")]
+    [Route("api/module")]
     public class ModuleController : BaseController
     {
-        // GET api/values
+        /// <summary>
+        /// 获取模块接口
+        /// </summary>
+        /// <returns>操作结果</returns>
         [HttpGet]
-        public ActionResult<IEnumerable<DBModule>> Get()
+        public ResponseResult Get()
         {
-            return BLL.ModuleBLL.GetAll();
+            return new ResponseResult(0,"", BLL.ModuleBLL.GetAll()) ;
         }
 
+        /// <summary>
+        /// 获取模块接口
+        /// </summary>
+        /// <param name="id">id</param>
+        /// <returns>操作结果</returns>
         // GET api/values/5
         [HttpGet("{id}")]
         public ActionResult<string> Get(int id)
@@ -25,20 +36,31 @@ namespace Web.Controllers
             return "value";
         }
 
+        /// <summary>
+        /// Post模块接口
+        /// </summary>
+        /// <param name="value">value</param>
+        /// <returns>操作结果</returns>
         // POST api/values
         [HttpPost]
-        public DBModule Post([FromBody]DBModule value)
+        public Module Post([FromBody]Module value)
         {
-           return BLL.ModuleBLL.Insert(value);
+            return BLL.ModuleBLL.Insert(value);
         }
 
-        // PUT api/values/5
+        /// <summary>
+        /// Put模块接口
+        /// </summary>
+        /// <param name="value">value</param>
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public void Put([FromBody] Module value)
         {
         }
 
-        // DELETE api/values/5
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <param name="id">id</param>
         [HttpDelete("{id}")]
         public void Delete(int id)
         {

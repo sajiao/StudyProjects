@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using SqlSugar;
 
-namespace Entities.DB
+namespace Entities
 {
     [SugarTable("Module", "模块表")]
-    public class DBModule
+    public class Module
     {
         [SugarColumn(IsNullable = false, IsPrimaryKey = true, IsIdentity = true)]
         public int Id { get; set; }

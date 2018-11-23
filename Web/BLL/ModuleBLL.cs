@@ -1,5 +1,5 @@
 ﻿using DAL;
-using Entities.DB;
+using Entities;
 using System;
 using System.Collections.Generic;
 
@@ -7,7 +7,7 @@ namespace BLL
 {
     public class ModuleBLL: DbContext, IInits
     {
-        private static Dictionary<int, DBModule> mDict = null;
+        private static Dictionary<int, Module> mDict = null;
 
         public void Init()
         {
@@ -15,7 +15,7 @@ namespace BLL
 
             if (all != null && all.Count > 0)
             {
-                mDict = new Dictionary<int, DBModule>(all.Count);
+                mDict = new Dictionary<int, Module>(all.Count);
                 foreach (var item in all)
                 {
                     mDict[item.Id] = item;
@@ -23,11 +23,11 @@ namespace BLL
             }
             else
             {
-                mDict = new Dictionary<int, DBModule>();
+                mDict = new Dictionary<int, Module>();
             }
         }
 
-        private static DBModule GetItem(int id)
+        private static Module GetItem(int id)
         {
             if (mDict.ContainsKey(id))
             {
@@ -37,25 +37,25 @@ namespace BLL
             return null;
         }
 
-        public static DBModule GetById(int id)
+        public static Module GetById(int id)
         {
             return GetItem(id);
         }
 
-        public static List<DBModule> GetAll()
+        public static List<Module> GetAll()
         {
            var dbContext = new DbContext();
            return dbContext.ModuleDb.GetList();
         }
 
-        public static DBModule Insert(DBModule param)
+        public static Module Insert(Module param)
         {
             var dbContext = new DbContext();
             var id = dbContext.ModuleDb.InsertReturnIdentity(param);
             return GetById(id);
         }
 
-        public static DBModule Update(DBModule param)
+        public static Module Update(Module param)
         {
             var dbContext = new DbContext();
             dbContext.ModuleDb.Update(param);

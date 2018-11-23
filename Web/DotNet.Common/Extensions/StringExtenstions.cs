@@ -10,6 +10,17 @@ namespace DotNet.Common
    public static class StringExtenstions
     {
         /// <summary>
+        /// 当前值是否包含输入参数
+        /// </summary>
+        /// <param name="thisValue">当前值</param>
+        /// <param name="inValues">输入参数</param>
+        /// <returns>任意包含返回true,不包含返回false</returns>
+        public static bool IsContainsIn(this string thisValue, params string[] inValues)
+        {
+            return inValues.Any(it => thisValue.Contains(it));
+        }
+
+        /// <summary>
         /// 追加字符串
         /// </summary>
         /// <param name="s"></param>

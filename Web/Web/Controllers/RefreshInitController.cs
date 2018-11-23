@@ -9,10 +9,17 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    /// <summary>
+    /// 刷新模块接口
+    /// </summary>
+    [Route("api/refreshinit")]
     public class RefreshInitController : BaseController
     {
+        /// <summary>
+        /// 刷新
+        /// </summary>
+        /// <param name="name">名称</param>
+        /// <returns>操作结果</returns>
         [HttpGet("{name}")]
         public ResponseResult Get(string name)
         {

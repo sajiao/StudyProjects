@@ -1,4 +1,4 @@
-﻿using Entities.DB;
+﻿using Entities;
 using SqlSugar;
 using System;
 using System.Collections.Generic;
@@ -21,8 +21,10 @@ namespace DAL
 
         public SqlSugarClient Db;//用来处理事务多表查询和复杂的操作
 
-        public DbSet<DBModuleSub> ModuleSubDb { get { return new DbSet<DBModuleSub>(Db); } }
+        public DbSet<ModuleSub> ModuleSubDb { get { return new DbSet<ModuleSub>(Db); } }
 
-        public DbSet<DBModule> ModuleDb { get { return new DbSet<DBModule>(Db); } }
+        public DbSet<Module> ModuleDb { get { return new DbSet<Module>(Db); } }
+
+        public DbSet<Article> ArticleDb { get { return new DbSet<Article>(Db); } }
     }
 }

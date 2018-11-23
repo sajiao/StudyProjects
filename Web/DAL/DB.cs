@@ -1,6 +1,5 @@
 ﻿using DotNet.Common;
 using Entities;
-using Entities.DB;
 using SqlSugar;
 using System;
 using System.Collections.Generic;
@@ -23,7 +22,7 @@ namespace DAL
                 IsAutoCloseConnection = true,//自动释放数据务，如何存在事务，在事务结束后释放
                 InitKeyType = InitKeyType.Attribute //初始化主键和自增列信息到ORM的方式 codefirst
             });
-            db.CodeFirst.BackupTable().InitTables(typeof(DBModule), typeof(DBModuleSub));
+            db.CodeFirst.InitTables(typeof(Module), typeof(ModuleSub), typeof(Article), typeof(User));
         }
 
         protected static SqlSugarClient GetDB()

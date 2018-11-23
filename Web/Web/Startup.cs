@@ -5,6 +5,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Web.Filters;
 using Swashbuckle.AspNetCore.Swagger;
 using System.IO;
+using System.Reflection;
+using System;
+using Web.Middleware;
 
 namespace Web
 {
@@ -21,6 +24,8 @@ namespace Web
         public void ConfigureServices(IServiceCollection services)
         {
             //services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddTransient<StopWatch>();
 
             services.AddMvc(options =>
             {
@@ -43,13 +48,14 @@ namespace Web
                     Contact = new Contact()
                     {
                         Name = "eleven yi",
-                        Email = ""
                     },
                 });
 
                 //设置xml文件路径
-                var basePath = Path.GetDirectoryName(typeof(Program).Assembly.Location);
-                var xmlPath = Path.Combine(basePath, "web.xml");
+                //var basePath = Path.GetDirectoryName(typeof(Program).Assembly.Location);
+                //var xmlPath = Path.Combine(basePath, "web.xml");
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
             });
 
@@ -64,12 +70,14 @@ namespace Web
             }
 
             app.UseSwagger();
+           
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "web api v1");
                 //c.RoutePrefix = string.Empty;
             });
-
+            app.UseMiddleware<TimeMiddleware>();
+            // app.UseMiddleware<TimeMiddleware>(new StopWatch()); //也可以不把StopWatch添加到依赖注入容器中，而是在UserMiddleware方法中直接给出参数。
             app.UseMvc();
         }
     }

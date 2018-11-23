@@ -1,5 +1,5 @@
 ﻿using DAL;
-using Entities.DB;
+using Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,7 +8,7 @@ namespace BLL
 {
     public class ModuleSubBLL : DbContext, IInits
     {
-        private static Dictionary<int, DBModuleSub> mDict = null;
+        private static Dictionary<int, ModuleSub> mDict = null;
 
         public void Init()
         {
@@ -16,7 +16,7 @@ namespace BLL
 
             if (all != null && all.Count > 0)
             {
-                mDict = new Dictionary<int, DBModuleSub>(all.Count);
+                mDict = new Dictionary<int, ModuleSub>(all.Count);
                 foreach (var item in all)
                 {
                     mDict[item.Id] = item;
@@ -24,11 +24,11 @@ namespace BLL
             }
             else
             {
-                mDict = new Dictionary<int, DBModuleSub>();
+                mDict = new Dictionary<int, ModuleSub>();
             }
         }
 
-        private static DBModuleSub GetItem(int id)
+        private static ModuleSub GetItem(int id)
         {
             if (mDict.ContainsKey(id))
             {
@@ -38,25 +38,25 @@ namespace BLL
             return null;
         }
 
-        public static DBModuleSub GetById(int id)
+        public static ModuleSub GetById(int id)
         {
             return GetItem(id);
         }
 
-        public static List<DBModuleSub> GetAll()
+        public static List<ModuleSub> GetAll()
         {
             var dbContext = new DbContext();
             return dbContext.ModuleSubDb.GetList();
         }
 
-        public static DBModuleSub Insert(DBModuleSub param)
+        public static ModuleSub Insert(ModuleSub param)
         {
             var dbContext = new DbContext();
             var id = dbContext.ModuleSubDb.InsertReturnIdentity(param);
             return GetById(id);
         }
 
-        public static DBModuleSub Update(DBModuleSub param)
+        public static ModuleSub Update(ModuleSub param)
         {
             var dbContext = new DbContext();
             dbContext.ModuleSubDb.Update(param);
