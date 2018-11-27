@@ -20,6 +20,12 @@ namespace DotNet.Common
             return inValues.Any(it => thisValue.Contains(it));
         }
 
+        public static bool IsEqual(this string thisValue, params string[] inValues)
+        {
+            var result =  inValues.Any(it => thisValue.EqualsCurrentCultureIgnoreCase(it.TryTrim()));
+            return result;
+        }
+
         /// <summary>
         /// 追加字符串
         /// </summary>

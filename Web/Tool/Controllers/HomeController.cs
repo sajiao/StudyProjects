@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using Tool.Models;
+using DotNet.Common;
+using System.Text;
 
 namespace Tool.Controllers
 {
@@ -18,6 +20,7 @@ namespace Tool.Controllers
     {
         private readonly IHostingEnvironment _hostingEnvironment;
 
+        private static string uploadFolder = "";
         public HomeController(IHostingEnvironment hostingEnvironment)
         {
             _hostingEnvironment = hostingEnvironment;
@@ -58,17 +61,17 @@ namespace Tool.Controllers
             long size = data.Sum(f => f.Length);
             string webRootPath = _hostingEnvironment.WebRootPath;
             string contentRootPath = _hostingEnvironment.ContentRootPath;
-            List<string> filesName = null;
+            List<string> filesName = new List<string>();
+            uploadFolder = webRootPath + "/upload/";
             foreach (var formFile in data)
             {
-                filesName = new List<string>(data.Count);
                 if (formFile.Length > 0)
                 {
                     string fileExt = formFile.FileName; //文件扩展名，不含“.”
                     long fileSize = formFile.Length; //获得文件大小，以字节为单位
                     string newFileName = System.Guid.NewGuid().ToString() + "." + fileExt; //随机生成新的文件名
                     filesName.Add(newFileName);
-                    var filePath = webRootPath + "/upload/" + newFileName;
+                    var filePath = uploadFolder + newFileName;
                     using (var stream = new FileStream(filePath, FileMode.Create))
                     {
                         await formFile.CopyToAsync(stream);
@@ -87,19 +90,204 @@ namespace Tool.Controllers
 
         public async void DoTask(List<string> filesName)
         {
-            if (filesName == null)
+            try
             {
-                return;
+                if (filesName == null)
+                {
+                    return;
+                }
+
+                DataTable dtDetail = null;
+                DataTable dtMapping = null;
+
+                List<AmountForMapping> mapping = null;
+
+                List<MappingDetail> mappingDetail = null;
+
+                foreach (var name in filesName)
+                {
+                    var filePath = uploadFolder + name;
+                    var dt = OfficeHelper.ReadExcelToDataTable(filePath);
+                    if (dt.Rows[0] == null)
+                    {
+                        break;
+                    }
+
+                    if (dt.Columns[0].ToString().Contains("Cash inDate"))
+                    {
+                        dtMapping = dt;
+                        mapping = new List<AmountForMapping>(dtMapping.Rows.Count);
+                        for (int i = 0; i < dtMapping.Rows.Count; i++)
+                        {
+                            var row = dtMapping.Rows[i];
+                            var temp = new AmountForMapping()
+                            {
+                                Id = row["Id"].ToString().TryToInt(),
+                                CashInDate = row["Cash inDate"].ToString().TryTrim(),
+                                TotalAmount = row["Total Amount"].ToString().TryToDecimal(),
+                                ByBatchAmount = row["By BatchAmount"].ToString().TryToDecimal(),
+                                SapCo = row["SAP Co"].ToString().TryTrim(),
+                                Term = row["Term"].ToString().TryTrim(),
+                                WBS = row["WBS"].ToString().TryTrim(),
+                            };
+                            mapping.Add(temp);
+                        }
+                    }
+                    else
+                    {
+                        dtDetail = dt;
+                        mappingDetail = new List<MappingDetail>(dtDetail.Rows.Count);
+                        for (int i = 0; i < dtDetail.Rows.Count; i++)
+                        {
+                            var row = dtDetail.Rows[i];
+                            var temp = new MappingDetail()
+                            {
+                                Id = row["Id"].ToString().TryToInt(),
+                                SAPCo = row["SAP Co"].ToString(),
+                                DocumentValue = row["Document Value"].ToString().TryToDecimal(),
+                                Terms = row["Terms"].ToString(),
+                                WBSCode = row["WBS Code"].ToString(),
+
+                            };
+                            mappingDetail.Add(temp);
+                        }
+                    }
+                }
+
+                if (mapping == null || mappingDetail == null)
+                {
+                    return;
+                }
+                Dictionary<AmountForMapping, List<MappingDetail>> result = new Dictionary<AmountForMapping, List<MappingDetail>>();
+
+                foreach (var item in mapping)
+                {
+                    result[item] = Cal(item, mappingDetail);
+                }
+
+                ExportExcel(result, dtDetail);
             }
-            string webRootPath = _hostingEnvironment.WebRootPath;
-            DataTable dtDetail = null;
-            DataTable dtMapping = null;
-            foreach (var name in filesName)
+            catch (Exception e)
             {
-                var filePath = webRootPath + "/upload/" + name;
-                var dt = OfficeHelper.ReadExcelToDataTable(filePath);
+
+                Logger.WriteErrorLog(e.Message);
+            }
+            
+        }
+
+        private static List<MappingDetail> Cal(AmountForMapping item, List<MappingDetail> details)
+        {
+            
+            List<MappingDetail> result = new List<MappingDetail>();
+            List<MappingDetail> reList = null;
+            try
+            {
+                 result = details.Where(d => d.WBSCode.Trim().EqualsCurrentCultureIgnoreCase(item.WBS) && d.Terms.Trim().EqualsCurrentCultureIgnoreCase(item.Term) && d.SAPCo.IsEqual(item.SapCo.Split(','))).OrderByDescending(d => d.DocumentValue).ToList();
+                var tempTotal = result.Sum(d => d.DocumentValue);
+                var subTotal = tempTotal -item.TotalAmount;
+                if (subTotal <= 0)
+                {
+                    return result;
+                }
+                reList = Map(subTotal, result);
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteErrorLog(ex.Message);
+            }
+
+            var temp = result.Where(r => reList.Any(re => re.Id == r.Id) == false).ToList();
+
+            return temp;
+        }
+
+        private static List<MappingDetail> Map(decimal amount, List<MappingDetail> items)
+        {
+            try
+            {
+                decimal tempAmount = 0;
+                List<MappingDetail> removeList = new List<MappingDetail>(items.Count);
+                if (items.Count == 0) return removeList;
+                List<int> removeListIndex = new List<int>();
+                for (int i = 0; i < items.Count; i++)
+                {
+                    var index = GetRandom(0, items.Count, removeListIndex);
+                    var item = items[index];
+
+                    tempAmount += item.DocumentValue;
+                    removeListIndex.Add(index);
+                    removeList.Add(item);
+                    if ((amount - tempAmount) <= 0)
+                    {
+                        break;
+                    }
+                }
+
+                if ((amount - tempAmount) >= -10 && (amount - tempAmount) <= 0)
+                {
+                    return removeList;
+                }
+                else
+                {
+                    return Map(amount, items);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteErrorLog(ex.Message);
                
             }
+
+            return null;
+        }
+
+        private static int GetRandom(int min, int max, List<int> removeList)
+        {
+            Random random = new Random();
+            var index = random.Next(min, max);
+            if (removeList.Any(r => r == index))
+            {
+               return GetRandom(min, max, removeList);
+            }
+
+            return index;
+        }
+
+        private static void ExportExcel(Dictionary<AmountForMapping, List<MappingDetail>> dicts, DataTable dtDetail)
+        {
+            try
+            {
+                foreach (var item in dicts)
+                {
+                    DataTable newDt = dtDetail.Clone();
+
+                    for (int i = 0; i < dtDetail.Rows.Count; i++)
+                    {
+                        var row = dtDetail.Rows[i];
+
+                        var isExist = item.Value.Any(d => d.Id == row.GetValue("Id").TryToInt());
+
+                        if (isExist)
+                        {
+                            var newRow = newDt.NewRow();
+                            newRow.ItemArray = row.ItemArray;
+                            newDt.Rows.Add(newRow);
+                        }
+                    }
+
+                    // newDt.Columns.Remove("Id");
+                    string fileContent = newDt.GetCSVFormatData();
+
+                    string filePath = uploadFolder + item.Key.WBS + item.Key.SapCo + item.Key.Term + DateTime.Now.ToString("yyyyMMddHHmmsssss") + ".csv";
+
+                    FileHelper.CreateFile(filePath, fileContent, Encoding.UTF8);
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.WriteErrorLog(e.Message);
+            }
+            
         }
     }
 }

@@ -44,13 +44,13 @@ namespace DotNet.Common
             return source.Select(strWhere).Length;
         }
 
-        public static string GetCSVFormatData(this DataTable source)
+        public static string GetCSVFormatData(this DataTable source, string delimiter = "~")
         {
             StringBuilder StringBuilder = new StringBuilder(1000);
             // 写出表头
             foreach (DataColumn DataColumn in source.Columns)
             {
-                StringBuilder.Append(DataColumn.ColumnName.ToString() + ",");
+                StringBuilder.Append(DataColumn.ColumnName.ToString() + delimiter);
             }
             StringBuilder.Append("\n");
             // 写出数据
@@ -58,7 +58,7 @@ namespace DotNet.Common
             {
                 foreach (DataColumn DataColumn in source.Columns)
                 {
-                    StringBuilder.Append(dataRowView[DataColumn.ColumnName].ToString() + ",");
+                    StringBuilder.Append(dataRowView[DataColumn.ColumnName].ToString() + delimiter);
                 }
                 StringBuilder.Append("\n");
             }

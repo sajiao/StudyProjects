@@ -30,3 +30,5 @@ D:\projects\StudyProjects\Web\Tool\obj\Debug\netcoreapp2.1\Tool.dll
 D:\projects\StudyProjects\Web\Tool\obj\Debug\netcoreapp2.1\Tool.pdb
 D:\projects\StudyProjects\Web\Tool\obj\Debug\netcoreapp2.1\Tool.csproj.CopyComplete
 D:\projects\StudyProjects\Web\Tool\obj\Debug\netcoreapp2.1\Tool.csprojAssemblyReference.cache
+D:\projects\StudyProjects\Web\Tool\bin\Debug\netcoreapp2.1\DotNet.Common.dll
+D:\projects\StudyProjects\Web\Tool\bin\Debug\netcoreapp2.1\DotNet.Common.pdb
