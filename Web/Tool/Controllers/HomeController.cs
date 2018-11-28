@@ -179,57 +179,57 @@ namespace Tool.Controllers
         {
             
             List<MappingDetail> result = new List<MappingDetail>();
-            List<MappingDetail> reList = null;
+ 
             try
             {
-                 result = details.Where(d => d.WBSCode.Trim().EqualsCurrentCultureIgnoreCase(item.WBS) && d.Terms.Trim().EqualsCurrentCultureIgnoreCase(item.Term) && d.SAPCo.IsEqual(item.SapCo.Split(','))).OrderByDescending(d => d.DocumentValue).ToList();
+                 result = details.Where(d => d.WBSCode.Trim().EqualsCurrentCultureIgnoreCase(item.WBS) && d.Terms.Trim().EqualsCurrentCultureIgnoreCase(item.Term) && d.SAPCo.IsEqual(item.SapCo.Split(','))).OrderBy(d => d.DocumentValue).ToList();
                 var tempTotal = result.Sum(d => d.DocumentValue);
                 var subTotal = tempTotal -item.TotalAmount;
                 if (subTotal <= 0)
                 {
                     return result;
                 }
-                reList = Map(subTotal, result);
+                result = Map(item.TotalAmount, result);
             }
             catch (Exception ex)
             {
                 Logger.WriteErrorLog(ex.Message);
             }
-
-            var temp = result.Where(r => reList.Any(re => re.Id == r.Id) == false).ToList();
-
-            return temp;
+            return result;
         }
 
         private static List<MappingDetail> Map(decimal amount, List<MappingDetail> items)
         {
+            decimal floatAmount = 10m;
             try
             {
                 decimal tempAmount = 0;
-                List<MappingDetail> removeList = new List<MappingDetail>(items.Count);
-                if (items.Count == 0) return removeList;
+                List<MappingDetail> matchList = new List<MappingDetail>(items.Count);
+                if (items.Count == 0) return matchList;
                 List<int> removeListIndex = new List<int>();
+                decimal subAmount = 0m;
+              
                 for (int i = 0; i < items.Count; i++)
                 {
-                    var index = GetRandom(0, items.Count, removeListIndex);
-                    var item = items[index];
+                    subAmount = amount - tempAmount;
+                    var item = items[i];
 
-                    tempAmount += item.DocumentValue;
-                    removeListIndex.Add(index);
-                    removeList.Add(item);
-                    if ((amount - tempAmount) <= 0)
+                    if (subAmount < item.DocumentValue)
                     {
                         break;
                     }
+                    tempAmount += item.DocumentValue;
+                    matchList.Add(item);
+              
                 }
 
-                if ((amount - tempAmount) >= -10 && (amount - tempAmount) <= 0)
+                if (subAmount >= -floatAmount && subAmount <= 0)
                 {
-                    return removeList;
+                    return matchList;
                 }
                 else
                 {
-                    return Map(amount, items);
+                    return reCal(amount, items, matchList,0,0);
                 }
             }
             catch (Exception ex)
@@ -238,7 +238,53 @@ namespace Tool.Controllers
                
             }
 
-            return null;
+            return new List<MappingDetail>();
+        }
+
+        private static List<MappingDetail> reCal(decimal amount,List<MappingDetail> items, List<MappingDetail> matchList, int num, int restNum)
+        {
+            //已经匹配的总金额
+            var origialMathTotalAmount = matchList.Sum(m => m.DocumentValue);
+            //剩下的差额
+            var subAmount = amount - origialMathTotalAmount;
+            //已经匹配的最大index
+            var maxMatchIndex = matchList.Count == 0 ? 0 : matchList.Count - 1 - num;
+            for (int i = 0; i < maxMatchIndex; i++)
+            {
+                var matchIndex = maxMatchIndex - i;
+                var matchItem = matchList.Count == 0 ? null : matchList[matchIndex];
+                var matchLastAmount = matchList.Count == 0 ? 0 : matchItem.DocumentValue;
+                var index = matchList.Count + 1 + restNum;
+
+                if (items.Count <= index) break;
+
+                var restItem = items[index];
+                var tempTotalAmount = origialMathTotalAmount - matchLastAmount;
+                var newAmount = tempTotalAmount + restItem.DocumentValue;
+                var tempNewSubAmount = newAmount - amount;
+                var newMathList = matchList.Where(m=> m.DocumentValue <= tempNewSubAmount && m.DocumentValue >= (tempNewSubAmount -10));
+
+                if (newMathList.Count() == 0)
+                {
+                    if (maxMatchIndex < num)
+                    {
+                       return reCal(amount, items, matchList, 0, restNum + 1);
+                    }
+                    else if ((items.Count - matchList.Count) <= restNum)
+                    {
+                        break;
+                    }
+
+                    return reCal(amount, items, matchList, num + 1, restNum);
+                }
+
+                var lastItem = newMathList.Last();
+                matchList.RemoveAt(matchIndex);
+                matchList.Remove(lastItem);
+                matchList.Add(restItem);
+                return matchList;
+            }
+            return matchList;
         }
 
         private static int GetRandom(int min, int max, List<int> removeList)

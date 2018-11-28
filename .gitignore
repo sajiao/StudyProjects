@@ -26,5 +26,7 @@ Web/BLL/bin
 Web/BLL/obj
 Web/DAL/bin
 Web/DAL/obj
+Web/Tool/bin
+Web/Tool/obj
 
 
