@@ -30,3 +30,5 @@ D:\projects\StudyProjects\Web\Tool\obj\Release\netcoreapp2.1\Tool.Views.pdb
 D:\projects\StudyProjects\Web\Tool\obj\Release\netcoreapp2.1\Tool.dll
 D:\projects\StudyProjects\Web\Tool\obj\Release\netcoreapp2.1\Tool.pdb
 D:\projects\StudyProjects\Web\Tool\obj\Release\netcoreapp2.1\Tool.csproj.CopyComplete
+D:\projects\StudyProjects\Web\Tool\bin\Release\netcoreapp2.1\DotNet.Common.dll
+D:\projects\StudyProjects\Web\Tool\bin\Release\netcoreapp2.1\DotNet.Common.pdb

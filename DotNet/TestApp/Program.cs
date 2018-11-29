@@ -25,17 +25,61 @@ namespace TestApp
             //Console.WriteLine(nameof(str));
             //(var a, var b, var c) = GetTest();
             //Console.WriteLine(a +" " + b + " "+ c);
-            setData();
-            foreach (var item in mData)
-            {
-                Console.WriteLine(item.Num + " score: " + item.RankScore);
-            }
+            //setData();
+            //foreach (var item in mData)
+            //{
+            //    Console.WriteLine(item.Num + " score: " + item.RankScore);
+            //}
 
-            string str = "1,2,3";
-            str = str.Append("4");
-            Console.WriteLine(str);
+            //string str = "1,2,3";
+            //str = str.Append("4");
+            List<decimal> num = new List<decimal> { 1,23,4,7,56,7,8,90.0m,5,3,3,4,5.0m};
+
+            SortTest(num, 44,3);
+
+           // Console.WriteLine(str);
             Console.ReadLine();
 
+        }
+
+        public static void SortTest(List<decimal> args, decimal inputAmount, decimal floatAmount)
+        {
+
+            Dictionary<decimal, List<decimal>> result = new Dictionary<decimal, List<decimal>>();
+            List<decimal> List2 = new List<decimal>(args);
+            for (int i = 0; i < List2.Count; i++)
+            {
+                List<decimal> List3 = new List<decimal>();
+                List3.Add(args[i]);
+                List2.RemoveAt(i);
+                for (int j = 0; j < List2.Count; j++)
+                {
+                    if (List2[j] <= inputAmount - Count(List3))
+                    {
+                        List3.Add(List2[j]);
+                        List2.RemoveAt(j);
+                        j = -1;
+                    }
+                }
+                result[Count(List3)] = List3;
+                i = -1;
+            }
+            var tempResult = result.Where(r => (inputAmount - r.Key) <= floatAmount).OrderByDescending(r => r.Key);
+            if (tempResult.Count() == 0)
+            {
+                tempResult = result.OrderByDescending(r => inputAmount - r.Key);
+            }
+            var  t = tempResult.First();
+            foreach (var item in tempResult)
+            {
+                string strArray = string.Join(",", item.Value);
+                Console.WriteLine("Total:"+ item.Key +" ；"+ strArray);
+            }
+        }
+
+        public static decimal Count(List<decimal> list)
+        {
+            return list.Sum(a => a);
         }
 
         private static void setData()

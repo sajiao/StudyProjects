@@ -189,7 +189,7 @@ namespace Tool.Controllers
                 {
                     return result;
                 }
-                result = Map(item.TotalAmount, result);
+                result = CalAmount(item.TotalAmount, result,10m);
             }
             catch (Exception ex)
             {
@@ -198,107 +198,47 @@ namespace Tool.Controllers
             return result;
         }
 
-        private static List<MappingDetail> Map(decimal amount, List<MappingDetail> items)
+
+        public static List<MappingDetail> CalAmount(decimal inputAmount, List<MappingDetail> args,  decimal floatAmount)
         {
-            decimal floatAmount = 10m;
-            try
-            {
-                decimal tempAmount = 0;
-                List<MappingDetail> matchList = new List<MappingDetail>(items.Count);
-                if (items.Count == 0) return matchList;
-                List<int> removeListIndex = new List<int>();
-                decimal subAmount = 0m;
-              
-                for (int i = 0; i < items.Count; i++)
-                {
-                    subAmount = amount - tempAmount;
-                    var item = items[i];
 
-                    if (subAmount < item.DocumentValue)
+            Dictionary<decimal, List<MappingDetail>> result = new Dictionary<decimal, List<MappingDetail>>();
+            List<MappingDetail> List2 = new List<MappingDetail>(args);
+            for (int i = 0; i < List2.Count; i++)
+            {
+                List<MappingDetail> List3 = new List<MappingDetail>();
+                List3.Add(args[i]);
+                List2.RemoveAt(i);
+                for (int j = 0; j < List2.Count; j++)
+                {
+                    if (List2[j].DocumentValue <= inputAmount - Count(List3))
                     {
-                        break;
+                        List3.Add(List2[j]);
+                        List2.RemoveAt(j);
+                        j = -1;
                     }
-                    tempAmount += item.DocumentValue;
-                    matchList.Add(item);
-              
                 }
-
-                if (subAmount >= -floatAmount && subAmount <= 0)
-                {
-                    return matchList;
-                }
-                else
-                {
-                    return reCal(amount, items, matchList,0,0);
-                }
+                result[Count(List3)] = List3;
+                i = -1;
             }
-            catch (Exception ex)
+            var tempResult = result.Where(r => (inputAmount - r.Key) <= floatAmount).OrderByDescending(r => r.Key);
+            if (tempResult.Count() == 0)
             {
-                Logger.WriteErrorLog(ex.Message);
-               
+                tempResult = result.OrderByDescending(r => inputAmount - r.Key);
             }
-
-            return new List<MappingDetail>();
+            return tempResult.First().Value;
+            ////foreach (var item in tempResult)
+            ////{
+            ////    string strArray = string.Join(",", item.Value);
+            ////    Console.WriteLine("Total:" + item.Key + " ；" + strArray);
+            ////}
         }
 
-        private static List<MappingDetail> reCal(decimal amount,List<MappingDetail> items, List<MappingDetail> matchList, int num, int restNum)
+        public static decimal Count(List<MappingDetail> list)
         {
-            //已经匹配的总金额
-            var origialMathTotalAmount = matchList.Sum(m => m.DocumentValue);
-            //剩下的差额
-            var subAmount = amount - origialMathTotalAmount;
-            //已经匹配的最大index
-            var maxMatchIndex = matchList.Count == 0 ? 0 : matchList.Count - 1 - num;
-            for (int i = 0; i < maxMatchIndex; i++)
-            {
-                var matchIndex = maxMatchIndex - i;
-                var matchItem = matchList.Count == 0 ? null : matchList[matchIndex];
-                var matchLastAmount = matchList.Count == 0 ? 0 : matchItem.DocumentValue;
-                var index = matchList.Count + 1 + restNum;
-
-                if (items.Count <= index) break;
-
-                var restItem = items[index];
-                var tempTotalAmount = origialMathTotalAmount - matchLastAmount;
-                var newAmount = tempTotalAmount + restItem.DocumentValue;
-                var tempNewSubAmount = newAmount - amount;
-                var newMathList = matchList.Where(m=> m.DocumentValue <= tempNewSubAmount && m.DocumentValue >= (tempNewSubAmount -10));
-
-                if (newMathList.Count() == 0)
-                {
-                    if (maxMatchIndex < num)
-                    {
-                       return reCal(amount, items, matchList, 0, restNum + 1);
-                    }
-                    else if ((items.Count - matchList.Count) <= restNum)
-                    {
-                        break;
-                    }
-
-                    return reCal(amount, items, matchList, num + 1, restNum);
-                }
-
-                var lastItem = newMathList.Last();
-                matchList.RemoveAt(matchIndex);
-                matchList.Remove(lastItem);
-                matchList.Add(restItem);
-                return matchList;
-            }
-            return matchList;
+            return list.Sum(a => a.DocumentValue);
         }
-
-        private static int GetRandom(int min, int max, List<int> removeList)
-        {
-            Random random = new Random();
-            var index = random.Next(min, max);
-            if (removeList.Any(r => r == index))
-            {
-               return GetRandom(min, max, removeList);
-            }
-
-            return index;
-        }
-
+  
         private static void ExportExcel(Dictionary<AmountForMapping, List<MappingDetail>> dicts, DataTable dtDetail)
         {
             try
