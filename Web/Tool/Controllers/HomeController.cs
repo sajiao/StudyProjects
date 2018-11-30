@@ -211,7 +211,7 @@ namespace Tool.Controllers
                 List2.RemoveAt(i);
                 for (int j = 0; j < List2.Count; j++)
                 {
-                    if (List2[j].DocumentValue <= inputAmount - Count(List3))
+                    if (List2[j].DocumentValue <= (inputAmount - Count(List3)))
                     {
                         List3.Add(List2[j]);
                         List2.RemoveAt(j);
@@ -224,7 +224,7 @@ namespace Tool.Controllers
             var tempResult = result.Where(r => (inputAmount - r.Key) <= floatAmount).OrderByDescending(r => r.Key);
             if (tempResult.Count() == 0)
             {
-                tempResult = result.OrderByDescending(r => inputAmount - r.Key);
+                tempResult = result.OrderByDescending(r => r.Key);
             }
             return tempResult.First().Value;
             ////foreach (var item in tempResult)
@@ -243,6 +243,7 @@ namespace Tool.Controllers
         {
             try
             {
+                List<string> filePaths = new List<string>();
                 foreach (var item in dicts)
                 {
                     DataTable newDt = dtDetail.Clone();
@@ -255,6 +256,8 @@ namespace Tool.Controllers
 
                         if (isExist)
                         {
+                            row["Group"] = item.Key.Id;
+                            row["IsUsed"] = 1;
                             var newRow = newDt.NewRow();
                             newRow.ItemArray = row.ItemArray;
                             newDt.Rows.Add(newRow);
@@ -264,10 +267,17 @@ namespace Tool.Controllers
                     // newDt.Columns.Remove("Id");
                     string fileContent = newDt.GetCSVFormatData();
 
-                    string filePath = uploadFolder + item.Key.WBS + item.Key.SapCo + item.Key.Term + DateTime.Now.ToString("yyyyMMddHHmmsssss") + ".csv";
+                    string filePath = Path.Combine(uploadFolder, item.Key.WBS + item.Key.SapCo + item.Key.Term + DateTime.Now.ToString("yyyyMMddHHmmsssss") + ".csv");
 
                     FileHelper.CreateFile(filePath, fileContent, Encoding.UTF8);
+                    filePaths.Add(filePath);
                 }
+
+                string detailMapPath = Path.Combine(uploadFolder, "detailMap"+ DateTime.Now.ToString("yyyyMMddHHmmsssss") + ".csv");
+                string detailContent = dtDetail.GetCSVFormatData();
+                FileHelper.CreateFile(detailMapPath, detailContent, Encoding.UTF8);
+                filePaths.Add(detailMapPath);
+                FileHelper.CompressMulti(filePaths.ToArray(), Path.Combine(uploadFolder, "DetailFiles"+ DateTime.Now.ToString("yyyyMMddHHmmsssss") +".gz"));
             }
             catch (Exception e)
             {

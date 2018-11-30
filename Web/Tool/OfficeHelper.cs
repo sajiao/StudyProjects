@@ -55,16 +55,22 @@ namespace Tool
                 {
                     IRow firstRow = sheet.GetRow(0);
                     //一行最后一个cell的编号 即总的列数
-                    int cellCount = firstRow.LastCellNum + 1;
+                    int cellCount = firstRow.LastCellNum + 3;
                     //如果第一行是标题列名
                     if (isFirstRowColumn)
                     {
                         for (int i = firstRow.FirstCellNum; i < cellCount; ++i)
                         {
-                            if (i == cellCount - 1)
+                            if (i == cellCount - 3)
                             {
                                 DataColumn column = new DataColumn("Id");
                                 data.Columns.Add(column);
+
+                                DataColumn column2 = new DataColumn("Group");
+                                data.Columns.Add(column2);
+
+                                DataColumn column3 = new DataColumn("IsUsed");
+                                data.Columns.Add(column3);
                                 break;
                             }
 
@@ -95,7 +101,7 @@ namespace Tool
                         DataRow dataRow = data.NewRow();
                         for (int j = row.FirstCellNum; j < cellCount; ++j)
                         {
-                            if (j == cellCount -1)
+                            if (j == cellCount -3)
                             {
                                 dataRow[j] = i;
                                 break;
