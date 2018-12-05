@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.1",
-    "signature": "72b25d5b6eb3bd95ff94cfebdb4c0bc4f2247482"
+    "signature": "9f062156d8e9e9e1ce71988b2bae2efd651099ae"
   },
   "compilationOptions": {
     "defines": [
@@ -288,15 +288,19 @@
           "Microsoft.NETCore.Platforms": "2.1.0"
         }
       },
-      "SharpZipLib/1.0.0": {
+      "SharpZipLib/1.0.0": {},
+      "SharpZipLib.NETStandard/1.0.7": {
+        "dependencies": {
+          "NETStandard.Library": "2.0.3"
+        },
         "runtime": {
-          "lib/netstandard2.0/ICSharpCode.SharpZipLib.dll": {
-            "assemblyVersion": "1.0.0.999",
-            "fileVersion": "1.0.0.999"
+          "lib/netstandard1.3/ICSharpCode.SharpZipLib.dll": {
+            "assemblyVersion": "1.0.7.0",
+            "fileVersion": "1.0.7.0"
           }
         },
         "compile": {
-          "lib/netstandard2.0/ICSharpCode.SharpZipLib.dll": {}
+          "lib/netstandard1.3/ICSharpCode.SharpZipLib.dll": {}
         }
       },
       "System.Configuration.ConfigurationManager/4.5.0": {
@@ -395,6 +399,7 @@
           "Microsoft.Extensions.DependencyInjection": "2.1.1",
           "Microsoft.Extensions.Options": "2.1.1",
           "Microsoft.Extensions.Options.ConfigurationExtensions": "2.1.1",
+          "SharpZipLib.NETStandard": "1.0.7",
           "System.Runtime.Caching": "4.5.0"
         },
         "runtime": {
@@ -3452,6 +3457,13 @@
       "sha512": "sha512-38egGevtPMQn/6olZZUteKUC7+BD47LdCGKo9Vyj17+HWDwiqPXsyJu55q9WSybhwVKwt0q2FLhiuJjZfQpsHw==",
       "path": "sharpziplib/1.0.0",
       "hashPath": "sharpziplib.1.0.0.nupkg.sha512"
+    },
+    "SharpZipLib.NETStandard/1.0.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-mYKPizF2CY32RQB8FITYy0e30gVgItFA63SFquruaxq+votwL1T+yOfssK10v4enBcxklr8ks48hS1emw5TTXg==",
+      "path": "sharpziplib.netstandard/1.0.7",
+      "hashPath": "sharpziplib.netstandard.1.0.7.nupkg.sha512"
     },
     "System.Configuration.ConfigurationManager/4.5.0": {
       "type": "package",

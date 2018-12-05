@@ -2945,6 +2945,18 @@
           "lib/netstandard2.0/ICSharpCode.SharpZipLib.dll": {}
         }
       },
+      "SharpZipLib.NETStandard/1.0.7": {
+        "type": "package",
+        "dependencies": {
+          "NETStandard.Library": "1.6.1"
+        },
+        "compile": {
+          "lib/netstandard1.3/ICSharpCode.SharpZipLib.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.3/ICSharpCode.SharpZipLib.dll": {}
+        }
+      },
       "System.AppContext/4.3.0": {
         "type": "package",
         "dependencies": {
@@ -4499,6 +4511,7 @@
           "Microsoft.Extensions.DependencyInjection": "2.1.1",
           "Microsoft.Extensions.Options": "2.1.1",
           "Microsoft.Extensions.Options.ConfigurationExtensions": "2.1.1",
+          "SharpZipLib.NETStandard": "1.0.7",
           "System.Runtime.Caching": "4.5.0"
         },
         "compile": {
@@ -7454,6 +7467,22 @@
         "lib/netstandard2.0/ICSharpCode.SharpZipLib.xml",
         "sharpziplib.1.0.0.nupkg.sha512",
         "sharpziplib.nuspec"
+      ]
+    },
+    "SharpZipLib.NETStandard/1.0.7": {
+      "sha512": "mYKPizF2CY32RQB8FITYy0e30gVgItFA63SFquruaxq+votwL1T+yOfssK10v4enBcxklr8ks48hS1emw5TTXg==",
+      "type": "package",
+      "path": "sharpziplib.netstandard/1.0.7",
+      "files": [
+        "lib/net45/ICSharpCode.SharpZipLib.dll",
+        "lib/net45/ICSharpCode.SharpZipLib.pdb",
+        "lib/net45/ICSharpCode.SharpZipLib.xml",
+        "lib/netstandard1.3/ICSharpCode.SharpZipLib.deps.json",
+        "lib/netstandard1.3/ICSharpCode.SharpZipLib.dll",
+        "lib/netstandard1.3/ICSharpCode.SharpZipLib.pdb",
+        "lib/netstandard1.3/ICSharpCode.SharpZipLib.xml",
+        "sharpziplib.netstandard.1.0.7.nupkg.sha512",
+        "sharpziplib.netstandard.nuspec"
       ]
     },
     "System.AppContext/4.3.0": {

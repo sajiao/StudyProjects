@@ -62,7 +62,7 @@ namespace Tool.Controllers
             string webRootPath = _hostingEnvironment.WebRootPath;
             string contentRootPath = _hostingEnvironment.ContentRootPath;
             List<string> filesName = new List<string>();
-            uploadFolder = webRootPath + "/upload/";
+            uploadFolder = webRootPath + "\\upload\\";
             foreach (var formFile in data)
             {
                 if (formFile.Length > 0)
@@ -78,23 +78,25 @@ namespace Tool.Controllers
                     }
                 }
             }
-
+            var zipName = "";
             if (filesName != null)
             {
-              DoTask(filesName);
+              zipName =  DoTask(filesName);
             }
 
             //return File(stream, memi, Path.GetFileName(addrUrl));
-            return Ok(new { Count = files.Count, Size= size, FileNames = filesName });
+
+            return Ok(new { Count = files.Count, Size= size, FileNames = filesName, downloadurl = "http://xl.bestddd.com/upload/"+zipName});
         }
 
-        public async void DoTask(List<string> filesName)
+        public string DoTask(List<string> filesName)
         {
+            string zipFileName = "";
             try
             {
                 if (filesName == null)
                 {
-                    return;
+                    return "";
                 }
 
                 DataTable dtDetail = null;
@@ -156,7 +158,7 @@ namespace Tool.Controllers
 
                 if (mapping == null || mappingDetail == null)
                 {
-                    return;
+                    return "";
                 }
                 Dictionary<AmountForMapping, List<MappingDetail>> result = new Dictionary<AmountForMapping, List<MappingDetail>>();
 
@@ -165,14 +167,15 @@ namespace Tool.Controllers
                     result[item] = Cal(item, mappingDetail);
                 }
 
-                ExportExcel(result, dtDetail);
+                zipFileName = ExportExcel(result, dtDetail);
             }
             catch (Exception e)
             {
 
                 Logger.WriteErrorLog(e.Message);
             }
-            
+
+            return zipFileName;
         }
 
         private static List<MappingDetail> Cal(AmountForMapping item, List<MappingDetail> details)
@@ -239,8 +242,9 @@ namespace Tool.Controllers
             return list.Sum(a => a.DocumentValue);
         }
   
-        private static void ExportExcel(Dictionary<AmountForMapping, List<MappingDetail>> dicts, DataTable dtDetail)
+        private static string ExportExcel(Dictionary<AmountForMapping, List<MappingDetail>> dicts, DataTable dtDetail)
         {
+            string zipFileName = "";
             try
             {
                 List<string> filePaths = new List<string>();
@@ -277,13 +281,16 @@ namespace Tool.Controllers
                 string detailContent = dtDetail.GetCSVFormatData();
                 FileHelper.CreateFile(detailMapPath, detailContent, Encoding.UTF8);
                 filePaths.Add(detailMapPath);
-                FileHelper.CompressMulti(filePaths.ToArray(), Path.Combine(uploadFolder, "DetailFiles"+ DateTime.Now.ToString("yyyyMMddHHmmsssss") +".gz"));
+                zipFileName = "DetailFiles" + DateTime.Now.ToString("yyyyMMddHHmmsssss") + ".zip";
+                ZipHelper.CompressFile(filePaths,null, Path.Combine(uploadFolder, zipFileName));
+          
             }
             catch (Exception e)
             {
                 Logger.WriteErrorLog(e.Message);
             }
-            
+
+            return zipFileName;
         }
     }
 }
