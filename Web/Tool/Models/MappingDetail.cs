@@ -17,5 +17,7 @@ namespace Tool.Models
 
         public string WBSCode { get; set; }
 
+        public bool IsUsed { get; set; }
+
     }
 }

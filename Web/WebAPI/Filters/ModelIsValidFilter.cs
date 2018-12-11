@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http.Results;
 
-namespace Web.Filters
+namespace WebAPI.Filters
 {
     /// <summary>
     /// 项目参数校验处理器

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Entities;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Web.Controllers
+namespace WebAPI.Controllers
 {
     /// <summary>
     /// 模块接口

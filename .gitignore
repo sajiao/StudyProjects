@@ -29,7 +29,11 @@ Web/DAL/obj
 Web/Tool/bin/netcoreapp2.1
 Web/Tool/Release/netcoreapp2.1
 Web/Tool/obj
+Web/Tool/bin
 Web/Tool/wwwroot/upload
+Web/WebAPI/appsettings.json
+Web/WebAPI/bin
+Web/WebAPI/obj
 
 
 

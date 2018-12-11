@@ -7,7 +7,7 @@ using Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Web.Controllers
+namespace WebAPI.Controllers
 {
     /// <summary>
     /// 刷新模块接口

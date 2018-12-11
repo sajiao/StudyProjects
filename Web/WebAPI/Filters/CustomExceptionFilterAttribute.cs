@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Web.Filters
+namespace WebAPI.Filters
 {
     /// <summary>
     /// 项目异常处理器

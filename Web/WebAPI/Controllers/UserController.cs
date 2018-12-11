@@ -5,39 +5,39 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Web.Controllers
+namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ModuleSubController : BaseController
+    public class UserController : BaseController
     {
-        // GET: api/ModuleSub
+        // GET api/values
         [HttpGet]
-        public IEnumerable<string> Get()
+        public ActionResult<IEnumerable<string>> Get()
         {
             return new string[] { "value1", "value2" };
         }
 
-        // GET: api/ModuleSub/5
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
+        // GET api/values/5
+        [HttpGet("{id}")]
+        public ActionResult<string> Get(int id)
         {
             return "value";
         }
 
-        // POST: api/ModuleSub
+        // POST api/values
         [HttpPost]
         public void Post([FromBody] string value)
         {
         }
 
-        // PUT: api/ModuleSub/5
+        // PUT api/values/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {
         }
 
-        // DELETE: api/ApiWithActions/5
+        // DELETE api/values/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {

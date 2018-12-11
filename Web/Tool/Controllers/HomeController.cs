@@ -119,9 +119,15 @@ namespace Tool.Controllers
                     {
                         dtMapping = dt;
                         mapping = new List<AmountForMapping>(dtMapping.Rows.Count);
+                        
                         for (int i = 0; i < dtMapping.Rows.Count; i++)
                         {
                             var row = dtMapping.Rows[i];
+                            if (row["WBS"].ToString().TryTrim().IsNullOrEmpty())
+                            {
+                                continue;
+                            }
+
                             var temp = new AmountForMapping()
                             {
                                 Id = row["Id"].ToString().TryToInt(),
@@ -185,7 +191,8 @@ namespace Tool.Controllers
  
             try
             {
-                 result = details.Where(d => d.WBSCode.Trim().EqualsCurrentCultureIgnoreCase(item.WBS) && d.Terms.Trim().EqualsCurrentCultureIgnoreCase(item.Term) && d.SAPCo.IsEqual(item.SapCo.Split(','))).OrderBy(d => d.DocumentValue).ToList();
+                 result = details.Where(d => d.WBSCode.Trim().StartsWith(item.WBS) && d.Terms.Trim().EqualsCurrentCultureIgnoreCase(item.Term) && d.SAPCo.IsEqual(item.SapCo.Split(','))).OrderBy(d => d.DocumentValue).ToList();
+
                 var tempTotal = result.Sum(d => d.DocumentValue);
                 var subTotal = tempTotal -item.TotalAmount;
                 if (subTotal <= 0)
@@ -212,13 +219,14 @@ namespace Tool.Controllers
                 List<MappingDetail> List3 = new List<MappingDetail>();
                 List3.Add(args[i]);
                 List2.RemoveAt(i);
+
                 for (int j = 0; j < List2.Count; j++)
                 {
                     if (List2[j].DocumentValue <= (inputAmount - Count(List3)))
                     {
                         List3.Add(List2[j]);
-                        List2.RemoveAt(j);
-                        j = -1;
+                        //List2.RemoveAt(j);
+                        //j = -1;
                     }
                 }
                 result[Count(List3)] = List3;
@@ -230,11 +238,7 @@ namespace Tool.Controllers
                 tempResult = result.OrderByDescending(r => r.Key);
             }
             return tempResult.First().Value;
-            ////foreach (var item in tempResult)
-            ////{
-            ////    string strArray = string.Join(",", item.Value);
-            ////    Console.WriteLine("Total:" + item.Key + " ；" + strArray);
-            ////}
+           
         }
 
         public static decimal Count(List<MappingDetail> list)

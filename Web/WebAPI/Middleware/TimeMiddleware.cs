@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Web.Middleware
+namespace WebAPI.Middleware
 {
     public class StopWatch
     {
