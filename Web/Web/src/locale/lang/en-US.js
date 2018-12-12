@@ -1,6 +1,7 @@
 export default {
   home: 'Home',
   components: 'Components',
+  upload_file_page: 'Upload File',
   count_to_page: 'Count-to',
   tables_page: 'Table',
   split_pane_page: 'Split-pane',
