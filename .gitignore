@@ -18,7 +18,8 @@ Web/.vs/*
 Web/Web/appsettings.json
 Web/Web/bin
 Web/Web/obj
-Web/Web/node_modules
+Web/Web/frontend/node_modules
+Web/Web/frontend/dist
 Web/Web/dist
 Web/DotNet.Common/bin
 Web/DotNet.Common/obj
