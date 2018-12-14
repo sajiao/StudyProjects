@@ -37,6 +37,7 @@ Web/Tool/wwwroot/upload
 Web/WebAPI/appsettings.json
 Web/WebAPI/bin
 Web/WebAPI/obj
+Web/WebAPI/wwwroot/upload
 
 
 
