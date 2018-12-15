@@ -58,6 +58,18 @@ namespace WebAPI.Controllers
             return contents;
         }
 
+        private void AddEtyma(List<string> contents)
+        {
+            if (contents.IsNullOrEmpty()) return;
+
+            foreach (var item in contents)
+            {
+                Etyma entity = new Etyma();
+                var arr1 = item.Split('.');
+               // entity.Desc = arr1[1].Trim().Replace
+            }
+        }
+
         [HttpPost]
         [HttpPost("upload")]
         public ResponseResult upload(IFormFile file, string userId)

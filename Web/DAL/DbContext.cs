@@ -26,5 +26,7 @@ namespace DAL
         public DbSet<Module> ModuleDb { get { return new DbSet<Module>(Db); } }
 
         public DbSet<Article> ArticleDb { get { return new DbSet<Article>(Db); } }
+
+        public DbSet<Etyma> EtymaDb { get { return new DbSet<Etyma>(Db); } }
     }
 }

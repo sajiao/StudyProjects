@@ -22,7 +22,7 @@ namespace DAL
                 IsAutoCloseConnection = true,//自动释放数据务，如何存在事务，在事务结束后释放
                 InitKeyType = InitKeyType.Attribute //初始化主键和自增列信息到ORM的方式 codefirst
             });
-            db.CodeFirst.InitTables(typeof(Module), typeof(ModuleSub), typeof(Article), typeof(User));
+            db.CodeFirst.InitTables(typeof(Module), typeof(ModuleSub), typeof(Article), typeof(User), typeof(Etyma));
         }
 
         protected static SqlSugarClient GetDB()
