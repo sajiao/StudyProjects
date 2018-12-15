@@ -17,13 +17,23 @@ namespace DotNet.Common
         /// </summary>
         /// <param name="interfaceTypes">接口类型集合</param>
         /// <returns></returns>
-        public static List<Type> GetTypeListOfImplementedInterface(params Type[] interfaceTypes)
+        public static List<Type> GetTypeListOfImplementedInterface(string assemblyName ,params Type[] interfaceTypes)
         {
 
             List<Type> typeList = new List<Type>();
 
             //获取整个应用程序集的类型数组
-            Type[] types = Assembly.GetExecutingAssembly().GetTypes();
+            Type[] types;
+
+            if (assemblyName.IsNullOrEmpty())
+            {
+                types = Assembly.GetExecutingAssembly().GetTypes();
+            }
+            else
+            {
+                types = Assembly.Load(assemblyName).GetTypes();
+            }
+            
             if (types == null || types.Length == 0) return typeList;
 
             //遍历每一个类型，看看是否实现了指定的接口

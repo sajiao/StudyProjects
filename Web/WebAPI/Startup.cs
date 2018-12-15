@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using BLL;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -84,6 +85,8 @@ namespace WebAPI
             app.UseMiddleware<TimeMiddleware>();
             // app.UseMiddleware<TimeMiddleware>(new StopWatch()); //也可以不把StopWatch添加到依赖注入容器中，而是在UserMiddleware方法中直接给出参数。
             app.UseMvc();
+
+            InitBLL.Init();
         }
     }
 }

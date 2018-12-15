@@ -13,7 +13,7 @@ namespace BLL
         public static void Init()
         {
             //初始化其它配置，获取实现了IInits接口的类
-            List<Type> typeList = ReflectionHelper.GetTypeListOfImplementedInterface(typeof(IInits));
+            List<Type> typeList = ReflectionHelper.GetTypeListOfImplementedInterface("BLL",typeof(IInits));
             foreach (Type type in typeList)
             {
                 //使用接口来生成对象

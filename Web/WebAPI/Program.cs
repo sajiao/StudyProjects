@@ -16,7 +16,7 @@ namespace WebAPI
         public static void Main(string[] args)
         {
             CreateWebHostBuilder(args).Build().Run();
-            InitBLL.Init();
+          
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
