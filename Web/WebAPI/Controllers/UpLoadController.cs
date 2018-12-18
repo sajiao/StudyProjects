@@ -21,9 +21,10 @@ namespace WebAPI.Controllers
     {
 
         [HttpGet]
-        public ResponseResult Get()
+        public ResponseResult Get(int type)
         {
-           
+            if (type == 0) return new ResponseResult(0, "no");
+
             var fileDir = Path.Combine(AppContext.BaseDirectory,"Upload");
             if (!Directory.Exists(fileDir))
             {
@@ -32,6 +33,17 @@ namespace WebAPI.Controllers
             //文件名称
             string projectFileName = "38000词汇500词根全集.pdf";
 
+            switch (type)
+            { 
+                case 1:
+                    projectFileName = "38000词汇500词根全集.pdf";
+                    break;
+                case 2:
+                    projectFileName = "词霸天下38000词汇大全集第1部分.pdf";
+                    break;
+
+            }
+            
             //上传的文件的路径
             string filePath = fileDir + $@"\{projectFileName}";
             List<string> content = null;
@@ -40,18 +52,26 @@ namespace WebAPI.Controllers
                content =   PDFHelper.ReadPDFLine(filePath);
             }
 
-            FilterEtyma(content);
-            AddEtyma(content);
+            Filter(content);
+            if (type == 1)
+            {
+                AddEtyma(content);
+            }
+            else if (type >= 2)
+            {
+                AddWords(content);
+            }
+           
             return new ResponseResult(0,"", content);
            
         }
 
-       
+
         /// <summary>
-        /// 38000词汇500词根全集.pdf
+        /// 词霸天下38000词汇大全集第1部分.pdf
         /// </summary>
         /// <param name="contents"></param>
-        private void AddEtyma(List<string> contents)
+        private void AddWords(List<string> contents)
         {
             if (contents.IsNullOrEmpty()) return;
 
@@ -59,15 +79,14 @@ namespace WebAPI.Controllers
             Regex regZh = new Regex(@"[^\x00-\xff].*$");
             foreach (var item in contents)
             {
-                Etyma entity = new Etyma();
+                Words entity = new Words();
                
                 entity.FullDesc = item;
                 entity.Desc = reg.Match(item).Value.Replace("-","").TryTrim();
                 entity.ZhDesc = regZh.Matches(item).Last().Value.TryTrim();
                 entity.Word = entity.Desc.Split("=")[0].TryTrim();
-                entity.EtymaSource = entity.Word;
                 entity.Status = 1;
-                EtymaBLL.Insert(entity);
+                WordsBLL.Insert(entity);
             }
         }
 
@@ -95,7 +114,7 @@ namespace WebAPI.Controllers
             }
         }
 
-        private List<string> FilterEtyma(List<string> contents)
+        private List<string> Filter(List<string> contents)
         {
             List<string> filters = new List<string> { "Evaluation Warning : The document was created with Spire.PDF for .NET", "宋老师终极词汇完美教程", "宋老师超越母语者完美版", "终极词汇速记", "组词根综合", "课后问答联系方式", "宋老师口语素材", "高考高分高能句型全总结", "宋老师英语词汇速记教材", "神奇后缀篇", "宋老师独家高中", "神奇前缀", "宋老师母语级词汇完美教程", "宋老师词霸天下系列", "母语级词汇速记", "词根统计100", "累积解析词汇量", "13	/	13" };
 
@@ -109,12 +128,13 @@ namespace WebAPI.Controllers
 
             return contents;
         }
+
         [HttpPost]
-        [HttpPost("upload")]
-        public ResponseResult upload(IFormFile file, string userId)
+        public ResponseResult Post(List<IFormFile> files)
         {
-            if (file != null)
+            if (files != null)
             {
+                var file = files[0];
                 var fileDir = AppContext.BaseDirectory;
                 if (!Directory.Exists(fileDir))
                 {

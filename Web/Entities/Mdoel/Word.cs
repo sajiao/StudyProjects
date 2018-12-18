@@ -35,6 +35,15 @@ namespace Entities
         [SugarColumn(Length = 50, IsNullable = false, ColumnDescription = "中文意思")]
         public string ZhDesc { get; set; }
 
+        [SugarColumn(Length = 50, IsNullable = true, ColumnDescription = "词频")]
+        public string Frequency { get; set; }
+
+        [SugarColumn(Length = 50, IsNullable = true, ColumnDescription = "考纲")]
+        public string Examination { get; set; }
+
+        [SugarColumn(IsNullable = false, ColumnDescription = "类别")]
+        public int CategoryId { get; set; }
+
         [SugarColumn(IsNullable = false, ColumnDescription = "状态:1 正常")]
         public int Status { get; set; }
 
