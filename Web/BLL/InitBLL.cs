@@ -12,14 +12,23 @@ namespace BLL
         /// </summary>
         public static void Init()
         {
-            //初始化其它配置，获取实现了IInits接口的类
-            List<Type> typeList = ReflectionHelper.GetTypeListOfImplementedInterface("BLL",typeof(IInits));
-            foreach (Type type in typeList)
+            try
             {
-                //使用接口来生成对象
-                var model = type.Assembly.CreateInstance(type.FullName) as IInits;
-                model.Init();
+                //初始化其它配置，获取实现了IInits接口的类
+                List<Type> typeList = ReflectionHelper.GetTypeListOfImplementedInterface("BLL", typeof(IInits));
+                foreach (Type type in typeList)
+                {
+                    //使用接口来生成对象
+                    var model = type.Assembly.CreateInstance(type.FullName) as IInits;
+                    model.Init();
+                }
             }
+            catch (Exception e)
+            {
+                Logger.WriteErrorLog(string.Format("Message={0};StackTrace={1}", e.Message, e.StackTrace));
+                throw e;
+            }
+           
         }
     }
 }

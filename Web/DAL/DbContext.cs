@@ -14,7 +14,7 @@ namespace DAL
             Db = new SqlSugarClient(new ConnectionConfig()
             {
                 ConnectionString = DB.dbConnection,
-                DbType = DbType.MySql,
+                DbType = DbType.SqlServer,
                 IsAutoCloseConnection = true
             });
         }
@@ -27,8 +27,9 @@ namespace DAL
 
         public DbSet<Article> ArticleDb { get { return new DbSet<Article>(Db); } }
 
+        public DbSet<Words> WordsDb { get { return new DbSet<Words>(Db); } }
+
         public DbSet<Etyma> EtymaDb { get { return new DbSet<Etyma>(Db); } }
 
-        public DbSet<Words> WordsDb { get { return new DbSet<Words>(Db); } }
     }
 }

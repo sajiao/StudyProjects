@@ -8,7 +8,7 @@ namespace Entities
     [SugarTable("Etyma", "词根表")]
     public class Etyma
     {
-        [SugarColumn(Length = 32, IsNullable = false, IsPrimaryKey = true, IsIdentity = true)]
+        [SugarColumn(IsNullable = false, IsPrimaryKey = true, IsIdentity = true)]
         public int Id { get; set; }
 
         [SugarColumn(Length = 50, IsNullable = false, ColumnDescription = "单词")]
@@ -45,7 +45,7 @@ namespace Entities
         [SugarColumn(IsNullable = false, ColumnDescription = "状态:1 正常")]
         public int Status { get; set; }
 
-        [SugarColumn(Length = 36, ColumnDataType =  "char", ColumnDescription = "创建者")]
+        [SugarColumn(ColumnDescription = "创建者")]
         public Guid CreatedBy { get; set; }
 
         [SugarColumn(ColumnDescription = "创建时间")]

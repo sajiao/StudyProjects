@@ -15,14 +15,16 @@ namespace DAL
 
         static DB()
         {
+            //Server=DESKTOP-9QO1QAD;Database=bestddd;user=sa;password=sa123;
             SqlSugarClient db = new SqlSugarClient(new ConnectionConfig()
             {
                 ConnectionString = dbConnection,
-                DbType = DbType.MySql,
+                DbType = DbType.SqlServer,
                 IsAutoCloseConnection = true,//自动释放数据务，如何存在事务，在事务结束后释放
                 InitKeyType = InitKeyType.Attribute //初始化主键和自增列信息到ORM的方式 codefirst
             });
-            db.CodeFirst.InitTables(typeof(Module), typeof(ModuleSub), typeof(Article), typeof(User), typeof(Words), typeof(Etyma));
+           //db.CodeFirst.InitTables(typeof(Module), typeof(ModuleSub), typeof(Article), typeof(User), typeof(Words), typeof(Etyma));
+          //  db.CodeFirst.InitTables(typeof(Module), typeof(ModuleSub), typeof(Article), typeof(User), typeof(Words), typeof(Etyma));
         }
 
         protected static SqlSugarClient GetDB()
@@ -30,7 +32,7 @@ namespace DAL
             SqlSugarClient db = new SqlSugarClient(new ConnectionConfig()
             {
                 ConnectionString = dbConnection,
-                DbType = DbType.MySql,
+                DbType = DbType.SqlServer,
                 IsAutoCloseConnection = true,//自动释放数据务，如何存在事务，在事务结束后释放
             });
 

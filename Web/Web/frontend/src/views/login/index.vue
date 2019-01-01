@@ -49,6 +49,11 @@
       </div>
 
       <el-button class="thirdparty-button" type="primary" @click="showDialog=true">{{ $t('login.thirdparty') }}</el-button>
+
+      <div class="tips">
+        <span><a href="http://www.miitbeian.gov.cn">蜀ICP备18020516号-2</a></span>
+      </div>
+
     </el-form>
 
     <el-dialog :title="$t('login.thirdparty')" :visible.sync="showDialog" append-to-body>

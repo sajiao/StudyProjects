@@ -8,7 +8,7 @@ namespace Entities
     [SugarTable("User", "用户表")]
     public class User
     {
-        [SugarColumn(Length = 32, IsNullable = false, IsPrimaryKey = true)]
+        [SugarColumn(IsNullable = false, IsPrimaryKey = true)]
         public Guid Id { get; set; }
 
         [SugarColumn(IsNullable = false, ColumnDescription = "类别ID")]
