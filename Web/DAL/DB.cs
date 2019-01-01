@@ -24,7 +24,7 @@ namespace DAL
                 InitKeyType = InitKeyType.Attribute //初始化主键和自增列信息到ORM的方式 codefirst
             });
            //db.CodeFirst.InitTables(typeof(Module), typeof(ModuleSub), typeof(Article), typeof(User), typeof(Words), typeof(Etyma));
-          //  db.CodeFirst.InitTables(typeof(Module), typeof(ModuleSub), typeof(Article), typeof(User), typeof(Words), typeof(Etyma));
+            //db.CodeFirst.InitTables(typeof(Words));
         }
 
         protected static SqlSugarClient GetDB()

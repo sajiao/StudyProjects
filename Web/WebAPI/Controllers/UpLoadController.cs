@@ -39,7 +39,7 @@ namespace WebAPI.Controllers
                     projectFileName = "38000词汇500词根全集.pdf";
                     break;
                 case 2:
-                    projectFileName = "词霸天下38000词汇大全集第1部分.pdf";
+                    projectFileName = "词霸天下38000词汇大全集第3部分.pdf";
                     break;
 
             }
@@ -73,21 +73,153 @@ namespace WebAPI.Controllers
         /// <param name="contents"></param>
         private void AddWords(List<string> contents)
         {
+         
             if (contents.IsNullOrEmpty()) return;
 
             Regex reg = new Regex(@"[^0-9.][\x00-\xff]{1,}");
             Regex regZh = new Regex(@"[^\x00-\xff].*$");
+            Regex regYB = new Regex(@"\[.*\]");
+            Regex regWordFreq = new Regex(@"(【).*(】)");
+            ///DBCC CHECKIDENT ('words', RESEED,31596) 
+            //var lastIndex = contents.LastIndexOf("1. -vinc- = -vict-  胜，征服");
+            //var lastIndex = contents.LastIndexOf("101. -sur-  确定");
+            var lastIndex = contents.LastIndexOf("201. -honor- = -hono- = -honest-  荣誉");
+            string wordSrouce = "【词源】";
+            string wordExtion = "【引申】";
+            string wordFreq = "【词频 ";
+            contents.RemoveRange(0, lastIndex);
+            Etyma etyma = new Etyma();
+            bool isEtyma = false;
+            string wordSrouceTemp = string.Empty;
+            string wordExtionTemp = string.Empty;
+            string wordDesc = string.Empty;
+            int index = 0;
+            Words entity = new Words();
+            int totalIndex = contents.Count();
             foreach (var item in contents)
             {
-                Words entity = new Words();
-               
-                entity.FullDesc = item;
-                entity.Desc = reg.Match(item).Value.Replace("-","").TryTrim();
-                entity.ZhDesc = regZh.Matches(item).Last().Value.TryTrim();
-                entity.Word = entity.Desc.Split("=")[0].TryTrim();
-                entity.Status = 1;
-                WordsBLL.Insert(entity);
+                try
+                {
+                    
+                    string etymaDesc = reg.Match(item).Value.Replace("-", "").TryTrim();
+                    (bool isExist, var etymatemp) = EtymaBLL.GetByDesc(etymaDesc);
+                    if (isExist)
+                    {
+                        etyma = etymatemp;
+                        isEtyma = true;
+                    }
+                    if (isEtyma)
+                    {
+                        if (item.Contains(wordSrouce))
+                        {
+                            wordSrouceTemp += item.Replace(wordSrouce, "");
+                        }
+                        else if (item.Contains(wordExtion))
+                        {
+                            wordExtionTemp += item.Replace(wordExtion, ""); ;
+                        }
+                        else
+                        {
+                            if (wordExtionTemp.IsNullOrEmpty() && wordSrouceTemp.IsNotNullOrEmpty())
+                            {
+                                wordSrouceTemp += item;
+                            }
+                        }
+                        bool isSave = false;
+                        if (totalIndex == (index + 1))
+                        {
+                            isSave = true;
+                        }
+                        else
+                        {
+                            var nextItem = contents[index + 1];
+                            if (nextItem.Contains(wordFreq))
+                            {
+                                isSave = true;
+                            }
+                        }
+                        
+                        if (isSave)
+                        {
+                            isEtyma = false;
+                            etyma.Extention = wordExtionTemp;
+                            etyma.EtymaSource = wordSrouceTemp;
+                            EtymaBLL.Update(etyma);
+                        }
+                    }
+                    else
+                    {
+                        bool isSave = false;
+                        if (totalIndex == (index + 1))
+                        {
+                            isSave = true;
+                        }
+                        else
+                        {
+                            var nextItem = contents[index + 1];
+                            isSave = regYB.Match(nextItem).Success;
+                        }
+
+                        if (wordDesc.IsNullOrEmpty())
+                        {
+                            wordDesc = item;
+                        }
+
+                        if (isSave)
+                        {
+                            var matches = regWordFreq.Matches(wordDesc);
+
+                            if (matches.HasValue())
+                            {
+                                var matchValue = matches.First().Value.IndexOf(wordFreq) > 0 ? matches.First().Value.Remove(0, matches.First().Value.IndexOf(wordFreq)) : matches.First().Value;
+                                var tempStr = matchValue.Replace(wordFreq, "").TryTrim();
+                                var freq = tempStr.Substring(0, tempStr.IndexOf("】")).TryTrim();
+                                var arr = freq.Split("，");
+                                entity.Frequency = arr[0].TryToInt();
+                                if (arr.Length > 1)
+                                {
+                                    entity.Frequency2 = freq.Replace(arr[0] + "，", "");
+                                }
+
+                                wordDesc = wordDesc.Replace(matchValue, "");
+                            }
+
+                            entity.EtymaId = etyma.Id;
+                            entity.FullDesc = wordDesc;
+                            entity.Desc = wordDesc.TryTrim();
+                            entity.ZhDesc = regZh.Matches(wordDesc).Last().Value.TryTrim();
+                            if (entity.ZhDesc.Contains("]"))
+                            {
+                                entity.ZhDesc = entity.ZhDesc.Remove(0, entity.ZhDesc.IndexOf("]") + 1).TryTrim();
+                            }
+                            entity.PhoneticSymbolUK = regYB.Match(wordDesc).Value;
+                            entity.Word = wordDesc.Substring(0, wordDesc.IndexOf(entity.PhoneticSymbolUK)).TryTrim();
+                            entity.Status = 1;
+
+                            WordsBLL.Insert(entity);
+                            wordDesc = string.Empty;
+                            entity = new Words();
+                        }
+                        else
+                        {
+                            if (wordDesc != item)
+                            {
+                                wordDesc += item;
+                            }
+
+                        }
+                    }
+
+                    index++;
+                }
+                catch (Exception ex)
+                {
+                    Logger.WriteErrorLog(string.Format("WordDesc:{2},Error Message:{0},StackTrace:{1}", ex.Message, ex.StackTrace, item));
+                    throw ex;
+                }
             }
+           
+            
         }
 
         /// <summary>

@@ -58,6 +58,22 @@ namespace BLL
             return (isExist, result);
         }
 
+        public static (bool, Etyma) GetByDesc(string desc)
+        {
+            Etyma result = null;
+            bool isExist = false;
+            foreach (var item in mDict)
+            {
+                if (item.Value.Desc.EqualsCurrentCultureIgnoreCase(desc))
+                {
+                    result = item.Value;
+                    isExist = true;
+                    break;
+                }
+            }
+            return (isExist, result);
+        }
+
         public static List<Etyma> GetAll()
         {
             var dbContext = new DbContext();
