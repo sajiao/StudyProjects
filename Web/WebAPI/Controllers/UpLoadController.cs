@@ -80,34 +80,48 @@ namespace WebAPI.Controllers
             Regex regZh = new Regex(@"[^\x00-\xff].*$");
             Regex regYB = new Regex(@"\[.*\]");
             Regex regWordFreq = new Regex(@"(【).*(】)");
-            ///DBCC CHECKIDENT ('words', RESEED,31596) 
+            //DBCC CHECKIDENT ('words', RESEED,31596) 
             //var lastIndex = contents.LastIndexOf("1. -vinc- = -vict-  胜，征服");
-            //var lastIndex = contents.LastIndexOf("101. -sur-  确定");
+            // var lastIndex = contents.LastIndexOf("101. -sur-  确定");
             var lastIndex = contents.LastIndexOf("201. -honor- = -hono- = -honest-  荣誉");
             string wordSrouce = "【词源】";
             string wordExtion = "【引申】";
-            string wordFreq = "【词频 ";
+            string wordFreq = "【词频";
             contents.RemoveRange(0, lastIndex);
             Etyma etyma = new Etyma();
             bool isEtyma = false;
             string wordSrouceTemp = string.Empty;
             string wordExtionTemp = string.Empty;
             string wordDesc = string.Empty;
-            int index = 0;
+            int index = -1;
             Words entity = new Words();
             int totalIndex = contents.Count();
+            bool debug = false;
             foreach (var item in contents)
             {
+                index++;
                 try
                 {
-                    
-                    string etymaDesc = reg.Match(item).Value.Replace("-", "").TryTrim();
-                    (bool isExist, var etymatemp) = EtymaBLL.GetByDesc(etymaDesc);
-                    if (isExist)
+                    //if (item.TryTrim() == "293. -cert-  确实")
+                    //{
+                    //    debug = true;
+                    //}
+                    //else if(debug == false)
+                    //{
+                    //    continue;
+                    //}
+
+                    if(isEtyma == false)
                     {
-                        etyma = etymatemp;
-                        isEtyma = true;
+                        string etymaDesc = reg.Match(item).Value.Replace("-", "").TryTrim();
+                        (bool isExist, var etymatemp) = EtymaBLL.GetByDesc(etymaDesc);
+                        if (isExist)
+                        {
+                            etyma = etymatemp;
+                            isEtyma = true;
+                        }
                     }
+
                     if (isEtyma)
                     {
                         if (item.Contains(wordSrouce))
@@ -145,6 +159,8 @@ namespace WebAPI.Controllers
                             etyma.Extention = wordExtionTemp;
                             etyma.EtymaSource = wordSrouceTemp;
                             EtymaBLL.Update(etyma);
+                            wordExtionTemp = string.Empty;
+                            wordSrouceTemp = string.Empty;
                         }
                     }
                     else
@@ -193,6 +209,7 @@ namespace WebAPI.Controllers
                                 entity.ZhDesc = entity.ZhDesc.Remove(0, entity.ZhDesc.IndexOf("]") + 1).TryTrim();
                             }
                             entity.PhoneticSymbolUK = regYB.Match(wordDesc).Value;
+                            entity.PhoneticSymbolUK = entity.PhoneticSymbolUK.Substring(0, entity.PhoneticSymbolUK.IndexOf("]")+1);
                             entity.Word = wordDesc.Substring(0, wordDesc.IndexOf(entity.PhoneticSymbolUK)).TryTrim();
                             entity.Status = 1;
 
@@ -209,8 +226,6 @@ namespace WebAPI.Controllers
 
                         }
                     }
-
-                    index++;
                 }
                 catch (Exception ex)
                 {

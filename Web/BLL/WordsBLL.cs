@@ -79,6 +79,8 @@ namespace BLL
             {
                 var dbContext = new DbContext();
                 id = dbContext.WordsDb.InsertReturnIdentity(param);
+                param.Id = id;
+                mDict[id] = param;
             }
 
             return GetById(id);
