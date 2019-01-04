@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using DotNet.Common;
+using Entities.Request;
+
 namespace BLL
 {
    public class EtymaBLL : DbContext, IInits
@@ -75,6 +77,12 @@ namespace BLL
         }
 
         public static List<Etyma> GetAll()
+        {
+            var dbContext = new DbContext();
+            return dbContext.EtymaDb.GetList();
+        }
+
+        public static List<Etyma> QueryPageList(ReqEtyma req)
         {
             var dbContext = new DbContext();
             return dbContext.EtymaDb.GetList();

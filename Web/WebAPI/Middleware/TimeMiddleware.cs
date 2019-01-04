@@ -41,8 +41,8 @@ namespace WebAPI.Middleware
             //return;
             _watch?.Start();
             await _next.Invoke(context);
-            var body = context.Response.Body.ToString();
-            await context.Response.WriteAsync($"共耗时:{_watch?.GetMillionSeconds()} 毫秒!");
+            //var body = context.Response.Body.ToString();
+            //await context.Response.WriteAsync($"共耗时:{_watch?.GetMillionSeconds()} 毫秒!");
         }
 
     }

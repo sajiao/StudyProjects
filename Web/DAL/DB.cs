@@ -80,7 +80,7 @@ namespace DAL
         {
             var db = GetDB();
             var total = 0;
-            var getPage = db.Queryable<T>().Where(w => fun(w)).OrderBy(t.Order).ToPageList(1, 2, ref total);//根据分页查询
+            var getPage = db.Queryable<T>().Where(w => fun(w)).OrderBy(t.Order).ToPageList(t.PageIndex, t.PageSize, ref total);//根据分页查询
             return (getPage, total);
         }
 

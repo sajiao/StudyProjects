@@ -9,30 +9,30 @@ namespace BLL
 {
    public class WordsBLL : DbContext, IInits
     {
-        private static Dictionary<int, Words> mDict = null;
+        private static Dictionary<string, Words> mDict = null;
         public void Init()
         {
             var all = GetAll();
 
             if (all != null && all.Count > 0)
             {
-                mDict = new Dictionary<int, Words>(all.Count);
+                mDict = new Dictionary<string, Words>(all.Count);
                 foreach (var item in all)
                 {
-                    mDict[item.Id] = item;
+                    mDict[item.Word] = item;
                 }
             }
             else
             {
-                mDict = new Dictionary<int, Words>();
+                mDict = new Dictionary<string, Words>();
             }
         }
 
-        private static Words GetItem(int id)
+        private static Words GetItem(string word)
         {
-            if (mDict.ContainsKey(id))
+            if (mDict.ContainsKey(word))
             {
-                return mDict[id];
+                return mDict[word];
             }
 
             return null;
@@ -40,22 +40,36 @@ namespace BLL
 
         public static Words GetById(int id)
         {
-            return GetItem(id);
+            Words result = null;
+            foreach (var item in mDict)
+            {
+                if (item.Value.Id == id)
+                {
+                    result = item.Value;
+ 
+                    break;
+                }
+            }
+            return result;
+        }
+
+        public static List<Words> GetByEtyma(int etymaId)
+        {
+            List<Words> result = new List<Words>();
+            foreach (var item in mDict)
+            {
+                if (item.Value.EtymaId == etymaId)
+                {
+                    result.Add(item.Value);
+                }
+            }
+            return result;
         }
 
         public static (bool, Words) GetByName(string word)
         {
-            Words result = null;
-            bool isExist = false;
-            foreach (var item in mDict)
-            {
-                if (item.Value.Word.EqualsCurrentCultureIgnoreCase(word))
-                {
-                    result = item.Value;
-                    isExist = true;
-                    break;
-                }
-            }
+            Words result = GetItem(word) ;
+            bool isExist = result != null;
             return (isExist, result);
         }
 
@@ -80,9 +94,8 @@ namespace BLL
                 var dbContext = new DbContext();
                 id = dbContext.WordsDb.InsertReturnIdentity(param);
                 param.Id = id;
-                mDict[id] = param;
             }
-
+            mDict[param.Word] = param;
             return GetById(id);
         }
 
