@@ -64,7 +64,7 @@ using Tool.Models;
             WriteLiteral("\r\n<div class=\"row\">\r\n    <div class=\"col-md-6\">\r\n        ");
             EndContext();
             BeginContext(102, 330, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "fa655d319a384f56a8082991be5e8191", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "8865aa9eb8a145709f7a81241f5a3e31", async() => {
                 BeginContext(196, 229, true);
                 WriteLiteral("\r\n            <div class=\"form-group\">\r\n\r\n                <label>Form表单上传文件:</label>\r\n                <input type=\"file\" name=\"files\" multiple />\r\n                <input type=\"submit\" value=\"上传\" />\r\n            </div>\r\n\r\n        ");
                 EndContext();

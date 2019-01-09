@@ -12,10 +12,12 @@ using Newtonsoft.Json.Linq;
 using Tool.Models;
 using DotNet.Common;
 using System.Text;
+using System.Web.Http.Cors;
 
 namespace Tool.Controllers
 {
-   
+
+    [EnableCors("*","*","*")]
     public class HomeController : Controller
     {
         private readonly IHostingEnvironment _hostingEnvironment;

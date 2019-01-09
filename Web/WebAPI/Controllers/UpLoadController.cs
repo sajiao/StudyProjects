@@ -279,10 +279,11 @@ namespace WebAPI.Controllers
         [HttpPost]
         public ResponseResult Post(List<IFormFile> files)
         {
-            if (files != null)
+            var data = Request.Form.Files;
+            if (data != null)
             {
-                var file = files[0];
-                var fileDir = AppContext.BaseDirectory;
+                var file = data[0];
+                var fileDir = Path.Combine(AppContext.BaseDirectory,"Upload");
                 if (!Directory.Exists(fileDir))
                 {
                     Directory.CreateDirectory(fileDir);

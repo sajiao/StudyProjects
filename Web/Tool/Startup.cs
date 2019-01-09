@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web.Http.Cors;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -16,6 +17,8 @@ namespace Tool
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+           
+
         }
 
         public IConfiguration Configuration { get; }
@@ -30,6 +33,11 @@ namespace Tool
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            //跨域配置
+            services.AddCors(options =>
+               options.AddPolicy("AllowAnyOrigin",
+               builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().AllowCredentials())
+           );
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
