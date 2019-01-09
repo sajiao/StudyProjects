@@ -17,21 +17,9 @@ namespace WebAPI.Controllers
         /// </summary>
         /// <returns>操作结果</returns>
         [HttpGet]
-        public ResponseResult Get()
+        public ResponseResult Get([FromQuery]Words req)
         {
-            return new ResponseResult(0, "", BLL.WordsBLL.GetAll());
-        }
-
-        /// <summary>
-        /// 获取模块接口
-        /// </summary>
-        /// <param name="id">id</param>
-        /// <returns>操作结果</returns>
-        // GET api/word/5
-        [HttpGet("{id}")]
-        public ResponseResult Get(int id)
-        {
-            return new ResponseResult(0, "", BLL.WordsBLL.GetByEtyma(id));
+            return new ResponseResult(0, "", BLL.WordsBLL.GetByEtyma(req.EtymaId));
         }
 
         /// <summary>
