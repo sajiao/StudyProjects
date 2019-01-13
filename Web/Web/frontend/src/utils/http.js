@@ -1,7 +1,7 @@
 'use strict'
 
 import axios from 'axios'
-//import { getToken } from '@/utils/auth'
+// import { getToken } from '@/utils/auth'
 
 // 超时时间
 axios.defaults.timeout = 5000
