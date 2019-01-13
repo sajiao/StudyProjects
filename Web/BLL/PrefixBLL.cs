@@ -6,35 +6,36 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using DotNet.Common;
+using Newtonsoft.Json;
 
 namespace BLL
 {
     public class PrefixBLL : DbContext, IInits
     {
-        private static Dictionary<int, Prefix> mDict = null;
+        private static Dictionary<string, Prefix> mDict = null;
         public void Init()
         {
             var all = GetAll();
 
             if (all != null && all.Count > 0)
             {
-                mDict = new Dictionary<int, Prefix>(all.Count);
+                mDict = new Dictionary<string, Prefix>(all.Count);
                 foreach (var item in all)
                 {
-                    mDict[item.Id] = item;
+                    mDict[item.Word] = item;
                 }
             }
             else
             {
-                mDict = new Dictionary<int, Prefix>();
+                mDict = new Dictionary<string, Prefix>();
             }
         }
 
-        private static Prefix GetItem(int id)
+        private static Prefix GetItem(string word)
         {
-            if (mDict.ContainsKey(id))
+            if (mDict.ContainsKey(word))
             {
-                return mDict[id];
+                return mDict[word];
             }
 
             return null;
@@ -42,22 +43,23 @@ namespace BLL
 
         public static Prefix GetById(int id)
         {
-            return GetItem(id);
+            Prefix result = null;
+            foreach (var item in mDict)
+            {
+                if (item.Value.Id == id)
+                {
+                    result = item.Value;
+
+                    break;
+                }
+            }
+            return result;
         }
 
         public static (bool, Prefix) GetByName(string word)
         {
-            Prefix result = null;
-            bool isExist = false;
-            foreach (var item in mDict)
-            {
-                if (item.Value.Word.EqualsCurrentCultureIgnoreCase(word))
-                {
-                    result = item.Value;
-                    isExist = true;
-                    break;
-                }
-            }
+            Prefix result = GetItem(word);
+            bool isExist = result != null;
             return (isExist, result);
         }
 
@@ -77,6 +79,17 @@ namespace BLL
             }
 
             var result = dbContext.PrefixDb.GetPages(req.ConvertData(), fun, req.PageInfo);
+
+            if (result.Results != null)
+            {
+                result.Results.ForEach(r => {
+                    if (r.Json.IsNotNullOrEmpty())
+                    {
+                        r.Extensions = JsonConvert.DeserializeObject<List<FixExtension>>(r.Json);
+                    }
+                });
+            }
+
             return result;
         }
 
@@ -84,6 +97,8 @@ namespace BLL
         {
             var (isExist, result) = GetByName(param.Word);
             int id;
+            param.Extensions = CommonHelper.GetWord(param.Json);
+            param.Json = JsonConvert.SerializeObject(param.Extensions);
             if (isExist)
             {
                 id = result.Id;
@@ -94,13 +109,16 @@ namespace BLL
             {
                 var dbContext = new DbContext();
                 id = dbContext.PrefixDb.InsertReturnIdentity(param);
+                param.Id = id;
             }
-
+            mDict[param.Word] = param;
             return GetById(id);
         }
 
         public static Prefix Update(Prefix param)
         {
+            param.Extensions = CommonHelper.GetWord(param.Json);
+            param.Json = JsonConvert.SerializeObject(param.Extensions);
             var dbContext = new DbContext();
             dbContext.PrefixDb.Update(param);
             return GetById(param.Id);

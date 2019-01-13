@@ -2,6 +2,10 @@
 
 export default {
   etymaAPI: 'etyma',
-  wordAPI: 'word'
+  wordAPI: 'word',
+  articleAPI: 'article',
+  nanhuarticleAPI: 'nanhuarticle',
+  prefixAPI: 'prefix',
+  suffixAPI: 'suffix'
 }
 

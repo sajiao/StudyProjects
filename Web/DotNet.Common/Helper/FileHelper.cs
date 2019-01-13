@@ -413,6 +413,31 @@ namespace DotNet.Common
                 throw ex;
             }
         }
+
+        public static void AppendText(string filePath, string text, Encoding encoding)
+        {
+            StreamWriter stream = null;
+
+            try
+            {
+                if (!File.Exists(filePath))
+                {
+                    Stream fileStream = File.Create(filePath);
+                    fileStream.Close();
+                }
+
+                stream = File.AppendText(filePath);
+                stream.WriteLine(text);
+                stream.Close();
+            }
+            catch
+            {
+                if (stream != null)
+                    stream.Close();
+                return;
+            }
+        }
+
         public static bool IsExistDirectory(string directoryPath)
         {
             return Directory.Exists(directoryPath);

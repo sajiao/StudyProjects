@@ -7,36 +7,36 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
 using DotNet.Common;
-
+using Newtonsoft.Json;
 
 namespace BLL
 {
    public class SuffixBLL : DbContext, IInits
     {
-        private static Dictionary<int, Suffix> mDict = null;
+        private static Dictionary<string, Suffix> mDict = null;
         public void Init()
         {
             var all = GetAll();
 
             if (all != null && all.Count > 0)
             {
-                mDict = new Dictionary<int, Suffix>(all.Count);
+                mDict = new Dictionary<string, Suffix>(all.Count);
                 foreach (var item in all)
                 {
-                    mDict[item.Id] = item;
+                    mDict[item.Word] = item;
                 }
             }
             else
             {
-                mDict = new Dictionary<int, Suffix>();
+                mDict = new Dictionary<string, Suffix>();
             }
         }
 
-        private static Suffix GetItem(int id)
+        private static Suffix GetItem(string word)
         {
-            if (mDict.ContainsKey(id))
+            if (mDict.ContainsKey(word))
             {
-                return mDict[id];
+                return mDict[word];
             }
 
             return null;
@@ -44,22 +44,23 @@ namespace BLL
 
         public static Suffix GetById(int id)
         {
-            return GetItem(id);
+            Suffix result = null;
+            foreach (var item in mDict)
+            {
+                if (item.Value.Id == id)
+                {
+                    result = item.Value;
+
+                    break;
+                }
+            }
+            return result;
         }
 
         public static (bool, Suffix) GetByName(string word)
         {
-            Suffix result = null;
-            bool isExist = false;
-            foreach (var item in mDict)
-            {
-                if (item.Value.Word.EqualsCurrentCultureIgnoreCase(word))
-                {
-                    result = item.Value;
-                    isExist = true;
-                    break;
-                }
-            }
+            Suffix result = GetItem(word);
+            bool isExist = result != null;
             return (isExist, result);
         }
 
@@ -79,6 +80,17 @@ namespace BLL
             }
 
             var result = dbContext.SuffixDb.GetPages(req.ConvertData(), fun, req.PageInfo);
+
+            if (result.Results != null)
+            {
+                result.Results.ForEach(r => {
+                    if (r.Json.IsNotNullOrEmpty())
+                    {
+                        r.Extensions = JsonConvert.DeserializeObject<List<FixExtension>>(r.Json);
+                    }
+                });
+            }
+
             return result;
         }
 
@@ -86,6 +98,8 @@ namespace BLL
         {
             var (isExist, result) = GetByName(param.Word);
             int id;
+            param.Extensions = CommonHelper.GetWord(param.Json);
+            param.Json = JsonConvert.SerializeObject(param.Extensions);
             if (isExist)
             {
                 id = result.Id;
@@ -96,13 +110,16 @@ namespace BLL
             {
                 var dbContext = new DbContext();
                 id = dbContext.SuffixDb.InsertReturnIdentity(param);
+                param.Id = id;
             }
-
+            mDict[param.Word] = param;
             return GetById(id);
         }
 
         public static Suffix Update(Suffix param)
         {
+            param.Extensions = CommonHelper.GetWord(param.Json);
+            param.Json = JsonConvert.SerializeObject(param.Extensions);
             var dbContext = new DbContext();
             dbContext.SuffixDb.Update(param);
             return GetById(param.Id);

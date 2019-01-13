@@ -16,7 +16,6 @@ namespace Entities
         public string Word { get; set; }
 
         public string ZhDesc { get; set; }
-
        
         public string PhoneticSymbolUK { get; set; }
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using BLL;
@@ -41,6 +42,9 @@ namespace WebAPI.Controllers
                 case 2:
                     projectFileName = "词霸天下38000词汇大全集第3部分.pdf";
                     break;
+                case 3:
+                    projectFileName = "神奇后缀篇.pdf";
+                    break;
 
             }
             
@@ -57,11 +61,15 @@ namespace WebAPI.Controllers
             {
                 AddEtyma(content);
             }
-            else if (type >= 2)
+            else if (type == 2)
             {
                 AddWords(content);
             }
-           
+            else if (type == 3)
+            {
+                FileHelper.CreateFile(filePath +".txt", content.JoinToString(Environment.NewLine), Encoding.UTF8);
+            }
+
             return new ResponseResult(0,"", content);
            
         }

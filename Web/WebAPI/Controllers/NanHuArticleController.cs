@@ -6,7 +6,7 @@ using WebAPI.Common;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Produces("application/json")]
     [Route("api/nanhuarticle")]
     public class NanHuArticleController : BaseController
     {

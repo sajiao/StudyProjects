@@ -38,8 +38,17 @@ namespace BLL
 
         public static NanHuArticle Insert(NanHuArticle param)
         {
-           var dbContext = new DbContext();
-           var id = dbContext.NanHuArticleDb.InsertReturnIdentity(param);
+            int id;
+            if (param.Id > 0)
+            {
+               return Update(param);
+            }
+            else
+            {
+                var dbContext = new DbContext();
+                id = dbContext.NanHuArticleDb.InsertReturnIdentity(param);
+            }
+           
             return GetById(id);
         }
 

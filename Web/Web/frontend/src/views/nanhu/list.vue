@@ -1,7 +1,11 @@
 <template>
   <div class="app-container">
+    <div class="filter-container">
+          <el-input v-model="listQuery.title" placeholder="title" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter"/>
+          <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{ $t('table.search') }}</el-button>
+        </div>
 
-    <el-table v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%">
+    <el-table v-loading="loading" :data="list" border fit highlight-current-row style="width: 100%">
       <el-table-column align="center" label="ID" width="80">
         <template slot-scope="scope">
           <span>{{ scope.row.id }}</span>
@@ -10,19 +14,15 @@
 
       <el-table-column width="180px" align="center" label="Date">
         <template slot-scope="scope">
-          <span>{{ scope.row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+          <span>{{ scope.row.showStartTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="120px" align="center" label="Author">
+      <el-table-column width="300px" align="center" label="Title">
         <template slot-scope="scope">
-          <span>{{ scope.row.author }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column width="100px" label="Importance">
-        <template slot-scope="scope">
-          <svg-icon v-for="n in +scope.row.importance" :key="n" icon-class="star" class="meta-item__icon"/>
+         <router-link :to="'/nanhu/edit/'+scope.row.id" class="link-type">
+            <span>{{ scope.row.title }}</span>
+          </router-link>
         </template>
       </el-table-column>
 
@@ -32,36 +32,30 @@
         </template>
       </el-table-column>
 
-      <el-table-column min-width="300px" label="Title">
-        <template slot-scope="scope">
-
-          <router-link :to="'/example/edit/'+scope.row.id" class="link-type">
-            <span>{{ scope.row.title }}</span>
-          </router-link>
-        </template>
-      </el-table-column>
-
       <el-table-column align="center" label="Actions" width="120">
         <template slot-scope="scope">
-          <router-link :to="'/example/edit/'+scope.row.id">
+          <router-link :to="'/nanhu/edit/'+scope.row.id">
             <el-button type="primary" size="small" icon="el-icon-edit">Edit</el-button>
           </router-link>
         </template>
       </el-table-column>
     </el-table>
 
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
+    <pagination v-show="total>0" :total="total" :pageIndex.sync="listQuery.pageIndex" :pageSize.sync="listQuery.pageSize" @pagination="getList" />
 
   </div>
 </template>
 
 <script>
-import { fetchList } from '@/api/article'
+import waves from '@/directive/waves' // Waves directive
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
+import api from '@/api/api'
+import baseapi from '@/api/baseapi'
 
 export default {
   name: 'ArticleList',
   components: { Pagination },
+  directives: { waves },
   filters: {
     statusFilter(status) {
       const statusMap = {
@@ -76,11 +70,13 @@ export default {
     return {
       list: null,
       total: 0,
-      listLoading: true,
+      loading: true,
       listQuery: {
-        page: 1,
-        limit: 20
-      }
+        pageIndex: 1,
+        pageSize: 10,
+        title:'',
+        sort: 'id'
+      },
     }
   },
   created() {
@@ -88,15 +84,19 @@ export default {
   },
   methods: {
     getList() {
-      this.listLoading = true
-      fetchList(this.listQuery).then(response => {
-        this.list = response.data.items
-        this.total = response.data.total
-        this.listLoading = false
+      this.loading = true;
+      baseapi.get(api.nanhuarticleAPI,this.listQuery).then(response => {
+        this.total = response.data.result.totalCount;
+        this.list = response.data.result.results;
+        this.loading = false;
       })
     },
+    handleFilter() {
+      this.listQuery.pageIndex = 1
+      this.getList()
+    },
     handleSizeChange(val) {
-      this.listQuery.limit = val
+      this.listQuery.pageSize = val
       this.getList()
     },
     handleCurrentChange(val) {

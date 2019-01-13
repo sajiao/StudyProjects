@@ -8,14 +8,10 @@
         <SourceUrlDropdown v-model="postForm.source_uri" />
         <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submitForm">发布
         </el-button>
-        <el-button v-loading="loading" type="warning" @click="draftForm">草稿</el-button>
       </sticky>
 
       <div class="createPost-main-container">
         <el-row>
-
-          <Warning />
-
           <el-col :span="24">
             <el-form-item style="margin-bottom: 40px;" prop="title">
               <MDinput v-model="postForm.title" :maxlength="100" name="name" required>
@@ -26,8 +22,8 @@
             <div class="postInfo-container">
               <el-row>
                 <el-col :span="8">
-                  <el-form-item label-width="45px" label="作者:" class="postInfo-container-item">
-                    <el-select v-model="postForm.author" :remote-method="getRemoteUserList" filterable remote placeholder="搜索用户">
+                  <el-form-item label-width="60px" label="类别:" class="postInfo-container-item">
+                    <el-select v-model="postForm.categoryId" :remote-method="getRemoteUserList" filterable remote placeholder="搜索类别">
                       <el-option v-for="(item,index) in userListOptions" :key="item+index" :label="item" :value="item"/>
                     </el-select>
                   </el-form-item>
@@ -35,19 +31,7 @@
 
                 <el-col :span="10">
                   <el-form-item label-width="80px" label="发布时间:" class="postInfo-container-item">
-                    <el-date-picker v-model="postForm.display_time" type="datetime" format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间"/>
-                  </el-form-item>
-                </el-col>
-
-                <el-col :span="6">
-                  <el-form-item label-width="60px" label="重要性:" class="postInfo-container-item">
-                    <el-rate
-                      v-model="postForm.importance"
-                      :max="3"
-                      :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
-                      :low-threshold="1"
-                      :high-threshold="3"
-                      style="margin-top:8px;"/>
+                    <el-date-picker v-model="postForm.showStartTime" type="datetime" format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间"/>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -56,7 +40,7 @@
         </el-row>
 
         <el-form-item style="margin-bottom: 40px;" label-width="45px" label="摘要:">
-          <el-input :rows="1" v-model="postForm.content_short" type="textarea" class="article-textarea" autosize placeholder="请输入内容"/>
+          <el-input :rows="1" v-model="postForm.summary" type="textarea" class="article-textarea" autosize placeholder="请输入内容"/>
           <span v-show="contentShortLength" class="word-counter">{{ contentShortLength }}字</span>
         </el-form-item>
 
@@ -81,21 +65,25 @@ import Sticky from '@/components/Sticky' // 粘性header组件
 import { validateURL } from '@/utils/validate'
 import { fetchArticle } from '@/api/article'
 import { userSearch } from '@/api/remoteSearch'
-import Warning from './Warning'
 import { CommentDropdown, PlatformDropdown, SourceUrlDropdown } from './Dropdown'
+import api from '@/api/api'
+import baseapi from '@/api/baseapi'
 
 const defaultForm = {
-  status: 'draft',
-  title: '', // 文章题目
-  content: '', // 文章内容
-  content_short: '', // 文章摘要
-  source_uri: '', // 文章外链
-  image_uri: '', // 文章图片
-  display_time: undefined, // 前台展示时间
-  id: undefined,
-  platforms: ['a-platform'],
-  comment_disabled: false,
-  importance: 0
+    id: undefined,
+    categoryId: 0,
+    title: '',
+    content: '',
+    summary: '',
+    isStick:false,
+    stickEndTime:0,
+    stickEndTime:0,
+    showStartTime:undefined,
+    showEndTime:0,
+    showObject:0,
+    readingCount:0,
+    commentCount:0,
+    status: 1
 }
 
 export default {
@@ -105,7 +93,7 @@ export default {
     isEdit: {
       type: Boolean,
       default: false
-    }
+    },
   },
   data() {
     const validateRequire = (rule, value, callback) => {
@@ -149,7 +137,7 @@ export default {
   },
   computed: {
     contentShortLength() {
-      return this.postForm.content_short.length
+      return this.postForm.content.length
     },
     lang() {
       return this.$store.getters.language
@@ -170,14 +158,11 @@ export default {
   },
   methods: {
     fetchData(id) {
-      fetchArticle(id).then(response => {
-        this.postForm = response.data
-        // Just for test
-        this.postForm.title += `   Article Id:${this.postForm.id}`
-        this.postForm.content_short += `   Article Id:${this.postForm.id}`
-
-        // Set tagsview title
-        this.setTagsViewTitle()
+      this.loading = true
+      baseapi.getById(api.nanhuarticleAPI,id).then(response => {
+        this.postForm = response.data.result;
+        this.loading = false;
+        this.setTagsViewTitle();
       }).catch(err => {
         console.log(err)
       })
@@ -188,40 +173,28 @@ export default {
       this.$store.dispatch('updateVisitedView', route)
     },
     submitForm() {
-      this.postForm.display_time = parseInt(this.display_time / 1000)
-      console.log(this.postForm)
+      debugger;
+      this.postForm.showStartTime = parseInt(this.postForm.showStartTime / 1000)
       this.$refs.postForm.validate(valid => {
         if (valid) {
-          this.loading = true
-          this.$notify({
-            title: '成功',
-            message: '发布文章成功',
-            type: 'success',
-            duration: 2000
+          this.loading = true;
+          baseapi.post(api.nanhuarticleAPI,this.postForm).then(response => {
+            if (response.data.id > 0) {
+              this.$notify({
+                title: '成功',
+                message: '发布文章成功',
+                type: 'success',
+                duration: 2000
+              })
+            }
+            this.loading = false
           })
-          this.postForm.status = 'published'
-          this.loading = false
+
         } else {
           console.log('error submit!!')
           return false
         }
       })
-    },
-    draftForm() {
-      if (this.postForm.content.length === 0 || this.postForm.title.length === 0) {
-        this.$message({
-          message: '请填写必要的标题和内容',
-          type: 'warning'
-        })
-        return
-      }
-      this.$message({
-        message: '保存成功',
-        type: 'success',
-        showClose: true,
-        duration: 1000
-      })
-      this.postForm.status = 'draft'
     },
     getRemoteUserList(query) {
       userSearch(query).then(response => {

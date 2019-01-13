@@ -162,6 +162,24 @@ export const asyncRouterMap = [
         }
       },
       {
+        path: 'prefix',
+        component: () => import('@/views/english/prefix'),
+        name: 'prefixpage',
+        meta: {
+          title: 'prefix page',
+          roles: ['admin'] // or you can only set roles in sub nav
+        }
+      },
+      {
+        path: 'suffix',
+        component: () => import('@/views/english/suffix'),
+        name: 'suffixpage',
+        meta: {
+          title: 'suffix page',
+          roles: ['admin'] // or you can only set roles in sub nav
+        }
+      },
+      {
         path: 'word/:id(\\d+)',
         component: () => import('@/views/english/word'),
         name: 'wordpage',
@@ -205,26 +223,26 @@ export const asyncRouterMap = [
     redirect: '/example/list',
     name: 'Example',
     meta: {
-      title: 'example',
-      icon: 'example'
+      title: 'nanhu',
+      icon: 'nanhu'
     },
     children: [
       {
         path: 'create',
-        component: () => import('@/views/example/create'),
+        component: () => import('@/views/nanhu/create'),
         name: 'CreateArticle',
         meta: { title: 'createArticle', icon: 'edit' }
       },
       {
         path: 'edit/:id(\\d+)',
-        component: () => import('@/views/example/edit'),
+        component: () => import('@/views/nanhu/edit'),
         name: 'EditArticle',
         meta: { title: 'editArticle', noCache: true },
         hidden: true
       },
       {
         path: 'list',
-        component: () => import('@/views/example/list'),
+        component: () => import('@/views/nanhu/list'),
         name: 'ArticleList',
         meta: { title: 'articleList', icon: 'list' }
       }
