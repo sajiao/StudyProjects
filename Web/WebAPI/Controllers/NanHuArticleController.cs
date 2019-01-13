@@ -1,25 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Entities;
+﻿using Entities;
+using Entities.Request;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WebAPI.Common;
 
 namespace WebAPI.Controllers
 {
-    [Produces("application/json")]
-    [Route("api/word")]
-    public class WordController : BaseController
+    [Route("api/[controller]")]
+    [Route("api/nanhuarticle")]
+    public class NanHuArticleController : BaseController
     {
         /// <summary>
         /// 获取模块接口
         /// </summary>
         /// <returns>操作结果</returns>
-        [HttpGet("{id}")]
-        public ResponseResult Get(int id)
+        [HttpGet]
+        public ResponseResult Get([FromQuery]ReqNanHuArticle req)
         {
-            return new ResponseResult(0, "", BLL.WordsBLL.GetById(id));
+            req.PageInfo = HttpContext.Request.GetPageInfo();
+            return new ResponseResult(0, "", BLL.NanHuArticleBLL.QueryPageList(req));
         }
 
         /// <summary>
@@ -27,10 +26,11 @@ namespace WebAPI.Controllers
         /// </summary>
         /// <param name="id">id</param>
         /// <returns>操作结果</returns>
-        [HttpGet]
-        public ResponseResult Get([FromQuery]Words req)
+        // GET api/NanHuArticle/5
+        [HttpGet("{id}")]
+        public ResponseResult Get(int id)
         {
-            return new ResponseResult(0, "", BLL.WordsBLL.GetByEtyma(req.EtymaId));
+            return new ResponseResult(0, "", BLL.NanHuArticleBLL.GetById(id));
         }
 
         /// <summary>
@@ -40,18 +40,19 @@ namespace WebAPI.Controllers
         /// <returns>操作结果</returns>
         // POST api/values
         [HttpPost]
-        public Words Post([FromBody]Words value)
+        public NanHuArticle Post([FromBody]NanHuArticle value)
         {
-            return BLL.WordsBLL.Insert(value);
+            return BLL.NanHuArticleBLL.Insert(value);
         }
 
         /// <summary>
         /// Put模块接口
         /// </summary>
         /// <param name="value">value</param>
-        [HttpPut("{id}")]
-        public void Put([FromBody] Words value)
+        [HttpPut]
+        public NanHuArticle Put([FromBody] NanHuArticle value)
         {
+            return BLL.NanHuArticleBLL.Insert(value);
         }
 
         /// <summary>

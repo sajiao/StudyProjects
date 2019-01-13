@@ -4,15 +4,15 @@ using System.Text;
 
 namespace Entities.Request
 {
-    public class ReqArticle: ReqBase
+    public class ReqNanHuArticle: ReqBase
     {
         public int Id { get; set; }
 
         public string Title { get; set; }
 
-        public Article ConvertData()
+        public NanHuArticle ConvertData()
         {
-            Article data = new Article()
+            NanHuArticle data = new NanHuArticle()
             {
                 Id = this.Id,
                 Title = this.Title

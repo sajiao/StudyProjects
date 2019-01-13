@@ -12,10 +12,6 @@ namespace WebAPI
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-            .UseKestrel(options => {
-                options.Limits.MaxRequestBodySize = 1024*1000*1000;
-            })
-            
             .UseStartup<Startup>();
     }
 }

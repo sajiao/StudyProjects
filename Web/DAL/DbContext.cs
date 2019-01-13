@@ -26,10 +26,14 @@ namespace DAL
         public DbSet<Module> ModuleDb { get { return new DbSet<Module>(Db); } }
 
         public DbSet<Article> ArticleDb { get { return new DbSet<Article>(Db); } }
+        public DbSet<NanHuArticle> NanHuArticleDb { get { return new DbSet<NanHuArticle>(Db); } }
 
         public DbSet<Words> WordsDb { get { return new DbSet<Words>(Db); } }
 
         public DbSet<Etyma> EtymaDb { get { return new DbSet<Etyma>(Db); } }
 
+        public DbSet<Prefix> PrefixDb { get { return new DbSet<Prefix>(Db); } }
+
+        public DbSet<Suffix> SuffixDb { get { return new DbSet<Suffix>(Db); } }
     }
 }

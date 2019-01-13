@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Entities;
+﻿using Entities;
 using Entities.Request;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WebAPI.Common;
 
 namespace WebAPI.Controllers
 {
@@ -20,6 +17,7 @@ namespace WebAPI.Controllers
         [HttpGet]
         public ResponseResult Get([FromQuery]ReqEtyma req)
         {
+            req.PageInfo = HttpContext.Request.GetPageInfo();
             return new ResponseResult(0, "", BLL.EtymaBLL.QueryPageList(req));
         }
 
@@ -51,9 +49,10 @@ namespace WebAPI.Controllers
         /// Put模块接口
         /// </summary>
         /// <param name="value">value</param>
-        [HttpPut("{id}")]
-        public void Put([FromBody] Etyma value)
+        [HttpPut]
+        public Etyma Put([FromBody] Etyma value)
         {
+            return BLL.EtymaBLL.Insert(value);
         }
 
         /// <summary>

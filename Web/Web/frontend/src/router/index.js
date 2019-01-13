@@ -141,6 +141,44 @@ export const asyncRouterMap = [
       }
     ]
   },
+  {
+    path: '/english',
+    component: Layout,
+    redirect: '/english/index',
+    alwaysShow: true, // will always show the root menu
+    meta: {
+      title: 'english',
+      icon: 'lock',
+      roles: ['admin', 'editor'] // you can set roles in root nav
+    },
+    children: [
+      {
+        path: 'page',
+        component: () => import('@/views/english/etyma'),
+        name: 'etymapage',
+        meta: {
+          title: 'etyma page',
+          roles: ['admin'] // or you can only set roles in sub nav
+        }
+      },
+      {
+        path: 'word/:id(\\d+)',
+        component: () => import('@/views/english/word'),
+        name: 'wordpage',
+        meta: { title: 'wordpage', noCache: true },
+        hidden: true
+      },
+      {
+        path: 'word page',
+        component: () => import('@/views/english/word'),
+        name: 'wordpage',
+        meta: {
+          title: 'word page'
+          // if do not set roles, means: this page does not require permission
+        }
+      }
+    ]
+  },
 
   {
     path: '/icon',

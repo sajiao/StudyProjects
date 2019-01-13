@@ -23,11 +23,12 @@ namespace DAL
                 IsAutoCloseConnection = true,//自动释放数据务，如何存在事务，在事务结束后释放
                 InitKeyType = InitKeyType.Attribute //初始化主键和自增列信息到ORM的方式 codefirst
             });
-           //db.CodeFirst.InitTables(typeof(Module), typeof(ModuleSub), typeof(Article), typeof(User), typeof(Words), typeof(Etyma));
+            //db.CodeFirst.InitTables(typeof(Module), typeof(ModuleSub), typeof(Article), typeof(User), typeof(Words), typeof(Etyma));
             //db.CodeFirst.InitTables(typeof(Words));
+           // db.CodeFirst.InitTables(typeof(Article), typeof(NanHuArticle), typeof(Prefix), typeof(Suffix));
         }
 
-        protected static SqlSugarClient GetDB()
+        public static SqlSugarClient GetDB()
         {
             SqlSugarClient db = new SqlSugarClient(new ConnectionConfig()
             {
@@ -76,12 +77,17 @@ namespace DAL
             return db.Queryable<T>().Where(w => fun(w)).ToList();
         }
 
-        public static (List<T>, Int32) QueryPageList<T>(T t,Func<T, Boolean> fun) where T : Pages, new()
+        public static Result<T> QueryPageList<T>(T t,Expression<Func<T, Boolean>> fun, PageInfo pageInfo) where T : class, new()
         {
+            Result<T> result = new Result<T>();
             var db = GetDB();
             var total = 0;
-            var getPage = db.Queryable<T>().Where(w => fun(w)).OrderBy(t.Order).ToPageList(t.PageIndex, t.PageSize, ref total);//根据分页查询
-            return (getPage, total);
+
+            var getPage = db.Queryable<T>().WhereIF(fun != null, fun).OrderByIF(!string.IsNullOrEmpty(pageInfo.SortFields),pageInfo.SortFields).ToPageList(pageInfo.PageIndex, pageInfo.PageSize, ref total);//根据分页查询
+
+            result.Results = getPage;
+            result.TotalCount = total;
+            return result;
         }
 
 

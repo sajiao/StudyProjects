@@ -1,25 +1,24 @@
 ﻿using DAL;
 using Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using DotNet.Common;
 using Entities.Request;
 using SqlSugar;
+using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
+using DotNet.Common;
 
 namespace BLL
 {
-   public class EtymaBLL : DbContext, IInits
+    public class PrefixBLL : DbContext, IInits
     {
-        private static Dictionary<int, Etyma> mDict = null;
+        private static Dictionary<int, Prefix> mDict = null;
         public void Init()
         {
             var all = GetAll();
 
             if (all != null && all.Count > 0)
             {
-                mDict = new Dictionary<int, Etyma>(all.Count);
+                mDict = new Dictionary<int, Prefix>(all.Count);
                 foreach (var item in all)
                 {
                     mDict[item.Id] = item;
@@ -27,11 +26,11 @@ namespace BLL
             }
             else
             {
-                mDict = new Dictionary<int, Etyma>();
+                mDict = new Dictionary<int, Prefix>();
             }
         }
 
-        private static Etyma GetItem(int id)
+        private static Prefix GetItem(int id)
         {
             if (mDict.ContainsKey(id))
             {
@@ -41,14 +40,14 @@ namespace BLL
             return null;
         }
 
-        public static Etyma GetById(int id)
+        public static Prefix GetById(int id)
         {
             return GetItem(id);
         }
 
-        public static (bool,Etyma) GetByName(string word)
+        public static (bool, Prefix) GetByName(string word)
         {
-            Etyma result = null;
+            Prefix result = null;
             bool isExist = false;
             foreach (var item in mDict)
             {
@@ -62,42 +61,26 @@ namespace BLL
             return (isExist, result);
         }
 
-        public static (bool, Etyma) GetByDesc(string desc)
-        {
-            Etyma result = null;
-            bool isExist = false;
-            foreach (var item in mDict)
-            {
-                if (item.Value.Desc.EqualsCurrentCultureIgnoreCase(desc))
-                {
-                    result = item.Value;
-                    isExist = true;
-                    break;
-                }
-            }
-            return (isExist, result);
-        }
-
-        public static List<Etyma> GetAll()
+        public static List<Prefix> GetAll()
         {
             var dbContext = new DbContext();
-            return dbContext.EtymaDb.GetList();
+            return dbContext.PrefixDb.GetList();
         }
 
-        public static Result<Etyma> QueryPageList(ReqEtyma req)
+        public static Result<Prefix> QueryPageList(ReqPrefix req)
         {
             var dbContext = new DbContext();
-            Expression<Func<Etyma, bool>> fun = null;
+            Expression<Func<Prefix, bool>> fun = null;
             if (req.Word.IsNotNullOrEmpty())
             {
                 fun = (r) => SqlFunc.Contains(r.Word, req.Word);
             }
 
-            var result = dbContext.EtymaDb.GetPages(req.ConvertData(), fun, req.PageInfo);
+            var result = dbContext.PrefixDb.GetPages(req.ConvertData(), fun, req.PageInfo);
             return result;
         }
 
-        public static Etyma Insert(Etyma param)
+        public static Prefix Insert(Prefix param)
         {
             var (isExist, result) = GetByName(param.Word);
             int id;
@@ -110,22 +93,22 @@ namespace BLL
             else
             {
                 var dbContext = new DbContext();
-                id = dbContext.EtymaDb.InsertReturnIdentity(param);
+                id = dbContext.PrefixDb.InsertReturnIdentity(param);
             }
-            
+
             return GetById(id);
         }
 
-        public static Etyma Update(Etyma param)
+        public static Prefix Update(Prefix param)
         {
             var dbContext = new DbContext();
-            dbContext.EtymaDb.Update(param);
+            dbContext.PrefixDb.Update(param);
             return GetById(param.Id);
         }
         public static bool Delete(int id)
         {
             var dbContext = new DbContext();
-            return dbContext.EtymaDb.DeleteById(id);
+            return dbContext.PrefixDb.DeleteById(id);
         }
     }
 }

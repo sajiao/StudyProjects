@@ -7,7 +7,7 @@ using DotNet.Common;
 
 namespace BLL
 {
-   public class WordsBLL : DbContext, IInits
+   public class WordsBLL : DbContext, IInits, IBLL
     {
         private static Dictionary<string, Words> mDict = null;
         public void Init()
@@ -25,6 +25,23 @@ namespace BLL
             else
             {
                 mDict = new Dictionary<string, Words>();
+            }
+        }
+
+        public List<string> Check()
+        {
+            return null;
+        }
+
+        public void ConvertData()
+        {
+            foreach (var item in mDict)
+            {
+                var etyma = EtymaBLL.GetById(item.Value.EtymaId);
+                if (etyma != null)
+                {
+                    item.Value.EtymaWord = etyma.Word;
+                }
             }
         }
 

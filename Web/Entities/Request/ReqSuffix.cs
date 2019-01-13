@@ -1,21 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace Entities.Request
 {
-   public class ReqEtyma : ReqBase
+  public  class ReqSuffix: ReqBase
     {
         public int Id { get; set; }
 
         public string Word { get; set; }
 
-        // [Required(AllowEmptyStrings = true, ErrorMessage = nameof(Name) + "为必填参数")]
-        //public string Name { get; set; }
-        public Etyma ConvertData()
+        public Suffix ConvertData()
         {
-            Etyma data = new Etyma()
+            Suffix data = new Suffix()
             {
                 Id = this.Id
             };
