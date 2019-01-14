@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using SqlSugar;
 
-namespace Entities
+namespace Entities.Model
 {
     [SugarTable("Module", "模块表")]
     public class Module
     {
-        [SugarColumn(IsNullable = false, IsPrimaryKey = true, IsIdentity = true)]
+        [SugarColumn(IsNullable = false, IsPrimaryKey = true)]
         public int Id { get; set; }
 
         [SugarColumn(Length = 30, IsNullable = false, ColumnDescription = "别名")]

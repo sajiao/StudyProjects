@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Entities
+namespace Entities.Model
 {
     [SugarTable("Suffix", "后缀表")]
    public class Suffix

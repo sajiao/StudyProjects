@@ -2,6 +2,7 @@
 using Entities;
 using System;
 using System.Collections.Generic;
+using Entities.Model;
 
 namespace BLL
 {

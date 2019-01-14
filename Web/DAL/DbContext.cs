@@ -1,8 +1,5 @@
-﻿using Entities;
-using SqlSugar;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using SqlSugar;
+using Entities.Model;
 
 namespace DAL
 {

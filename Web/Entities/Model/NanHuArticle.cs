@@ -1,7 +1,7 @@
 ﻿using SqlSugar;
 using System;
 
-namespace Entities
+namespace Entities.Model
 {
     [SugarTable("NanHuArticle", "南湖文章表")]
     public class NanHuArticle

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using DotNet.Common;
 using Newtonsoft.Json;
+using Entities.Model;
 
 namespace BLL
 {

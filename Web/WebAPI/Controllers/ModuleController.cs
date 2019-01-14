@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Entities;
 using Microsoft.AspNetCore.Mvc;
+using Entities.Model;
+
 
 namespace WebAPI.Controllers
 {

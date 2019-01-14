@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using DotNet.Common;
+using Entities.Model;
 
 namespace BLL
 {
