@@ -45,7 +45,7 @@ rm(path.join(config.build.assetsRoot, config.build.assetsSubDirectory), err => {
     )
 
     if (process.env.npm_config_preview) {
-      const port = 8000
+      const port = 9526
       const host = 'http://localhost:' + port
       const basePath = config.build.assetsPublicPath
       const app = connect()
