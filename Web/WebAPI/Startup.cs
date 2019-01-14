@@ -79,8 +79,9 @@ namespace WebAPI
             app.UseMiddleware<TimeMiddleware>();
             // app.UseMiddleware<TimeMiddleware>(new StopWatch()); //也可以不把StopWatch添加到依赖注入容器中，而是在UserMiddleware方法中直接给出参数。
             app.UseMvc();
-
+#if !DEBUG
             InitBLL.Start();
+#endif
         }
     }
 }
