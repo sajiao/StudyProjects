@@ -69,20 +69,20 @@ import api from '@/api/api'
 import baseapi from '@/api/baseapi'
 
 const defaultForm = {
-    id: undefined,
-    categoryId: 0,
-    title: '',
-    content: '',
-    summary: '',
-    isStick:false,
-    stickEndTime:0,
-    stickEndTime:0,
-    showStartTime:undefined,
-    showEndTime:0,
-    showObject:0,
-    readingCount:0,
-    commentCount:0,
-    status: 1
+  id: undefined,
+  categoryId: 0,
+  title: '',
+  content: '',
+  summary: '',
+  isStick: false,
+  stickEndTime: 0,
+  stickEndTime: 0,
+  showStartTime: undefined,
+  showEndTime: 0,
+  showObject: 0,
+  readingCount: 0,
+  commentCount: 0,
+  status: 1
 }
 
 export default {
@@ -92,7 +92,7 @@ export default {
     isEdit: {
       type: Boolean,
       default: false
-    },
+    }
   },
   data() {
     const validateRequire = (rule, value, callback) => {
@@ -158,10 +158,10 @@ export default {
   methods: {
     fetchData(id) {
       this.loading = true
-      baseapi.getById(api.nanhuarticleAPI,id).then(response => {
-        this.postForm = response.data.result;
-        this.loading = false;
-        this.setTagsViewTitle();
+      baseapi.getById(api.nanhuarticleAPI, id).then(response => {
+        this.postForm = response.data.result
+        this.loading = false
+        this.setTagsViewTitle()
       }).catch(err => {
         console.log(err)
       })
@@ -172,12 +172,12 @@ export default {
       this.$store.dispatch('updateVisitedView', route)
     },
     submitForm() {
-      debugger;
+      debugger
       this.postForm.showStartTime = parseInt(this.postForm.showStartTime / 1000)
       this.$refs.postForm.validate(valid => {
         if (valid) {
-          this.loading = true;
-          baseapi.post(api.nanhuarticleAPI,this.postForm).then(response => {
+          this.loading = true
+          baseapi.post(api.nanhuarticleAPI, this.postForm).then(response => {
             if (response.data.id > 0) {
               this.$notify({
                 title: '成功',
@@ -188,7 +188,6 @@ export default {
             }
             this.loading = false
           })
-
         } else {
           console.log('error submit!!')
           return false

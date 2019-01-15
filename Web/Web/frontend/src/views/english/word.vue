@@ -24,7 +24,7 @@
 
       <el-table-column label="word" width="150px">
         <template slot-scope="scope">
-            <a href="#" @click="handleUpdate(scope.row)">{{ scope.row.word }}</a>
+          <a href="#" @click="handleUpdate(scope.row)">{{ scope.row.word }}</a>
         </template>
       </el-table-column>
 
@@ -211,7 +211,7 @@ export default {
         examination: '',
         splitWord: '',
         splitWordDesc: '',
-        level:'',
+        level: '',
         status: 1
       },
       dialogFormVisible: false,
