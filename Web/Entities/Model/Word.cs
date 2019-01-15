@@ -20,6 +20,9 @@ namespace Entities
         [SugarColumn(Length = 400, IsNullable = true, ColumnDescription = "单词拆分描述")]
         public string SplitWordDesc { get; set; }
 
+        [SugarColumn(Length = 100, IsNullable = true, ColumnDescription = "单词级别")]
+        public string Level { get; set; }
+
         [SugarColumn(IsNullable = false, ColumnDescription = "单词词源关联ID")]
         public int EtymaId { get; set; }
 

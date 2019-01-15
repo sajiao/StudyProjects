@@ -218,13 +218,13 @@ export const asyncRouterMap = [
   tableRouter,
 
   {
-    path: '/example',
+    path: '/nanhu',
     component: Layout,
-    redirect: '/example/list',
-    name: 'Example',
+    redirect: '/nanhu/list',
+    name: 'nanhu',
     meta: {
       title: 'nanhu',
-      icon: 'nanhu'
+      icon: 'example'
     },
     children: [
       {

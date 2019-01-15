@@ -24,13 +24,13 @@
 
       <el-table-column label="word" width="150px">
         <template slot-scope="scope">
-          <span>{{ scope.row.word }}</span>
+            <a href="#" @click="handleUpdate(scope.row)">{{ scope.row.word }}</a>
         </template>
       </el-table-column>
 
       <el-table-column label="SplitWord" width="150px">
         <template slot-scope="scope">
-          <span>{{ scope.row.splitWord }}</span>
+          <span>{{ scope.row.splitWordDesc }}</span>
         </template>
       </el-table-column>
 
@@ -92,47 +92,51 @@
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="150px" style="width: 700px; margin-left:50px;">
 
         <el-form-item label="Word" prop="word">
-          <el-input v-model="temp.word"/>
+          <el-input v-model="temp.word" />
         </el-form-item>
 
         <el-form-item label="SplitWord">
-          <el-input v-model="temp.splitWord"/>
+          <el-input v-model="temp.splitWord" />
         </el-form-item>
 
         <el-form-item label="SplitWordDesc">
-          <el-input v-model="temp.splitWordDesc"/>
+          <el-input :autosize="{ minRows: 2, maxRows: 4}" v-model="temp.splitWordDesc" type="textarea" placeholder="Please input" />
         </el-form-item>
 
         <el-form-item label="EtymaId" prop="etymaId">
-          <el-input v-model="temp.etymaId"/>
+          <el-input v-model="temp.etymaId" />
+        </el-form-item>
+
+        <el-form-item label="Level">
+          <el-input v-model="temp.level" />
         </el-form-item>
 
         <el-form-item label="PhoneticSymbolUK" prop="PhoneticSymbolUK">
-          <el-input v-model="temp.phoneticSymbolUK"/>
+          <el-input v-model="temp.phoneticSymbolUK" />
         </el-form-item>
         <el-form-item label="PhoneticSymbolUS" prop="phoneticSymbolUS">
-          <el-input v-model="temp.phoneticSymbolUS"/>
+          <el-input v-model="temp.phoneticSymbolUS" />
         </el-form-item>
         <el-form-item label="Desc">
-          <el-input :autosize="{ minRows: 2, maxRows: 4}" v-model="temp.desc" type="textarea" placeholder="Please input"/>
+          <el-input :autosize="{ minRows: 2, maxRows: 4}" v-model="temp.desc" type="textarea" placeholder="Please input" />
         </el-form-item>
 
         <el-form-item label="ZhDesc">
-          <el-input :autosize="{ minRows: 2, maxRows: 4}" v-model="temp.zhDesc" type="textarea" placeholder="Please input"/>
+          <el-input :autosize="{ minRows: 2, maxRows: 4}" v-model="temp.zhDesc" type="textarea" placeholder="Please input" />
         </el-form-item>
 
         <el-form-item label="FullDesc">
-          <el-input :autosize="{ minRows: 2, maxRows: 6}" v-model="temp.fullDesc" type="textarea" placeholder="Please input"/>
+          <el-input :autosize="{ minRows: 2, maxRows: 6}" v-model="temp.fullDesc" type="textarea" placeholder="Please input" />
         </el-form-item>
 
         <el-form-item label="Frequency">
-          <el-input v-model="temp.frequency"/>
+          <el-input v-model="temp.frequency" />
         </el-form-item>
         <el-form-item label="Frequency2">
-          <el-input v-model="temp.frequency2"/>
+          <el-input v-model="temp.frequency2" />
         </el-form-item>
         <el-form-item label="Examination">
-          <el-input v-model="temp.examination"/>
+          <el-input v-model="temp.examination" />
         </el-form-item>
 
       </el-form>
@@ -207,6 +211,7 @@ export default {
         examination: '',
         splitWord: '',
         splitWordDesc: '',
+        level:'',
         status: 1
       },
       dialogFormVisible: false,
@@ -282,6 +287,7 @@ export default {
         examination: '',
         splitWord: '',
         splitWordDesc: '',
+        level: '',
         status: 1
       }
     },
