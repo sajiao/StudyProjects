@@ -163,8 +163,8 @@
 import waves from '@/directive/waves' // Waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
-import wordAPI from '@/api/word'
-
+import api from '@/api/api'
+import baseapi from '@/api/baseapi'
 export default {
   name: 'ComplexTable',
   components: { Pagination },
@@ -237,7 +237,7 @@ export default {
     getList(id) {
       this.loading = true
       this.listQuery.etymaId = id
-      wordAPI.get(this.listQuery).then(response => {
+      baseapi.get(api.wordAPI,this.listQuery).then(response => {
         const items = response.data.result
         this.list = items.map(v => {
           this.$set(v, 'edit', false) // https://vuejs.org/v2/guide/reactivity.html
@@ -303,7 +303,7 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           this.loading = true
-          wordAPI.post(this.temp).then(response => {
+          baseapi.post(api.wordAPI,this.temp).then(response => {
             if (response.data.id > 0) {
               this.list.unshift(this.temp)
               this.dialogFormVisible = false
@@ -330,8 +330,7 @@ export default {
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          const tempData = Object.assign({}, this.temp)
-          wordAPI.post(this.temp).then(response => {
+          baseapi.post(api.wordAPI,this.temp).then(response => {
             if (response.data.id > 0) {
               for (const v of this.list) {
                 if (v.id === this.temp.id) {

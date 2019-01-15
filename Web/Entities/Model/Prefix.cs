@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Entities
+namespace Entities.Model
 {
     [SugarTable("Prefix", "前缀表")]
    public class Prefix

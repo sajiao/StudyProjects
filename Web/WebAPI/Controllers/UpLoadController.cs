@@ -12,6 +12,7 @@ using Entities;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Entities.Model;
 
 namespace WebAPI.Controllers
 {

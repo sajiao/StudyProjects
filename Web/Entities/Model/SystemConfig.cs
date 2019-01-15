@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Entities.Model;
 
-namespace BLL
+namespace Entities.Model
 {
-   public  class UserBLL
+   public class SystemConfig
     {
 
     }

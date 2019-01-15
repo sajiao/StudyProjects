@@ -1,11 +1,12 @@
 ﻿using DAL;
-using Entities;
 using Entities.Request;
 using SqlSugar;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using DotNet.Common;
+using Entities.Model;
+using Entities;
 
 namespace BLL
 {

@@ -8,6 +8,7 @@ using System.Linq.Expressions;
 using System.Text;
 using DotNet.Common;
 using Newtonsoft.Json;
+using Entities.Model;
 
 namespace BLL
 {

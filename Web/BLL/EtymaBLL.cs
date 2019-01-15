@@ -7,6 +7,7 @@ using DotNet.Common;
 using Entities.Request;
 using SqlSugar;
 using System.Linq.Expressions;
+using Entities.Model;
 
 namespace BLL
 {

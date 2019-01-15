@@ -49,7 +49,7 @@
         </div>
 
         <div style="margin-bottom: 20px;">
-          <Upload v-model="postForm.image_uri" />
+          <Upload v-model="postForm.imageUri" />
         </div>
       </div>
     </el-form>

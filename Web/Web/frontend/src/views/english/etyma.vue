@@ -123,7 +123,8 @@
 import waves from '@/directive/waves' // Waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
-import etymaAPI from '@/api/etyma'
+import api from '@/api/api'
+import baseapi from '@/api/baseapi'
 
 const calendarTypeOptions = [
   { key: 'CN', display_name: 'China' },
@@ -202,7 +203,7 @@ export default {
   methods: {
     getList() {
       this.loading = true
-      etymaAPI.get(this.listQuery).then(response => {
+      baseapi.get(api.etymaAPI,this.listQuery).then(response => {
         const items = response.data.result.results
         this.total = response.data.result.totalCount
         this.list = items.map(v => {
@@ -263,7 +264,7 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           this.loading = true
-          etymaAPI.post(this.temp).then(response => {
+          baseapi.post(api.etymaAPI,this.temp).then(response => {
             if (response.data.id > 0) {
               this.list.unshift(this.temp)
               this.dialogFormVisible = false
@@ -291,7 +292,7 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           const tempData = Object.assign({}, this.temp)
-          etymaAPI.post(this.temp).then(response => {
+          baseapi.post(this.temp).then(response => {
             if (response.data.id > 0) {
               for (const v of this.list) {
                 if (v.id === this.temp.id) {

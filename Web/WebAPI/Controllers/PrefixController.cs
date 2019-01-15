@@ -3,6 +3,8 @@ using Entities.Request;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Common;
+using Entities.Model;
+
 
 namespace WebAPI.Controllers
 {

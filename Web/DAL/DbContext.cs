@@ -1,8 +1,5 @@
-﻿using Entities;
-using SqlSugar;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using SqlSugar;
+using Entities.Model;
 
 namespace DAL
 {
@@ -35,5 +32,9 @@ namespace DAL
         public DbSet<Prefix> PrefixDb { get { return new DbSet<Prefix>(Db); } }
 
         public DbSet<Suffix> SuffixDb { get { return new DbSet<Suffix>(Db); } }
+
+        public DbSet<SystemItem> SystemConfigDb { get { return new DbSet<SystemItem>(Db); } }
+
+        
     }
 }
