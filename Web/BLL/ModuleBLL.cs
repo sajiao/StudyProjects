@@ -51,16 +51,30 @@ namespace BLL
 
         public static Module Insert(Module param)
         {
-            var dbContext = new DbContext();
-            var id = dbContext.ModuleDb.InsertReturnIdentity(param);
-            return GetById(id);
+            Module result;
+            var item = GetById(param.Id);
+            if (item == null)
+            {
+                var dbContext = new DbContext();
+                dbContext.ModuleDb.InsertReturnIdentity(param);
+                result = GetById(param.Id);
+                mDict[param.Id] = result;
+            }
+            else
+            {
+                result = Update(param);
+            }
+           
+            return result;
         }
 
         public static Module Update(Module param)
         {
             var dbContext = new DbContext();
             dbContext.ModuleDb.Update(param);
-            return GetById(param.Id);
+            var reslut = GetById(param.Id);
+            mDict[param.Id] = reslut;
+            return reslut;
         }
         public static bool Delete(int id)
         {

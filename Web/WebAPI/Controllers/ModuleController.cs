@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Entities;
+﻿using Entities;
 using Microsoft.AspNetCore.Mvc;
 using Entities.Model;
-
 
 namespace WebAPI.Controllers
 {
@@ -33,9 +28,9 @@ namespace WebAPI.Controllers
         /// <returns>操作结果</returns>
         // GET api/values/5
         [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        public ResponseResult Get(int id)
         {
-            return "value";
+            return new ResponseResult(0, "", BLL.ModuleBLL.GetById(id));
         }
 
         /// <summary>
@@ -54,9 +49,10 @@ namespace WebAPI.Controllers
         /// Put模块接口
         /// </summary>
         /// <param name="value">value</param>
-        [HttpPut("{id}")]
-        public void Put([FromBody] Module value)
+        [HttpPut]
+        public Module Put([FromBody] Module value)
         {
+            return BLL.ModuleBLL.Update(value);
         }
 
         /// <summary>

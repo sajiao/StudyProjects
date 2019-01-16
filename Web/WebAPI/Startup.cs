@@ -82,6 +82,7 @@ namespace WebAPI
 #if !DEBUG
             InitBLL.Start();
 #endif
+            InitBLL.Start();
         }
     }
 }

@@ -43,6 +43,26 @@ namespace BLL
             return GetItem(id);
         }
 
+        public static List<ModuleSub> GetByModuleId(int moduleID)
+        {
+            List<ModuleSub> result = new List<ModuleSub>();
+            foreach (var item in mDict)
+            {
+                if (moduleID == 0)
+                {
+                    result.Add(item.Value);
+                }
+                else if (item.Value.ModuleId == moduleID)
+                {
+                    result.Add(item.Value);
+
+                    break;
+                }
+            }
+
+            return result;
+        }
+
         public static List<ModuleSub> GetAll()
         {
             var dbContext = new DbContext();
@@ -51,16 +71,30 @@ namespace BLL
 
         public static ModuleSub Insert(ModuleSub param)
         {
-            var dbContext = new DbContext();
-            var id = dbContext.ModuleSubDb.InsertReturnIdentity(param);
-            return GetById(id);
+            ModuleSub result;
+            var item = GetById(param.Id);
+            if (item == null)
+            {
+                var dbContext = new DbContext();
+                dbContext.ModuleSubDb.InsertReturnIdentity(param);
+                result = GetById(param.Id);
+                mDict[param.Id] = result;
+            }
+            else
+            {
+                result = Update(param);
+            }
+            
+            return result;
         }
 
         public static ModuleSub Update(ModuleSub param)
         {
             var dbContext = new DbContext();
             dbContext.ModuleSubDb.Update(param);
-            return GetById(param.Id);
+            var reslut = GetById(param.Id);
+            mDict[param.Id] = reslut;
+            return reslut;
         }
         public static bool Delete(int id)
         {

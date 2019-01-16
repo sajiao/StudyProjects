@@ -112,6 +112,7 @@ namespace BLL
             {
                 var dbContext = new DbContext();
                 id = dbContext.EtymaDb.InsertReturnIdentity(param);
+                mDict[id] = param;
             }
             
             return GetById(id);
@@ -121,6 +122,7 @@ namespace BLL
         {
             var dbContext = new DbContext();
             dbContext.EtymaDb.Update(param);
+            mDict[param.Id] = param;
             return GetById(param.Id);
         }
         public static bool Delete(int id)

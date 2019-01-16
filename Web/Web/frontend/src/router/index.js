@@ -142,6 +142,44 @@ export const asyncRouterMap = [
     ]
   },
   {
+    path: '/module',
+    component: Layout,
+    redirect: '/module/index',
+    alwaysShow: true, // will always show the root menu
+    meta: {
+      title: 'module',
+      icon: 'lock',
+      roles: ['admin', 'editor'] // you can set roles in root nav
+    },
+    children: [
+      {
+        path: 'page',
+        component: () => import('@/views/module/module'),
+        name: 'module page',
+        meta: {
+          title: 'module page',
+          roles: ['admin'] // or you can only set roles in sub nav
+        }
+      },
+      {
+        path: 'sub/:id(\\d+)',
+        component: () => import('@/views/module/sub'),
+        name: 'modulesub page',
+        meta: { title: 'modulesub', noCache: true },
+        hidden: true
+      },
+      {
+        path: 'modulesub page',
+        component: () => import('@/views/module/sub'),
+        name: 'modulesub',
+        meta: {
+          title: 'modulesub page'
+          // if do not set roles, means: this page does not require permission
+        }
+      }
+    ]
+  },
+  {
     path: '/english',
     component: Layout,
     redirect: '/english/index',

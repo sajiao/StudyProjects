@@ -6,6 +6,10 @@ export default {
   articleAPI: 'article',
   nanhuarticleAPI: 'nanhuarticle',
   prefixAPI: 'prefix',
-  suffixAPI: 'suffix'
+  suffixAPI: 'suffix',
+  moduleAPI: 'module',
+  modulesubAPI: 'modulesub',
+  userAPI: 'user',
+  loginAPI: 'login'
 }
 

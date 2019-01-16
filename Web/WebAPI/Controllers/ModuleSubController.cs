@@ -1,48 +1,70 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Entities;
 using Microsoft.AspNetCore.Mvc;
 using Entities.Model;
-
+using Entities.Request;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    /// <summary>
+    /// 模块接口
+    /// </summary>
+    [Produces("application/json")]
+    [Route("api/modulesub")]
     public class ModuleSubController : BaseController
     {
-        // GET api/values
+        /// <summary>
+        /// 获取模块接口
+        /// </summary>
+        /// <returns>操作结果</returns>
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public ResponseResult Get([FromQuery]ReqModuleSub req)
         {
-            return new string[] { "value1", "value2" };
+            return new ResponseResult(0, "", BLL.ModuleSubBLL.GetByModuleId(req.ModuleId));
         }
 
+        /// <summary>
+        /// 获取模块接口
+        /// </summary>
+        /// <param name="id">id</param>
+        /// <returns>操作结果</returns>
         // GET api/values/5
         [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        public ResponseResult Get(int id)
         {
-            return "value";
+            return new ResponseResult(0, "", BLL.ModuleSubBLL.GetById(id));
         }
 
+        /// <summary>
+        /// Post模块接口
+        /// </summary>
+        /// <param name="value">value</param>
+        /// <returns>操作结果</returns>
         // POST api/values
         [HttpPost]
-        public void Post([FromBody] string value)
+        public ModuleSub Post([FromBody]ModuleSub value)
         {
+            return BLL.ModuleSubBLL.Insert(value);
         }
 
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        /// <summary>
+        /// Put模块接口
+        /// </summary>
+        /// <param name="value">value</param>
+        [HttpPut]
+        public ModuleSub Put([FromBody] ModuleSub value)
         {
+            return BLL.ModuleSubBLL.Update(value);
         }
 
-        // DELETE api/values/5
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <param name="id">id</param>
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public ResponseResult Delete(int id)
         {
+           var result = BLL.ModuleSubBLL.Delete(id);
+           return  new ResponseResult(0, "", result);
         }
     }
 }
