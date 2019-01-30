@@ -4,8 +4,8 @@
     "\\api",
     "\\router",
     "\\views",
-    "\\views\\module"
+    "\\views\\nanhu\\components"
   ],
-  "SelectedNode": "\\views\\module\\sub.vue",
+  "SelectedNode": "\\views\\module",
   "PreviewInSolutionExplorer": false
 }

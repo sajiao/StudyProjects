@@ -166,6 +166,13 @@ export default {
         console.log(err)
       })
     },
+    getSubModule() {
+      this.listQuery.moduleId = id
+      baseapi.get(api.modulesubAPI, this.listQuery).then(response => {
+        const items = response.data.result
+        this.list = items;
+      })
+    },
     setTagsViewTitle() {
       const title = this.lang === 'zh' ? '编辑文章' : 'Edit Article'
       const route = Object.assign({}, this.tempRoute, { title: `${title}-${this.postForm.id}` })
