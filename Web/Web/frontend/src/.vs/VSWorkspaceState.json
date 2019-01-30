@@ -1,11 +1,6 @@
 {
   "ExpandedNodes": [
-    "",
-    "\\api",
-    "\\router",
-    "\\views",
-    "\\views\\nanhu\\components"
+    "\\router"
   ],
-  "SelectedNode": "\\views\\module",
   "PreviewInSolutionExplorer": false
 }
