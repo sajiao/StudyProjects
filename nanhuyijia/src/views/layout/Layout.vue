@@ -1,17 +1,33 @@
 <template>
   <div :class="classObj" class="app-wrapper">
-    <div v-if="device==='mobile'&&sidebar.opened" class="drawer-bg" @click="handleClickOutside"/>
-    <sidebar class="sidebar-container"/>
     <div class="main-container">
-      <navbar/>
-      <tags-view/>
-      <app-main/>
+      <navbar />
+      <el-row class="header">
+        <el-menu theme="dark" :default-active="activeIndex" background-color="#2B6695"
+                 text-color="#fff"
+                 active-text-color="#ffd04b" mode="horizontal" @select="handleSelect">
+          <el-menu-item index="1"> <router-link to="/dashboard">❤&nbsp首页</router-link></el-menu-item>
+
+          <el-submenu index="2">
+            <template slot="title">
+              我的工作台
+            </template>
+            <el-menu-item index="2-1">选项1</el-menu-item>
+            <el-menu-item index="2-2">选项2</el-menu-item>
+            <el-menu-item index="2-3">选项3</el-menu-item>
+          </el-submenu>
+          <el-menu-item index="3"> <router-link to="/icon">消息中心</router-link></el-menu-item>
+          <el-menu-item index="4"> <router-link to="/icon">帮助中心</router-link></el-menu-item>
+        </el-menu>
+        <div class="line"></div>
+        </el-row>
+      <app-main />
     </div>
   </div>
 </template>
 
 <script>
-import { Navbar, Sidebar, AppMain, TagsView } from './components'
+  import { Navbar, Sidebar, AppMain, TagsView } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
 
 export default {
@@ -22,7 +38,12 @@ export default {
     AppMain,
     TagsView
   },
-  mixins: [ResizeMixin],
+   mixins: [ResizeMixin],
+    data() {
+      return {
+        activeIndex: '1'
+      }
+    },
   computed: {
     sidebar() {
       return this.$store.state.app.sidebar
@@ -40,9 +61,9 @@ export default {
     }
   },
   methods: {
-    handleClickOutside() {
-      this.$store.dispatch('closeSideBar', { withoutAnimation: false })
-    }
+    handleSelect(key) {
+      activeIndex = key;
+    },
   }
 }
 </script>

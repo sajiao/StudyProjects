@@ -1,11 +1,15 @@
 {
   "ExpandedNodes": [
     "",
-    "\\api",
     "\\router",
     "\\views",
+    "\\views\\dashboard\\admin",
+    "\\views\\dashboard\\editor",
+    "\\views\\layout",
+    "\\views\\layout\\components",
+    "\\views\\layout\\components\\Sidebar",
     "\\views\\nanhu\\components"
   ],
-  "SelectedNode": "\\views\\module",
+  "SelectedNode": "\\views\\layout\\components\\Sidebar\\index.vue",
   "PreviewInSolutionExplorer": false
 }

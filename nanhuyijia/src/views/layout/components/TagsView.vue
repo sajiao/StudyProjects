@@ -1,16 +1,16 @@
 <template>
   <div class="tags-view-container">
+
     <scroll-pane ref="scrollPane" class="tags-view-wrapper">
-      <router-link
-        v-for="tag in visitedViews"
-        ref="tag"
-        :class="isActive(tag)?'active':''"
-        :to="{ path: tag.path, query: tag.query, fullPath: tag.fullPath }"
-        :key="tag.path"
-        tag="span"
-        class="tags-view-item"
-        @click.middle.native="closeSelectedTag(tag)"
-        @contextmenu.prevent.native="openMenu(tag,$event)">
+      <router-link v-for="tag in visitedViews"
+                   ref="tag"
+                   :class="isActive(tag)?'active':''"
+                   :to="{ path: tag.path, query: tag.query, fullPath: tag.fullPath }"
+                   :key="tag.path"
+                   tag="span"
+                   class="tags-view-item"
+                   @click.middle.native="closeSelectedTag(tag)"
+                   @contextmenu.prevent.native="openMenu(tag,$event)">
         {{ generateTitle(tag.title) }}
         <span class="el-icon-close" @click.prevent.stop="closeSelectedTag(tag)" />
       </router-link>
