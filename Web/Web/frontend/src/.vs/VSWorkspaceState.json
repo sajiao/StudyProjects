@@ -1,6 +1,9 @@
 {
   "ExpandedNodes": [
-    "\\router"
+    "",
+    "\\views\\nanhu\\components",
+    "\\views\\nanhu\\components\\Dropdown"
   ],
+  "SelectedNode": "\\views",
   "PreviewInSolutionExplorer": false
 }

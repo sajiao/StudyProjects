@@ -34,6 +34,13 @@ namespace BLL
             }
 
             var result = dbContext.NanHuArticleDb.GetPages(req.ConvertData(), fun, req.PageInfo);
+            if (result.TotalCount > 0)
+            {
+                result.Results.ForEach(r =>
+                {
+                    r.CategoryName = ModuleSubBLL.GetById(r.CategoryId)?.Name;
+                });
+            }
             return result;
         }
 

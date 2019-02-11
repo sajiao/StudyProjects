@@ -1,49 +1,54 @@
 <template>
-  <div class="app-container">
-    <div class="filter-container">
-          <el-input v-model="listQuery.title" placeholder="title" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter"/>
-          <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{ $t('table.search') }}</el-button>
-        </div>
+  <el-container>
+    <el-aside width="200px" v-if="!isMobile"></el-aside>
+    <el-main>
+      <div class="app-container">
 
-    <el-table v-loading="loading" :data="list" border fit highlight-current-row style="width: 100%">
-      <el-table-column align="center" label="ID" width="80">
-        <template slot-scope="scope">
-          <span>{{ scope.row.id }}</span>
-        </template>
-      </el-table-column>
+        <el-table v-loading="loading" :data="list" highlight-current-row style="width: 100%">
 
-      <el-table-column width="180px" align="center" label="Date">
-        <template slot-scope="scope">
-          <span>{{ scope.row.showStartTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
-        </template>
-      </el-table-column>
+          <el-table-column  align="left" label="标题">
+            <template slot-scope="scope">
+              <router-link :to="'/nanhu/detail/'+scope.row.id" class="link-type">
+               <span v-if="scope.row.IsStick">置顶</span> <span>{{ scope.row.title }}</span>
+              </router-link>
+            </template>
+          </el-table-column>
 
-      <el-table-column width="300px" align="center" label="Title">
-        <template slot-scope="scope">
-         <router-link :to="'/nanhu/edit/'+scope.row.id" class="link-type">
-            <span>{{ scope.row.title }}</span>
-          </router-link>
-        </template>
-      </el-table-column>
+          <el-table-column width="100px" v-if="!isMobile" align="center" label="作者">
+            <template slot-scope="scope">
+             
+            </template>
+          </el-table-column>
+          <el-table-column width="100px" v-if="!isMobile" align="center" label="阅读量">
+            <template slot-scope="scope">
+              <span>{{ scope.row.ReadingCount }}</span>
+            </template>
+          </el-table-column>
 
-      <el-table-column class-name="status-col" label="Status" width="110">
-        <template slot-scope="scope">
-          <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status }}</el-tag>
-        </template>
-      </el-table-column>
+          <el-table-column width="100px" v-if="!isMobile" align="center" label="评论数">
+            <template slot-scope="scope">
+              <span>{{ scope.row.CommentCount }}</span>
+            </template>
+          </el-table-column>
+         
+          <el-table-column width="180px" v-if="!isMobile" align="center" label="发布日期">
+            <template slot-scope="scope">
+              <span>{{ scope.row.showStartTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+            </template>
+          </el-table-column>
 
-      <el-table-column align="center" label="Actions" width="120">
-        <template slot-scope="scope">
-          <router-link :to="'/nanhu/edit/'+scope.row.id">
-            <el-button type="primary" size="small" icon="el-icon-edit">Edit</el-button>
-          </router-link>
-        </template>
-      </el-table-column>
-    </el-table>
+        </el-table>
 
-    <pagination v-show="total>0" :total="total" :pageIndex.sync="listQuery.pageIndex" :pageSize.sync="listQuery.pageSize" @pagination="getList" />
+        <pagination v-show="total>0" :total="total" :pageIndex.sync="listQuery.pageIndex" :pageSize.sync="listQuery.pageSize" @pagination="getList" />
 
-  </div>
+      </div>
+    </el-main>
+    <el-aside width="200px" v-if="!isMobile">
+
+    </el-aside>
+  </el-container>
+
+ 
 </template>
 
 <script>
@@ -65,10 +70,11 @@ export default {
       }
       return statusMap[status]
     }
-  },
+    },
   data() {
     return {
       list: null,
+      isMobile: this.$store.state.app.device === 'mobile',
       total: 0,
       loading: true,
       listQuery: {

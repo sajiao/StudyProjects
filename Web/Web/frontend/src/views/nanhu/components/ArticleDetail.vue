@@ -6,7 +6,8 @@
         <CommentDropdown v-model="postForm.comment_disabled" />
         <PlatformDropdown v-model="postForm.platforms" />
         <SourceUrlDropdown v-model="postForm.source_uri" />
-        <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submitForm">发布
+        <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submitForm">
+          发布
         </el-button>
       </sticky>
 
@@ -21,18 +22,30 @@
 
             <div class="postInfo-container">
               <el-row>
-                <el-col :span="8">
-                  <el-form-item label-width="60px" label="类别:" class="postInfo-container-item">
-                    <el-select v-model="postForm.categoryId" :remote-method="getRemoteUserList" filterable remote placeholder="搜索类别">
-                      <el-option v-for="(item,index) in userListOptions" :key="item+index" :label="item" :value="item"/>
-                    </el-select>
+                <el-col :span="6">
+                  <el-select v-model="postForm.categoryId" filterable placeholder="请选择类别">
+                    <el-option v-for="item in modules"
+                               :key="item.id"
+                               :label="item.name"
+                               :value="item.id">
+                    </el-option>
+                  </el-select>
+
+                </el-col>
+
+                <el-col :span="6">
+                  <el-form-item label-width="80px" label="发布时间:" class="postInfo-container-item">
+                    <el-date-picker v-model="postForm.showStartTime" type="datetime" format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间" />
                   </el-form-item>
                 </el-col>
 
-                <el-col :span="10">
-                  <el-form-item label-width="80px" label="发布时间:" class="postInfo-container-item">
-                    <el-date-picker v-model="postForm.showStartTime" type="datetime" format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间"/>
-                  </el-form-item>
+                <el-col :span="2">
+                    <el-checkbox v-model="postForm.isStick">是否置顶</el-checkbox>
+                </el-col>
+                <el-col :span="6">
+                  <div class="block" v-if="postForm.isStick">
+                    <el-date-picker v-model="postForm.stickEndTime" type="datetime" format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间" />
+                  </div>
                 </el-col>
               </el-row>
             </div>
@@ -70,15 +83,14 @@ import baseapi from '@/api/baseapi'
 
 const defaultForm = {
   id: undefined,
-  categoryId: 0,
+  categoryId: '',
   title: '',
   content: '',
   summary: '',
   isStick: false,
-  stickEndTime: 0,
-  stickEndTime: 0,
+  stickEndTime: undefined,
   showStartTime: undefined,
-  showEndTime: 0,
+  showEndTime: undefined,
   showObject: 0,
   readingCount: 0,
   commentCount: 0,
@@ -131,7 +143,8 @@ export default {
         content: [{ validator: validateRequire }],
         source_uri: [{ validator: validateSourceUri, trigger: 'blur' }]
       },
-      tempRoute: {}
+      tempRoute: {},
+      modules: []
     }
   },
   computed: {
@@ -142,7 +155,13 @@ export default {
       return this.$store.getters.language
     }
   },
-  created() {
+    created() {
+      var query = {};
+      query.moduleId = 20;
+      baseapi.get(api.modulesubAPI, query).then(response => {
+        this.modules = response.data.result;
+      });
+
     if (this.isEdit) {
       const id = this.$route.params && this.$route.params.id
       this.fetchData(id)
@@ -160,6 +179,8 @@ export default {
       this.loading = true
       baseapi.getById(api.nanhuarticleAPI, id).then(response => {
         this.postForm = response.data.result
+        this.postForm.showStartTime = new Date(this.postForm.showStartTime * 1000);
+        this.postForm.stickEndTime = new Date(this.postForm.stickEndTime * 1000);
         this.loading = false
         this.setTagsViewTitle()
       }).catch(err => {
@@ -179,8 +200,8 @@ export default {
       this.$store.dispatch('updateVisitedView', route)
     },
     submitForm() {
-      debugger
-      this.postForm.showStartTime = parseInt(this.postForm.showStartTime / 1000)
+      this.postForm.showStartTime = parseInt(this.postForm.showStartTime / 1000);
+      this.postForm.stickEndTime = parseInt(this.postForm.stickEndTime / 1000);
       this.$refs.postForm.validate(valid => {
         if (valid) {
           this.loading = true
@@ -192,6 +213,8 @@ export default {
                 type: 'success',
                 duration: 2000
               })
+              this.postForm.showStartTime = new Date(this.postForm.showStartTime * 1000);
+              this.postForm.stickEndTime = new Date(this.postForm.stickEndTime * 1000);
             }
             this.loading = false
           })

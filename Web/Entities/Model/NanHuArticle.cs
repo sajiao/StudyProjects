@@ -12,6 +12,9 @@ namespace Entities.Model
         [SugarColumn(IsNullable = false, ColumnDescription = "类别ID")]
         public int CategoryId { get; set; }
 
+        [SugarColumn(IsIgnore = true)]
+        public string CategoryName { get; set; }
+
         [SugarColumn(Length = 200, IsNullable = false, ColumnDescription = "文章名称")]
         public string Title { get; set; }
 
@@ -53,6 +56,9 @@ namespace Entities.Model
 
         [SugarColumn(ColumnDescription = "创建者")]
         public Guid CreatedBy { get; set; }
+
+        [SugarColumn(IsIgnore = true)]
+        public string CreatedByName { get; set; }
 
         [SugarColumn(ColumnDescription = "上一次更新时间")]
         public int LastUpdatedTime { get; set; }

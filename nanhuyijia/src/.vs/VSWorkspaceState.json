@@ -2,14 +2,11 @@
   "ExpandedNodes": [
     "",
     "\\router",
+    "\\styles",
     "\\views",
-    "\\views\\dashboard\\admin",
-    "\\views\\dashboard\\editor",
     "\\views\\layout",
-    "\\views\\layout\\components",
-    "\\views\\layout\\components\\Sidebar",
-    "\\views\\nanhu\\components"
+    "\\views\\layout\\components"
   ],
-  "SelectedNode": "\\views\\layout\\components\\Sidebar\\index.vue",
+  "SelectedNode": "\\styles\\element-ui.scss",
   "PreviewInSolutionExplorer": false
 }

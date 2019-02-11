@@ -15,6 +15,9 @@ export default {
     cachedViews() {
       return this.$store.state.tagsView.cachedViews
     },
+    device() {
+      return this.$store.state.app.device
+    },
     key() {
       return this.$route.fullPath
     }

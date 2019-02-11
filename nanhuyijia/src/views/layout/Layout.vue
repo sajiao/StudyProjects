@@ -16,11 +16,23 @@
             <el-menu-item index="2-2">选项2</el-menu-item>
             <el-menu-item index="2-3">选项3</el-menu-item>
           </el-submenu>
-          <el-menu-item index="3"> <router-link to="/icon">消息中心</router-link></el-menu-item>
-          <el-menu-item index="4"> <router-link to="/icon">帮助中心</router-link></el-menu-item>
+          <el-menu-item index="3"> <router-link to="/guide">消息中心</router-link></el-menu-item>
+          <el-menu-item index="4"> <router-link to="/nanhu">帮助中心</router-link></el-menu-item>
         </el-menu>
         <div class="line"></div>
-        </el-row>
+      </el-row>
+      <el-tabs type="border-card">
+        <el-tab-pane label="用户管理">
+            <div v-for="o in 4" :key="o" class="text item">
+              <router-link :to="'/nanhu/edit/'">
+                {{'列表内容 ' + o }}
+              </router-link>
+            </div>
+        </el-tab-pane>
+        <el-tab-pane label="配置管理">配置管理</el-tab-pane>
+        <el-tab-pane label="角色管理">角色管理</el-tab-pane>
+        <el-tab-pane label="定时任务补偿">定时任务补偿</el-tab-pane>
+      </el-tabs>
       <app-main />
     </div>
   </div>
@@ -62,7 +74,7 @@ export default {
   },
   methods: {
     handleSelect(key) {
-      activeIndex = key;
+      this.activeIndex = key;
     },
   }
 }

@@ -55,8 +55,6 @@ namespace BLL
                 else if (item.Value.ModuleId == moduleID)
                 {
                     result.Add(item.Value);
-
-                    break;
                 }
             }
 

@@ -85,6 +85,37 @@ export const constantRouterMap = [
     ]
   },
   {
+    path: '/nanhu',
+    component: Layout,
+    redirect: '/nanhu/list',
+    name: 'nanhu',
+    meta: {
+      title: 'nanhu',
+      icon: 'example'
+    },
+    children: [
+      {
+        path: 'create',
+        component: () => import('@/views/nanhu/create'),
+        name: 'CreateArticle',
+        meta: { title: 'createArticle', icon: 'edit' }
+      },
+      {
+        path: 'edit/:id(\\d+)',
+        component: () => import('@/views/nanhu/edit'),
+        name: 'EditArticle',
+        meta: { title: 'editArticle', noCache: true },
+        hidden: true
+      },
+      {
+        path: 'list',
+        component: () => import('@/views/nanhu/list'),
+        name: 'ArticleList',
+        meta: { title: 'articleList', icon: 'list' }
+      }
+    ]
+  },
+  {
     path: '/guide',
     component: Layout,
     redirect: '/guide/index',
@@ -241,38 +272,6 @@ export const asyncRouterMap = [
         component: () => import('@/views/svg-icons/index'),
         name: 'Icons',
         meta: { title: 'icons', icon: 'icon', noCache: true }
-      }
-    ]
-  },
-
-  {
-    path: '/nanhu',
-    component: Layout,
-    redirect: '/nanhu/list',
-    name: 'nanhu',
-    meta: {
-      title: 'nanhu',
-      icon: 'example'
-    },
-    children: [
-      {
-        path: 'create',
-        component: () => import('@/views/nanhu/create'),
-        name: 'CreateArticle',
-        meta: { title: 'createArticle', icon: 'edit' }
-      },
-      {
-        path: 'edit/:id(\\d+)',
-        component: () => import('@/views/nanhu/edit'),
-        name: 'EditArticle',
-        meta: { title: 'editArticle', noCache: true },
-        hidden: true
-      },
-      {
-        path: 'list',
-        component: () => import('@/views/nanhu/list'),
-        name: 'ArticleList',
-        meta: { title: 'articleList', icon: 'list' }
       }
     ]
   },
