@@ -1,37 +1,35 @@
 <template>
   <el-container>
-    <el-aside width="200px" v-if="!isMobile"></el-aside>
+    <el-aside v-if="!isMobile" width="200px"/>
     <el-main>
       <div class="app-container">
 
         <el-table v-loading="loading" :data="list" highlight-current-row style="width: 100%">
 
-          <el-table-column  align="left" label="标题">
+          <el-table-column align="left" label="标题">
             <template slot-scope="scope">
               <router-link :to="'/nanhu/detail/'+scope.row.id" class="link-type">
-               <span v-if="scope.row.IsStick">置顶</span> <span>{{ scope.row.title }}</span>
+                <span v-if="scope.row.IsStick">置顶</span> <span>{{ scope.row.title }}</span>
               </router-link>
             </template>
           </el-table-column>
 
-          <el-table-column width="100px" v-if="!isMobile" align="center" label="作者">
-            <template slot-scope="scope">
-             
-            </template>
+          <el-table-column v-if="!isMobile" width="100px" align="center" label="作者">
+            <template slot-scope="scope"/>
           </el-table-column>
-          <el-table-column width="100px" v-if="!isMobile" align="center" label="阅读量">
+          <el-table-column v-if="!isMobile" width="100px" align="center" label="阅读量">
             <template slot-scope="scope">
               <span>{{ scope.row.ReadingCount }}</span>
             </template>
           </el-table-column>
 
-          <el-table-column width="100px" v-if="!isMobile" align="center" label="评论数">
+          <el-table-column v-if="!isMobile" width="100px" align="center" label="评论数">
             <template slot-scope="scope">
               <span>{{ scope.row.CommentCount }}</span>
             </template>
           </el-table-column>
-         
-          <el-table-column width="180px" v-if="!isMobile" align="center" label="发布日期">
+
+          <el-table-column v-if="!isMobile" width="180px" align="center" label="发布日期">
             <template slot-scope="scope">
               <span>{{ scope.row.showStartTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
             </template>
@@ -39,16 +37,13 @@
 
         </el-table>
 
-        <pagination v-show="total>0" :total="total" :pageIndex.sync="listQuery.pageIndex" :pageSize.sync="listQuery.pageSize" @pagination="getList" />
+        <pagination v-show="total>0" :total="total" :page-index.sync="listQuery.pageIndex" :page-size.sync="listQuery.pageSize" @pagination="getList" />
 
       </div>
     </el-main>
-    <el-aside width="200px" v-if="!isMobile">
-
-    </el-aside>
+    <el-aside v-if="!isMobile" width="200px"/>
   </el-container>
 
- 
 </template>
 
 <script>
@@ -70,7 +65,7 @@ export default {
       }
       return statusMap[status]
     }
-    },
+  },
   data() {
     return {
       list: null,
@@ -80,9 +75,9 @@ export default {
       listQuery: {
         pageIndex: 1,
         pageSize: 10,
-        title:'',
+        title: '',
         sort: 'id'
-      },
+      }
     }
   },
   created() {
@@ -90,11 +85,11 @@ export default {
   },
   methods: {
     getList() {
-      this.loading = true;
-      baseapi.get(api.nanhuarticleAPI,this.listQuery).then(response => {
-        this.total = response.data.result.totalCount;
-        this.list = response.data.result.results;
-        this.loading = false;
+      this.loading = true
+      baseapi.get(api.nanhuarticleAPI, this.listQuery).then(response => {
+        this.total = response.data.result.totalCount
+        this.list = response.data.result.results
+        this.loading = false
       })
     },
     handleFilter() {
