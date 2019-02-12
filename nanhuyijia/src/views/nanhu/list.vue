@@ -4,6 +4,19 @@
     <el-main>
       <div class="app-container">
 
+        <el-tabs type="border-card">
+          <el-tab-pane label="用户管理">
+            <div v-for="o in 4" :key="o" class="text item">
+              <router-link :to="'/nanhu/edit/'">
+                {{ '列表内容 ' + o }}
+              </router-link>
+            </div>
+          </el-tab-pane>
+          <el-tab-pane label="配置管理">配置管理</el-tab-pane>
+          <el-tab-pane label="角色管理">角色管理</el-tab-pane>
+          <el-tab-pane label="定时任务补偿">定时任务补偿</el-tab-pane>
+        </el-tabs>
+
         <el-table v-loading="loading" :data="list" highlight-current-row style="width: 100%">
 
           <el-table-column align="left" label="标题">
@@ -15,7 +28,7 @@
           </el-table-column>
 
           <el-table-column v-if="!isMobile" width="100px" align="center" label="作者">
-            <template slot-scope="scope"/>
+            <template slot-scope="scope" />
           </el-table-column>
           <el-table-column v-if="!isMobile" width="100px" align="center" label="阅读量">
             <template slot-scope="scope">
