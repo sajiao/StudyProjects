@@ -108,6 +108,13 @@ export const constantRouterMap = [
         hidden: true
       },
       {
+        path: 'detail/:id(\\d+)',
+        component: () => import('@/views/nanhu/detail'),
+        name: 'detail',
+        meta: { title: 'detail', noCache: true },
+        hidden: true
+      },
+      {
         path: 'list',
         component: () => import('@/views/nanhu/list'),
         name: 'ArticleList',
@@ -131,7 +138,7 @@ export const constantRouterMap = [
 ]
 
 export default new Router({
-  // mode: 'history', // require service support
+  mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRouterMap
 })

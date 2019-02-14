@@ -1,35 +1,49 @@
 <template>
   <div :class="classObj" class="app-wrapper">
     <div class="main-container">
-      <navbar />
-      <el-row class="header" >
-        <el-menu
-          :default-active="activeIndex" 
-          theme="dark"
-          background-color="#2B6695"
-          text-color="#fff"
-          active-text-color="#ffd04b"
-          mode="horizontal"
-          @select="handleSelect" type="flex" justify="center">
-          <el-menu-item index="1"> <router-link to="/dashboard">❤&nbsp首页</router-link></el-menu-item>
+      <el-row class="header">
+        <el-menu :default-active="activeIndex"
+                 theme="dark"
+                 background-color="#2B6695"
+                 text-color="#fff"
+                 active-text-color="#ffd04b"
+                 mode="horizontal"
+                 @select="handleSelect">
+          <el-menu-item index="1"> <router-link to="/nanhu">❤&nbsp首页</router-link></el-menu-item>
 
-          <el-submenu index="2">
-            <template slot="title">
-              我的工作台
-            </template>
-            <el-menu-item index="2-1">选项1</el-menu-item>
-            <el-menu-item index="2-2">选项2</el-menu-item>
-            <el-menu-item index="2-3">选项3</el-menu-item>
-          </el-submenu>
-          <el-menu-item index="3"> <router-link to="/guide">消息中心</router-link></el-menu-item>
-          <el-menu-item index="4"> <router-link to="/nanhu">帮助中心</router-link></el-menu-item>
+          <el-menu-item index="2"> <router-link to="/guide">消息中心</router-link></el-menu-item>
+          <el-menu-item index="3"> <router-link to="/dashboard">帮助中心</router-link></el-menu-item>
         </el-menu>
-        <div class="line"/>
+        <div class="line" />
       </el-row>
 
+      <el-tabs type="border-card">
+        <el-tab-pane label="用户管理">
+          <div v-for="o in 4" :key="o" class="text item">
+            <router-link :to="'/nanhu/edit/'">
+              {{ '列表内容 ' + o }}
+            </router-link>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="配置管理">配置管理</el-tab-pane>
+        <el-tab-pane label="角色管理">角色管理</el-tab-pane>
+        <el-tab-pane label="定时任务补偿">定时任务补偿</el-tab-pane>
+      </el-tabs>
+
       <app-main />
+
+      <el-footer id="footer">
+        <p class="footer">
+          Copyright <a href="http://www.nanhuyijia.com">南湖逸家</a>   2019-2025|  蜀ICP备11019899号
+
+          <a href="www.nanhuyijia.com">www.nanhuyijia.com</a>  <a target="_top" href="javascript:window.external.addFavorite('http://www.nanhuyijia.com','南湖逸家');">加入收藏</a>
+          <a href='#' onClick="this.style.behavior='url(#default#homepage)';this.setHomePage('http://www.nanhuyijia.com');">设为首页</a>
+        </p>
+
+      </el-footer>
+
     </div>
-  </div>
+    </div>
 </template>
 
 <script>
@@ -95,4 +109,6 @@ export default {
     position: absolute;
     z-index: 999;
   }
+
+
 </style>
