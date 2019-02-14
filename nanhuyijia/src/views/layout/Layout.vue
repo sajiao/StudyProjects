@@ -11,23 +11,41 @@
                  @select="handleSelect">
           <el-menu-item index="1"> <router-link to="/nanhu">❤&nbsp首页</router-link></el-menu-item>
 
-          <el-menu-item index="2"> <router-link to="/guide">消息中心</router-link></el-menu-item>
-          <el-menu-item index="3"> <router-link to="/dashboard">帮助中心</router-link></el-menu-item>
+          <el-menu-item index="2"> <router-link to="/nanhu">消息中心</router-link></el-menu-item>
+          <el-menu-item index="3"> <router-link to="/nanhu">帮助中心</router-link></el-menu-item>
         </el-menu>
-        <div class="line" />
+      
       </el-row>
 
       <el-tabs type="border-card">
-        <el-tab-pane label="用户管理">
-          <div v-for="o in 4" :key="o" class="text item">
-            <router-link :to="'/nanhu/edit/'">
-              {{ '列表内容 ' + o }}
+        <el-tab-pane label="通知">
+          <div v-for="item in notifications" :key="item.id" class="text item">
+            <router-link :to="'/nanhu/detail/'+item.id">
+              {{ item.title }}
             </router-link>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="配置管理">配置管理</el-tab-pane>
-        <el-tab-pane label="角色管理">角色管理</el-tab-pane>
-        <el-tab-pane label="定时任务补偿">定时任务补偿</el-tab-pane>
+        <el-tab-pane label="新闻">
+          <div v-for="item in news" :key="item.id" class="text item">
+            <router-link :to="'/nanhu/detail/'+item.id">
+              {{ item.title }}
+            </router-link>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="便民">
+          <div v-for="item in bianmin" :key="item.id" class="text item">
+            <router-link :to="'/nanhu/detail/'+item.id">
+              {{ item.title }}
+            </router-link>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="周边">
+          <div v-for="item in zhoubian" :key="item.id" class="text item">
+            <router-link :to="'/nanhu/detail/'+item.id">
+              {{ item.title }}
+            </router-link>
+          </div>
+        </el-tab-pane>
       </el-tabs>
 
       <app-main />
@@ -49,6 +67,8 @@
 <script>
 import { Navbar, Sidebar, AppMain, TagsView } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
+import api from '@/api/api'
+import baseapi from '@/api/baseapi'
 
 export default {
   name: 'Layout',
@@ -61,8 +81,15 @@ export default {
   mixins: [ResizeMixin],
   data() {
     return {
-      activeIndex: '1'
+      activeIndex: '1',
+      notifications:[],
+      news:[],
+      zhoubian:[],
+      bianmin:[]
     }
+  },
+  created() {
+    this.getList()
   },
   computed: {
     sidebar() {
@@ -81,6 +108,28 @@ export default {
     }
   },
   methods: {
+  getList() {
+      var queryNotification = {categoryId:202,pageIndex:1,pageSize:5};
+      var queryNews = {categoryId:201,pageIndex:1,pageSize:5};
+      var queryZhoubian = {categoryId:203,pageIndex:1,pageSize:5};
+      var queryBianmin = {categoryId:204,pageIndex:1,pageSize:5};
+
+      baseapi.get(api.nanhuarticleAPI, queryNotification).then(response => {
+        this.notifications = response.data.result.results
+      })
+
+     baseapi.get(api.nanhuarticleAPI, queryNews).then(response => {
+        this.news = response.data.result.results
+      })
+
+   baseapi.get(api.nanhuarticleAPI, queryZhoubian).then(response => {
+        this.zhoubian = response.data.result.results
+      })
+
+   baseapi.get(api.nanhuarticleAPI, queryBianmin).then(response => {
+        this.bianmin = response.data.result.results
+      })
+    },
     handleSelect(key) {
       this.activeIndex = key
     }

@@ -1,12 +1,9 @@
 {
   "ExpandedNodes": [
-    "",
     "\\router",
-    "\\styles",
     "\\views",
     "\\views\\layout",
-    "\\views\\layout\\components"
+    "\\views\\nanhu"
   ],
-  "SelectedNode": "\\styles\\element-ui.scss",
   "PreviewInSolutionExplorer": false
 }
