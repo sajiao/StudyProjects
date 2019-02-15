@@ -24,9 +24,8 @@
 
 
             </p>
-            <div id="ArcitleContent">
+            <div id="ArcitleContent" v-html="entity.content">
 
-              {{entity.content}}
             </div>
           </div><!--end: news_body -->
           <div id="news_otherinfo">
