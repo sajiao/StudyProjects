@@ -1,12 +1,12 @@
 {
   "ExpandedNodes": [
     "",
+    "\\api",
     "\\router",
-    "\\styles",
     "\\views",
-    "\\views\\layout",
-    "\\views\\layout\\components"
+    "\\views\\layout\\components",
+    "\\views\\nanhu\\components"
   ],
-  "SelectedNode": "\\styles\\element-ui.scss",
+  "SelectedNode": "\\App.vue",
   "PreviewInSolutionExplorer": false
 }

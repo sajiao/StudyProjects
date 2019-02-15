@@ -27,10 +27,18 @@ namespace BLL
         public static Result<NanHuArticle> QueryPageList(ReqNanHuArticle req)
         {
             var dbContext = new DbContext();
-            Expression<Func<NanHuArticle, bool>> fun = null;
+            Expression<Func<NanHuArticle, bool>> fun = r => true;
             if (req.Title.IsNotNullOrEmpty())
             {
                 fun = (r) => SqlFunc.Contains(r.Title, req.Title);
+                //fun.AndAlso(r => SqlFunc.Contains(r.Title, req.Title));
+            }
+
+            if (req.CategoryId > 0)
+            {
+                var prefix = fun.Compile();
+                fun = (r) => prefix(r) && r.CategoryId == req.CategoryId;
+                // fun.AndAlso(r => r.CategoryId == req.CategoryId);
             }
 
             var result = dbContext.NanHuArticleDb.GetPages(req.ConvertData(), fun, req.PageInfo);
