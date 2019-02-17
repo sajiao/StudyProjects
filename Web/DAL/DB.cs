@@ -84,8 +84,13 @@ namespace DAL
             Result<T> result = new Result<T>();
             var db = GetDB();
             var total = 0;
+            string sort = "desc";
+            if (pageInfo.Sort.EqualsCurrentCultureIgnoreCase(sort) == false)
+            {
+                sort = "asc";
+            }
 
-            var getPage = db.Queryable<T>().WhereIF(fun != null, fun).OrderByIF(!string.IsNullOrEmpty(pageInfo.SortFields),pageInfo.SortFields).ToPageList(pageInfo.PageIndex, pageInfo.PageSize, ref total);//根据分页查询
+            var getPage = db.Queryable<T>().WhereIF(fun != null, fun).OrderByIF(!string.IsNullOrEmpty(pageInfo.SortFields), pageInfo.SortFields +" " + sort).ToPageList(pageInfo.PageIndex, pageInfo.PageSize, ref total);//根据分页查询
 
             result.Results = getPage;
             result.TotalCount = total;

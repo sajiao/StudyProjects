@@ -68,11 +68,12 @@
       <div class="side_block">
         <h3 class="title_yellow">阅读排行</h3>
         <ul id="navlist" class="topnews block_list bt">
-          <li>aaaaaaaaaa</li>
-          <li>aaaaaaaaaa</li>
-          <li>aaaaaaaaaa</li>
-          <li>aaaaaaaaaa</li>
-          <li>aaaaaaaaaa</li>
+          <li v-for="item in topList" :key="item.id" class="text item">
+            <router-link :to="'/article/'+item.id">
+              {{ item.title }}
+            </router-link>
+          </li>
+
         </ul>
       </div>
       </div>
@@ -90,6 +91,11 @@
     name: 'ComplexTable',
     components: { Pagination },
     directives: { waves },
+    route: {
+      canReuse: function (transition) {
+        return false
+      }
+    },
     data() {
       return {
         isMobile: this.$store.state.app.device === 'mobile',
@@ -125,7 +131,8 @@
           readingCount: 0,
           commentCount: 0,
           status: 1
-        }
+        },
+        topList:[]
       }
     },
     created() {
@@ -134,9 +141,15 @@
       baseapi.getById(api.nanhuarticleAPI, id).then(response => {
         this.entity = response.data.result;
       });
-
+      this.getTopList()
     },
     methods: {
+      getTopList() {
+          var query = { pageIndex: 1, pageSize: 5, sortFields: 'readingCount',sort: 'desc'};
+          baseapi.get(api.nanhuarticleAPI, query).then(response => {
+            this.topList = response.data.result.results
+          })
+        }
     }
   }
 </script>

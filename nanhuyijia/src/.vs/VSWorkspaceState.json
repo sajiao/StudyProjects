@@ -1,20 +1,11 @@
 {
   "ExpandedNodes": [
-<<<<<<< HEAD
     "",
-    "\\api",
-    "\\router",
-    "\\views",
-    "\\views\\layout\\components",
-    "\\views\\nanhu\\components"
-  ],
-  "SelectedNode": "\\App.vue",
-=======
     "\\router",
     "\\views",
     "\\views\\layout",
     "\\views\\nanhu"
   ],
->>>>>>> a635e4f6aa87f2efc1f5575ef770e31d63621071
+  "SelectedNode": "\\views\\layout\\Layout.vue",
   "PreviewInSolutionExplorer": false
 }

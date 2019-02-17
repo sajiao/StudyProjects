@@ -59,19 +59,6 @@ export const constantRouterMap = [
     hidden: true
   },
   {
-    path: '',
-    component: Layout,
-    redirect: 'dashboard',
-    children: [
-      {
-        path: 'dashboard',
-        component: () => import('@/views/dashboard/index'),
-        name: 'Dashboard',
-        meta: { title: 'dashboard', icon: 'dashboard', noCache: true }
-      }
-    ]
-  },
-  {
     path: '/documentation',
     component: Layout,
     redirect: '/documentation/index',
@@ -85,12 +72,12 @@ export const constantRouterMap = [
     ]
   },
   {
-    path: '/nanhu',
+    path: '',
     component: Layout,
-    redirect: '/nanhu/list',
+    redirect: '',
     name: 'nanhu',
     meta: {
-      title: 'nanhu',
+      title: 'index',
       icon: 'example'
     },
     children: [
@@ -108,19 +95,26 @@ export const constantRouterMap = [
         hidden: true
       },
       {
-        path: 'detail/:id(\\d+)',
+        path: 'article/:id(\\d+)',
         component: () => import('@/views/nanhu/detail'),
-        name: 'detail',
-        meta: { title: 'detail', noCache: true },
+        name: 'article',
+        meta: { title: 'article', noCache: true },
         hidden: true
       },
       {
-        path: 'list',
+        path: '',
         component: () => import('@/views/nanhu/list'),
         name: 'ArticleList',
         meta: { title: 'articleList', icon: 'list' }
       }
     ]
+  },
+  {
+    path: '',
+    component: () => import('@/views/nanhu/list'),
+    name: 'list',
+    meta: { title: 'list', noCache: true },
+    hidden: true
   },
   {
     path: '/guide',

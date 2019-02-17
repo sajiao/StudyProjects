@@ -4,9 +4,11 @@
       <el-table v-loading="loading" :data="list" highlight-current-row style="width: 100%">
         <el-table-column align="left" label="标题">
           <template slot-scope="scope">
+            <span v-if="scope.row.isStick">置顶</span>
+
             [{{scope.row.categoryName}}]
-            <router-link :to="'/nanhu/detail/'+scope.row.id" class="link-type">
-              <span v-if="scope.row.isStick">置顶</span> <span> {{ scope.row.title }}</span>
+            <router-link :to="'/article/'+scope.row.id" class="link-type">
+              <span> {{ scope.row.title }}</span>
             </router-link>
           </template>
         </el-table-column>
@@ -39,11 +41,12 @@
       <div class="side_block">
         <h3 class="title_yellow">阅读排行</h3>
         <ul id="navlist" class="topnews block_list bt">
-          <li>aaaaaaaaaa</li>
-          <li>aaaaaaaaaa</li>
-          <li>aaaaaaaaaa</li>
-          <li>aaaaaaaaaa</li>
-          <li>aaaaaaaaaa</li>
+          <li v-for="item in topList" :key="item.id" class="text item">
+            <router-link :to="'/article/'+item.id">
+              {{ item.title }}
+            </router-link>
+          </li>
+           
         </ul>
       </div>
     </div>
@@ -78,14 +81,17 @@ export default {
       loading: true,
       listQuery: {
         pageIndex: 1,
-        pageSize: 10,
+        pageSize: 20,
         title: '',
-        sort: 'id'
-      }
+        sortFields: 'Id',
+        sort:'desc'
+      },
+      topList:[]
     }
   },
   created() {
-    this.getList()
+    this.getList();
+    this.getTopList();
   },
   methods: {
     getList() {
@@ -94,6 +100,13 @@ export default {
         this.total = response.data.result.totalCount
         this.list = response.data.result.results
         this.loading = false
+      })
+    },
+    getTopList() {
+      var query = {
+        pageIndex: 1, pageSize: 5, sortFields: 'ReadingCount',sort: 'desc'};
+      baseapi.get(api.nanhuarticleAPI, query).then(response => {
+        this.topList = response.data.result.results
       })
     },
     handleFilter() {

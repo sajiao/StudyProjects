@@ -9,10 +9,10 @@
                  active-text-color="#ffd04b"
                  mode="horizontal"
                  @select="handleSelect">
-          <el-menu-item index="1"> <router-link to="/nanhu">❤&nbsp首页</router-link></el-menu-item>
+          <el-menu-item index="1"> <router-link to="/">❤&nbsp首页</router-link></el-menu-item>
 
-          <el-menu-item index="2"> <router-link to="/nanhu">消息中心</router-link></el-menu-item>
-          <el-menu-item index="3"> <router-link to="/nanhu">帮助中心</router-link></el-menu-item>
+          <el-menu-item index="2"> <router-link to="/">消息中心</router-link></el-menu-item>
+          <el-menu-item index="3"> <router-link to="/">帮助中心</router-link></el-menu-item>
         </el-menu>
       
       </el-row>
@@ -20,28 +20,28 @@
       <el-tabs type="border-card">
         <el-tab-pane label="通知">
           <div v-for="item in notifications" :key="item.id" class="text item">
-            <router-link :to="'/nanhu/detail/'+item.id">
+            <router-link :to="'/article/'+item.id">
               {{ item.title }}
             </router-link>
           </div>
         </el-tab-pane>
         <el-tab-pane label="新闻">
           <div v-for="item in news" :key="item.id" class="text item">
-            <router-link :to="'/nanhu/detail/'+item.id">
+            <router-link :to="'/article/'+item.id">
               {{ item.title }}
             </router-link>
           </div>
         </el-tab-pane>
         <el-tab-pane label="便民">
           <div v-for="item in bianmin" :key="item.id" class="text item">
-            <router-link :to="'/nanhu/detail/'+item.id">
+            <router-link :to="'/article/'+item.id">
               {{ item.title }}
             </router-link>
           </div>
         </el-tab-pane>
         <el-tab-pane label="周边">
           <div v-for="item in zhoubian" :key="item.id" class="text item">
-            <router-link :to="'/nanhu/detail/'+item.id">
+            <router-link :to="'/article/'+item.id">
               {{ item.title }}
             </router-link>
           </div>
@@ -51,7 +51,7 @@
       <app-main />
 
       <el-footer id="footer">
-        <p class="footer">
+        <p id="footer_bottom">
           Copyright <a href="http://www.nanhuyijia.com">南湖逸家</a>   2019-2025|  蜀ICP备11019899号
 
           <a href="www.nanhuyijia.com">www.nanhuyijia.com</a>  <a target="_top" href="javascript:window.external.addFavorite('http://www.nanhuyijia.com','南湖逸家');">加入收藏</a>
@@ -109,10 +109,10 @@ export default {
   },
   methods: {
   getList() {
-      var queryNotification = {categoryId:202,pageIndex:1,pageSize:5};
-      var queryNews = {categoryId:201,pageIndex:1,pageSize:5};
-      var queryZhoubian = {categoryId:203,pageIndex:1,pageSize:5};
-      var queryBianmin = {categoryId:204,pageIndex:1,pageSize:5};
+      var queryNotification = {categoryId:202,pageIndex:1,pageSize:5,sortFields:'id',sort: 'desc'};
+      var queryNews = {categoryId:201,pageIndex:1,pageSize:5,sortFields:'id',sort: 'desc'};
+      var queryZhoubian = {categoryId:203,pageIndex:1,pageSize:5,sortFields:'id',sort: 'desc'};
+      var queryBianmin = {categoryId:204,pageIndex:1,pageSize:5,sortFields:'id',sort: 'desc'};
 
       baseapi.get(api.nanhuarticleAPI, queryNotification).then(response => {
         this.notifications = response.data.result.results
@@ -137,27 +137,12 @@ export default {
 }
 </script>
 
-<style rel="stylesheet/scss" lang="scss" scoped>
-  @import "~@/styles/mixin.scss";
-  .app-wrapper {
-    @include clearfix;
-    position: relative;
-    height: 100%;
-    width: 100%;
-    &.mobile.openSidebar{
-      position: fixed;
-      top: 0;
-    }
-  }
-  .drawer-bg {
-    background: #000;
-    opacity: 0.3;
-    width: 100%;
-    top: 0;
-    height: 100%;
-    position: absolute;
-    z-index: 999;
-  }
+<style scoped>
 
+  #footer_bottom {
+    text-align: center;
+    margin-top: 15px;
+    padding-bottom: 20px;
+  }
 
 </style>
