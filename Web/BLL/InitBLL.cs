@@ -10,9 +10,9 @@ namespace BLL
 
         public static void Start()
         {
-            Init();
-            Check();
-            ConvertData();
+           // Init();
+            //Check();
+          //  ConvertData();
         }
 
         /// <summary>

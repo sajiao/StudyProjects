@@ -11,7 +11,7 @@ namespace DAL
             Db = new SqlSugarClient(new ConnectionConfig()
             {
                 ConnectionString = DB.dbConnection,
-                DbType = DbType.SqlServer,
+                DbType = DbType.MySql,
                 IsAutoCloseConnection = true
             });
         }
@@ -35,6 +35,9 @@ namespace DAL
 
         public DbSet<SystemItem> SystemConfigDb { get { return new DbSet<SystemItem>(Db); } }
 
-        
+        public DbSet<CouponGood> CouponGoodDb { get { return new DbSet<CouponGood>(Db); } }
+
+        public DbSet<JuTuan> JuTuanDb { get { return new DbSet<JuTuan>(Db); } }
+
     }
 }
