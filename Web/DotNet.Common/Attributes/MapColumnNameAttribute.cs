@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DotNet.Common.Attributes
 {
-    [AttributeUsage(AttributeTargets.All)]
+    [AttributeUsage(AttributeTargets.All,AllowMultiple = true)]
     public class MapNameAttribute : Attribute
     {
         public string Name { get; set; }

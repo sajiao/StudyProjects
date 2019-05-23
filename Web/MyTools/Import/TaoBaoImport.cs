@@ -10,10 +10,43 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace MyTools.Goods
+namespace MyTools.Import
 {
    public static class TaoBaoImport
     {
+        public static void ImportItems(string path)
+        {
+            Items t = new Items();
+            var list = TaoBaoImport.Import(t, path);
+            var tempList = new List<Items>(500);
+            foreach (var item in list)
+            {
+                item.Uid = 1;
+                item.CateId = 1;
+                item.OrdId = 1;
+                item.IsShow = 1;
+                item.AliId = "1";
+                item.CateId = 1;
+                item.Status = 1;
+                item.Tags = item.TypeName.Replace("/", ",");
+                tempList.Add(item);
+                if (tempList.Count == 500)
+                {
+                    BLL.ItemsBLL.BatchInsert(tempList);
+                    tempList.Clear();
+                }
+            }
+
+            if (tempList.Count > 0)
+            {
+                BLL.ItemsBLL.BatchInsert(tempList);
+
+            }
+
+            Console.WriteLine("ImportCouponGood done, total count:" + list.Count.ToString());
+        }
+
+
         public static void ImportCouponGood(string path)
         {
             CouponGood t = new CouponGood();

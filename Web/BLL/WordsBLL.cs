@@ -2,6 +2,9 @@
 using Entities;
 using System.Collections.Generic;
 using Entities.Model;
+using System.Diagnostics;
+using DotNet.Common;
+using System;
 
 namespace BLL
 {
@@ -113,6 +116,32 @@ namespace BLL
             mDict[param.Word] = param;
             return GetById(id);
         }
+
+
+        public static void BatchInsert(List<Words> param)
+        {
+            if (param == null || param.Count == 0)
+            {
+                return;
+            }
+
+            try
+            {
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
+                var dbContext = new DbContext();
+                dbContext.WordsDb.InsertRange(param);
+                sw.Stop();
+                var logstr = string.Format("WordsBLL.BatchInsert共计：{0} 条数据，耗时:{0} ms", param.Count, sw.ElapsedMilliseconds);
+                Console.WriteLine(logstr);
+                Logger.WriteProcessLog(logstr);
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteErrorLog(ex.Message);
+            }
+        }
+
 
         public static Words Update(Words param)
         {

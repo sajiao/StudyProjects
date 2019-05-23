@@ -39,5 +39,7 @@ namespace DAL
 
         public DbSet<JuTuan> JuTuanDb { get { return new DbSet<JuTuan>(Db); } }
 
+        public DbSet<Items> ItemsDb { get { return new DbSet<Items>(Db); } }
+
     }
 }

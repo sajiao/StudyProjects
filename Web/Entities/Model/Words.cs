@@ -14,6 +14,16 @@ namespace Entities.Model
         [SugarColumn(Length = 200, IsNullable = false, ColumnDescription = "单词")]
         public string Word { get; set; }
 
+        [SugarColumn(IsNullable = true, ColumnDescription = "词频")]
+        public int Frequency { get; set; }
+
+        [SugarColumn(Length = 5000, IsNullable = true, ColumnDescription = "中文意思")]
+        public string Trans { get; set; }
+
+        [SugarColumn(Length = 5000, IsNullable = true, ColumnDescription = "经常搭配使用单词")]
+        public string MatchWord { get; set; }
+        
+
         [SugarColumn(Length = 200, IsNullable = true, ColumnDescription = "单词拆分")]
         public string SplitWord { get; set; }
 
@@ -23,13 +33,13 @@ namespace Entities.Model
         [SugarColumn(Length = 100, IsNullable = true, ColumnDescription = "单词级别")]
         public string Level { get; set; }
 
-        [SugarColumn(IsNullable = false, ColumnDescription = "单词词源关联ID")]
+        [SugarColumn(ColumnDescription = "单词词源关联ID")]
         public int EtymaId { get; set; }
 
         [SugarColumn(IsIgnore = true, ColumnDescription = "Etyma Word")]
         public string EtymaWord { get; set; }
 
-        [SugarColumn(Length = 8000, IsNullable = false, ColumnDataType = "Nvarchar", ColumnDescription = "描述")]
+        [SugarColumn(Length = 8000, IsNullable = true, ColumnDataType = "Nvarchar", ColumnDescription = "描述")]
         public string Desc { get; set; }
 
         [SugarColumn(Length = 200, IsNullable = true, ColumnDataType = "Nvarchar", ColumnDescription = "英式音标")]
@@ -44,28 +54,23 @@ namespace Entities.Model
         [SugarColumn(Length = 400, IsNullable = true, ColumnDescription = "美式音标读音地址")]
         public string PhoneticSymbolUSUrl { get; set; }
 
-        [SugarColumn(Length = 8000, IsNullable = false, ColumnDataType = "Nvarchar", ColumnDescription = "词根描述")]
+        [SugarColumn(Length = 8000, IsNullable = true, ColumnDataType = "Nvarchar", ColumnDescription = "词根描述")]
         public string FullDesc { get; set; }
 
-        [SugarColumn(Length = 5000, IsNullable = false, ColumnDescription = "中文意思")]
-        public string ZhDesc { get; set; }
-
-        [SugarColumn(IsNullable = true, ColumnDescription = "词频")]
-        public int Frequency { get; set; }
-
+        
         [SugarColumn(Length = 100, IsNullable = true, ColumnDescription = "词频")]
         public string Frequency2 { get; set; }
 
         [SugarColumn(Length = 100, IsNullable = true, ColumnDescription = "考纲")]
         public string Examination { get; set; }
 
-        [SugarColumn(IsNullable = false, ColumnDescription = "类别")]
+        [SugarColumn(ColumnDescription = "类别")]
         public int CategoryId { get; set; }
 
-        [SugarColumn(IsNullable = false, ColumnDescription = "状态:1 正常")]
+        [SugarColumn(ColumnDescription = "状态:1 正常")]
         public int Status { get; set; }
 
-        [SugarColumn(ColumnDescription = "创建者")]
+        [SugarColumn(Length = 36, ColumnDataType = "char", IsNullable = true, ColumnDescription = "创建者")]
         public Guid CreatedBy { get; set; }
 
         [SugarColumn(ColumnDescription = "创建时间")]

@@ -13,7 +13,7 @@ namespace DAL
     public class DB
     {
         //internal static string dbConnection = ConfigHelper.GetSection("DBConnection");
-        internal static string dbConnection = "DataSource=101.132.110.64;port=3306;UserId=root;Password=Sa~Yj!123@qwe;Database=shop;Allow Zero Datetime=true;charset=utf8;pooling=true;MinimumPoolSize=20;maximumpoolsize=200;command timeout=60;";
+        internal static string dbConnection = "DataSource=101.132.110.64;port=3306;UserId=root;Password=Sa~Yj!123@qwe;Database=tuiquanke;Allow Zero Datetime=true;charset=utf8;pooling=true;MinimumPoolSize=20;maximumpoolsize=200;command timeout=60;";
 
         static DB()
         {
@@ -29,7 +29,7 @@ namespace DAL
             //db.CodeFirst.InitTables(typeof(Words));
             // db.CodeFirst.InitTables(typeof(Article), typeof(NanHuArticle), typeof(Prefix), typeof(Suffix),typeof(Charge), typeof(IPLock), typeof(EmailEnum), typeof(EmailModel), typeof(Module), typeof(ModuleSub));
             //db.CodeFirst.InitTables(typeof(SyncingInfo), typeof(SystemConfig), typeof(User));
-           db.CodeFirst.InitTables(typeof(CouponGood), typeof(JuTuan));
+           db.CodeFirst.InitTables(typeof(Words));
         }
 
         public static SqlSugarClient GetDB()
