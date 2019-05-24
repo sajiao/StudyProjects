@@ -9,3 +9,14 @@ D:\git\github\StudyProjects\Web\ThirtyPart\obj\Debug\netcoreapp2.1\ThirtyPart.As
 D:\git\github\StudyProjects\Web\ThirtyPart\obj\Debug\netcoreapp2.1\ThirtyPart.csproj.CopyComplete
 D:\git\github\StudyProjects\Web\ThirtyPart\obj\Debug\netcoreapp2.1\ThirtyPart.dll
 D:\git\github\StudyProjects\Web\ThirtyPart\obj\Debug\netcoreapp2.1\ThirtyPart.pdb
+D:\projects\StudyProjects\Web\ThirtyPart\bin\Debug\netcoreapp2.1\ThirtyPart.deps.json
+D:\projects\StudyProjects\Web\ThirtyPart\bin\Debug\netcoreapp2.1\ThirtyPart.dll
+D:\projects\StudyProjects\Web\ThirtyPart\bin\Debug\netcoreapp2.1\ThirtyPart.pdb
+D:\projects\StudyProjects\Web\ThirtyPart\bin\Debug\netcoreapp2.1\TopSdk.dll
+D:\projects\StudyProjects\Web\ThirtyPart\obj\Debug\netcoreapp2.1\ThirtyPart.csprojAssemblyReference.cache
+D:\projects\StudyProjects\Web\ThirtyPart\obj\Debug\netcoreapp2.1\ThirtyPart.csproj.CoreCompileInputs.cache
+D:\projects\StudyProjects\Web\ThirtyPart\obj\Debug\netcoreapp2.1\ThirtyPart.AssemblyInfoInputs.cache
+D:\projects\StudyProjects\Web\ThirtyPart\obj\Debug\netcoreapp2.1\ThirtyPart.AssemblyInfo.cs
+D:\projects\StudyProjects\Web\ThirtyPart\obj\Debug\netcoreapp2.1\ThirtyPart.csproj.CopyComplete
+D:\projects\StudyProjects\Web\ThirtyPart\obj\Debug\netcoreapp2.1\ThirtyPart.dll
+D:\projects\StudyProjects\Web\ThirtyPart\obj\Debug\netcoreapp2.1\ThirtyPart.pdb
