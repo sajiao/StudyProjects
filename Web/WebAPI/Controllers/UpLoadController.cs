@@ -212,11 +212,11 @@ namespace WebAPI.Controllers
                             entity.EtymaId = etyma.Id;
                             entity.FullDesc = wordDesc;
                             entity.Desc = wordDesc.TryTrim();
-                            entity.ZhDesc = regZh.Matches(wordDesc).Last().Value.TryTrim();
-                            if (entity.ZhDesc.Contains("]"))
-                            {
-                                entity.ZhDesc = entity.ZhDesc.Remove(0, entity.ZhDesc.IndexOf("]") + 1).TryTrim();
-                            }
+                            //entity.ZhDesc = regZh.Matches(wordDesc).Last().Value.TryTrim();
+                            //if (entity.ZhDesc.Contains("]"))
+                            //{
+                            //    entity.ZhDesc = entity.ZhDesc.Remove(0, entity.ZhDesc.IndexOf("]") + 1).TryTrim();
+                            //}
                             entity.PhoneticSymbolUK = regYB.Match(wordDesc).Value;
                             entity.PhoneticSymbolUK = entity.PhoneticSymbolUK.Substring(0, entity.PhoneticSymbolUK.IndexOf("]")+1);
                             entity.Word = wordDesc.Substring(0, wordDesc.IndexOf(entity.PhoneticSymbolUK)).TryTrim();

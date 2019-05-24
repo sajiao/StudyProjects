@@ -13,7 +13,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BLL", "BLL\BLL.csproj", "{F
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAPI", "WebAPI\WebAPI.csproj", "{5BE6DD14-AB14-4066-83A0-3D47605A47AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyTools", "MyTools\MyTools.csproj", "{F6845807-A558-4FCE-9B77-CAF7E3A397C2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyTools", "MyTools\MyTools.csproj", "{F6845807-A558-4FCE-9B77-CAF7E3A397C2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThirtyPart", "ThirtyPart\ThirtyPart.csproj", "{B85EC24A-38C7-49AF-B800-6ABE012792AB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{49C35C96-4A9E-4180-94BA-0B1F13CFA02C} = {49C35C96-4A9E-4180-94BA-0B1F13CFA02C}
+		{F306DF9A-B21F-44CB-B149-613CD7E15A07} = {F306DF9A-B21F-44CB-B149-613CD7E15A07}
+		{F53B04F4-A3EA-44EF-B366-68728C7507D6} = {F53B04F4-A3EA-44EF-B366-68728C7507D6}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +52,10 @@ Global
 		{F6845807-A558-4FCE-9B77-CAF7E3A397C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F6845807-A558-4FCE-9B77-CAF7E3A397C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F6845807-A558-4FCE-9B77-CAF7E3A397C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B85EC24A-38C7-49AF-B800-6ABE012792AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B85EC24A-38C7-49AF-B800-6ABE012792AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B85EC24A-38C7-49AF-B800-6ABE012792AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B85EC24A-38C7-49AF-B800-6ABE012792AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -29,7 +29,7 @@ namespace DAL
             //db.CodeFirst.InitTables(typeof(Words));
             // db.CodeFirst.InitTables(typeof(Article), typeof(NanHuArticle), typeof(Prefix), typeof(Suffix),typeof(Charge), typeof(IPLock), typeof(EmailEnum), typeof(EmailModel), typeof(Module), typeof(ModuleSub));
             //db.CodeFirst.InitTables(typeof(SyncingInfo), typeof(SystemConfig), typeof(User));
-           db.CodeFirst.InitTables(typeof(Words));
+          // db.CodeFirst.InitTables(typeof(Words));
         }
 
         public static SqlSugarClient GetDB()

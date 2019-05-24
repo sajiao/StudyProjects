@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using ThirtyPart;
 
 namespace MyTools
 {
@@ -36,9 +37,9 @@ namespace MyTools
             //}
 
             // var temp =  ObjectXmlSerializer.LoadFromXml<WordBook>(path);
-            var xmlPaths = "D:\\BaiduNetdiskDownload\\COCAXML";
-            WordImport.Import(xmlPaths);
-
+            //var xmlPaths = "D:\\BaiduNetdiskDownload\\COCAXML";
+            //WordImport.Import(xmlPaths);
+      
             Console.ReadLine();
         }
     }
