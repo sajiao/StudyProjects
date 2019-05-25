@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.Swagger;
 using WebAPI.Filters;
 using WebAPI.Middleware;
@@ -31,7 +32,9 @@ namespace WebAPI
             {
                 options.Filters.Add<ModelIsValidFilter>();
                 options.Filters.Add<CustomExceptionFilterAttribute>();
-            });
+            })
+            .AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
+          
 
             services.AddCors(options =>
                  options.AddPolicy("AllowAnyOrigin",
@@ -68,7 +71,7 @@ namespace WebAPI
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            
             app.UseSwagger();
 
             app.UseSwaggerUI(c =>

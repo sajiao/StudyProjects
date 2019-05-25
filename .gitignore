@@ -42,6 +42,7 @@ Web/MyTools/bin
 Web/MyTools/obj
 Web/ThirtyPart/bin/debug/netcoreapp2.1/*
 Web/ThirtyPart/obj/debug/netcoreapp2.1/*
+taobaoke/node_modules
 
 
 
