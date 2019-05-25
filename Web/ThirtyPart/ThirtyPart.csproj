@@ -9,6 +9,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DotNet.Common\DotNet.Common.csproj" />
+    <ProjectReference Include="..\Entities\Entities.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="TopSdk">
       <HintPath>..\dll\TopSdk.dll</HintPath>
     </Reference>

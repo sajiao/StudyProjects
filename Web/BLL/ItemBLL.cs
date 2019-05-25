@@ -26,18 +26,18 @@ namespace BLL
             return dbContext.ItemsDb.GetList();
         }
 
-        //public static Result<Items> QueryPageList(ReqItems req)
-        //{
-        //    var dbContext = new DbContext();
-        //    Expression<Func<Items, bool>> fun = null;
-        //    if (req.GoodName.IsNotNullOrEmpty())
-        //    {
-        //        fun = (r) => SqlFunc.Contains(r.Title, req.GoodName);
-        //    }
+        public static Result<Items> QueryPageList(ReqItems req)
+        {
+            var dbContext = new DbContext();
+            Expression<Func<Items, bool>> fun = null;
+            if (req.Title.IsNotNullOrEmpty())
+            {
+                fun = (r) => SqlFunc.Contains(r.Title, req.Title);
+            }
 
-        //    var result = dbContext.ItemsDb.GetPages(req.ConvertData(), fun, req.PageInfo);
-        //    return result;
-        //}
+            var result = dbContext.ItemsDb.GetPages(req.ConvertData(), fun, req.PageInfo);
+            return result;
+        }
 
         public static Items Insert(Items param)
         {

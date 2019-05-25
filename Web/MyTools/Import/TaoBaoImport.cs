@@ -21,7 +21,7 @@ namespace MyTools.Import
             var tempList = new List<Items>(500);
             foreach (var item in list)
             {
-                item.Uid = 1;
+              
                 item.CateId = 1;
                 item.OrdId = 1;
                 item.IsShow = 1;

@@ -6,130 +6,155 @@ using System.Text;
 
 namespace Entities.Model
 {
-    [SugarTable("tqk_Items", "商品项")]
+    [SugarTable("Items", "商品项")]
     public class Items
     {
         [SugarColumn(IsNullable = false, IsPrimaryKey = true, IsIdentity = true)]
         public int Id { get; set; }
 
+        [SugarColumn(IsNullable = false, ColumnDescription = "类型：1，淘宝优惠券，2，淘宝产品")]
+        public int TypeId { get; set; }
+
         [SugarColumn(IsNullable = false, ColumnDescription = "自定义排序")]
         public int OrdId { get; set; }
 
-        [SugarColumn(IsNullable = false, ColumnDescription = "商品分类id", ColumnName = "cate_id")]
+        [SugarColumn(IsNullable = false, ColumnDescription = "商品分类id")]
         public int CateId { get; set; }
 
-        [SugarColumn(Length = 50, IsNullable = true, ColumnDescription = "AliId", ColumnName = "ali_id")]
+        [SugarColumn(Length = 50, IsNullable = true, ColumnDescription = "AliId")]
         public string AliId { get; set; }
 
 
-        [SugarColumn(IsNullable = false, ColumnDescription = "专场", ColumnName = "zc_id")]
+        [SugarColumn(IsNullable = false, ColumnDescription = "专场")]
         public int ZCId { get; set; }
 
  
-        [SugarColumn(ColumnDescription = "OrigId", ColumnName = "orig_id")]
+        [SugarColumn(ColumnDescription = "OrigId")]
         public int OrigId { get; set; }
 
+
         [MapName("NumIid", "商品id")]
-        [SugarColumn(Length = 50, IsNullable = false, ColumnDescription = "商品id", ColumnName = "num_iid")]
-        public string NumIid { get; set; }
+        [SugarColumn(ColumnDescription = "商品id")]
+        public Int64 NumIid { get; set; }
 
         [MapName("Title", "商品名称")]
         [SugarColumn(Length = 255, IsNullable = false, ColumnDescription = "商品名称")]
         public string Title { get; set; }
 
-        [SugarColumn(Length = 255, IsNullable = true, ColumnDescription = "描述")]
+        [SugarColumn(Length = 500, IsNullable = true, ColumnDescription = "描述")]
         public string Intro { get; set; }
 
         [SugarColumn(Length = 255, IsNullable = true, ColumnDescription = "Tags")]
         public string Tags { get; set; }
 
-        [SugarColumn(Length = 55, IsNullable = true, ColumnDescription = "卖家昵称")]
-        public string Nick { get; set; }
-
-        [SugarColumn(Length = 255, IsNullable = true, ColumnDescription = "change_price", ColumnName = "change_price")]
-        public string ChangePrice { get; set; }
-
-        [SugarColumn(Length = 255, IsNullable = true, ColumnDescription = "mobilezk", ColumnName = "mobilezk")]
-        public string MobileZk { get; set; }
-
-        [SugarColumn(Length = 255, IsNullable = true, ColumnDescription = "area", ColumnName = "area")]
-        public string Area { get; set; }
-
-        [MapName("SellerId", "卖家id")]
-        [SugarColumn(Length = 25, IsNullable = true, ColumnDescription = "sellerId", ColumnName = "sellerId")]
-        public string SellerId { get; set; }
-
-
-        [SugarColumn(IsNullable = false, ColumnDescription = "uid默认1", ColumnName = "uid")]
-        public int Uid { get; set; }
-
-        [MapName("Uname", "卖家旺旺")]
-        [SugarColumn(Length = 20 ,IsNullable = false, ColumnDescription = "uname", ColumnName = "uname")]
-        public string Uname { get; set; }
-
         [MapName("PicUrl", "商品主图")]
-        [SugarColumn(Length = 500, IsNullable = false, ColumnDescription = "商品主图", ColumnName = "pic_url")]
+        [SugarColumn(Length = 500, IsNullable = true, ColumnDescription = "商品主图")]
         public string PicUrl { get; set; }
 
         [MapName("PicUrls", "商品主图")]
-        [SugarColumn(Length = 500, IsNullable = true, ColumnDescription = "宽版图片", ColumnName = "pic_urls")]
-        public string PicUrls { get; set; }
+        [SugarColumn(Length = 500, IsNullable = true, ColumnDescription = "商品小图列表")]
+        public string SmallImages { get; set; }
 
         [MapName("Price", "商品价格(单位：元)")]
         [SugarColumn(Length = 13, DecimalDigits = 2, IsNullable = false, ColumnDescription = "商品价格(单位：元)")]
         public decimal Price { get; set; }
 
+        [SugarColumn(Length = 11, DecimalDigits = 2, IsNullable = false, ColumnDescription = "商品最终价格")]
+        public decimal FinalPrice { get; set; }
 
-        [MapName("Link", "商品详情页链接地址")]
-        [SugarColumn(Length = 500, IsNullable = false, ColumnDescription = "商品详情页链接地址")]
-        public string Link { get; set; }
+        [SugarColumn( ColumnDescription = "卖家类型，0表示集市，1表示商城")]
+        public Int64 UserType { get; set; }
 
-        [MapName("ClickUrl", "淘宝客链接")]
-        [SugarColumn(Length = 500, IsNullable = false, ColumnDescription = "淘宝客链接",ColumnName = "click_url")]
-        public string ClickUrl { get; set; }
 
-     
-        [SugarColumn(ColumnDescription = "Ding")]
-        public int Ding { get; set; }
+        [SugarColumn(Length = 55, IsNullable = true, ColumnDescription = "卖家昵称/店铺名称")]
+        public string Nick { get; set; }
+
+        [SugarColumn(Length = 55, IsNullable = true, ColumnDescription = "叶子类目名称,eg:情趣内衣")]
+        public string CatLeafName { get; set; }
+
+        [SugarColumn(Length = 255, IsNullable = true, ColumnDescription = "宝贝所在地")]
+        public string Area { get; set; }
+
+
+        [MapName("SellerId", "卖家id")]
+        [SugarColumn(Length = 25, IsNullable = true, ColumnDescription = "卖家id")]
+        public string SellerId { get; set; }
 
         [SugarColumn(ColumnDescription = "月销量数据")]
-        public int Volume { get; set; }
+        public Int64 Volume { get; set; }
 
+        [SugarColumn(ColumnDescription = "是否加入消费者保障")]
+        public bool IsPrepay { get; set; }
+
+        [SugarColumn(Length = 255, IsNullable = true, ColumnDescription = "	店铺dsr 评分")]
+        public string ShopDsr { get; set; }
+
+        [SugarColumn(ColumnDescription = "卖家等级")]
+        public int RateSum { get; set; }
+
+        [SugarColumn(ColumnDescription = "退款率是否低于行业均值")]
+        public bool IRfdRate { get; set; }
+
+        [SugarColumn(ColumnDescription = "好评率是否高于行业均值")]
+        public bool HGoodRate { get; set; }
+
+        [SugarColumn(ColumnDescription = "成交转化是否高于行业均值")]
+        public bool HPayRate30 { get; set; }
+
+        [SugarColumn(ColumnDescription = "是否包邮")]
+        public bool FreeShipment { get; set; }
+
+        [SugarColumn(Length = 20 ,IsNullable = true, ColumnDescription = "商品库类型，支持多库类型输出，以“，”区分，1:营销商品主推库")]
+        public string MaterialLibType { get; set; }
+
+        [MapName("ItemUrl", "商品详情页链接地址")]
+        [SugarColumn(Length = 500, IsNullable = true, ColumnDescription = "商品详情页链接地址")]
+        public string ProductUrl { get; set; }
+
+        [MapName("ClickUrl", "淘宝客链接")]
+        [SugarColumn(Length = 500, IsNullable = true, ColumnDescription = "淘宝客链接/商品链接（是淘客商品返回淘客链接，非淘客商品返回普通h5链接）")]
+        public string ClickUrl { get; set; }
 
         [MapName("CommissionRate", "收入比率(%)")]
-        [SugarColumn(Length = 12, DecimalDigits = 2,  ColumnDescription = "收入比率(%)",ColumnName = "commission_rate")]
+        [SugarColumn(Length = 12, DecimalDigits = 2, ColumnDescription = "收入比例，举例，取值为20.00，表示比例20.00%")]
         public decimal CommissionRate { get; set; }
 
         [MapName("Commission", "佣金")]
         [SugarColumn(Length = 12, DecimalDigits = 2, ColumnDescription = "佣金")]
         public decimal Commission { get; set; }
 
-        [SugarColumn(ColumnDescription = "CouponType", ColumnName = "coupon_type")]
-        public int CouponType { get; set; }
-
-        [SugarColumn(Length = 12, DecimalDigits = 2,  ColumnDescription = "CouponPrice", ColumnName = "coupon_price")]
-        public decimal CouponPrice { get; set; }
-
-
-        [SugarColumn(ColumnDescription = "是否审核", ColumnName = "pass")]
-        public int Pass { get; set; }
-
-        [SugarColumn( ColumnDescription = "状态")]
-        public int Status { get; set; }
-
-        [SugarColumn(Length = 500, IsNullable = true, ColumnDescription = "未通过理由", ColumnName = "fail_reason")]
-        public string FailReason { get; set; }
+        [SugarColumn(Length = 50, IsNullable = true, ColumnDescription = "	无线折扣价，即宝贝在无线上的实际售卖价格。")]
+        public string FinalPriceWap { get; set; }
 
         [MapName("ShopName", "店铺名称")]
-        [SugarColumn(Length = 50, IsNullable = false, ColumnDescription = "店铺名称",ColumnName = "shop_name")]
+        [SugarColumn(Length = 50, IsNullable = true, ColumnDescription = "店铺名称")]
         public string ShopName { get; set; }
 
-        [SugarColumn(Length = 50, IsNullable = true, ColumnDescription = "商品类型（淘宝，天猫）", ColumnName = "shop_type")]
+        [SugarColumn(Length = 50, IsNullable = true, ColumnDescription = "商品类型（淘宝，天猫）")]
         public string ShopType { get; set; }
 
+        [SugarColumn(ColumnDescription = "宝贝类型：1 普通商品； 2 鹊桥高佣金商品；3 定向招商商品；4 营销计划商品")]
+        public int ItemType { get; set; }
+
         [MapName("ItemUrl", "商品优惠券推广链接")]
-        [SugarColumn(Length = 500, ColumnDescription = "宝贝地址", ColumnName = "item_url")]
+        [SugarColumn(Length = 500, IsNullable = true, ColumnDescription = "商品优惠券推广链接")]
         public string ItemUrl { get; set; }
+
+        [SugarColumn(ColumnDescription = "宝贝状态，0失效，1有效；注：失效可能是宝贝已经下线或者是被处罚不能在进行推广")]
+        public int Status { get; set; }
+
+        [SugarColumn(Length = 200,IsNullable =true,  ColumnDescription = "优惠券面额")]
+        public string ItemInfo { get; set; }
+
+        [SugarColumn(ColumnDescription = "后台一级类目")]
+        public int Category { get; set; }
+
+        [SugarColumn(Length = 50, IsNullable = true, ColumnDescription = "类目名称")]
+        public string CategoryName { get; set; }
+
+        [SugarColumn(Length = 500, IsNullable = true, ColumnDescription = "未通过理由")]
+        public string FailReason { get; set; }
+
 
         [SugarColumn( ColumnDescription = "点击量")]
         public int Hits { get; set; }
@@ -142,61 +167,27 @@ namespace Entities.Model
 
 
         [MapName("Inventory", "商品月销量")]
-        [SugarColumn(IsNullable = false, ColumnDescription = "库存")]
+        [SugarColumn(IsNullable = false, ColumnDescription = "总库存")]
         public int Inventory { get; set; }
 
-        [SugarColumn(IsNullable = true, ColumnDescription = "AddTime", ColumnName = "add_time")]
-        public int AddTime { get; set; }
+        [SugarColumn( ColumnDescription = "	优惠券总量")]
+        public int TotalCount { get; set; }
+
+        [SugarColumn(IsNullable = false, ColumnDescription = "优惠券剩余量")]
+        public int RemainCount { get; set; }
 
 
-        [SugarColumn(IsNullable = false, ColumnDescription = "LastRateTime", ColumnName = "last_rate_time")]
-        public int LastRateTime { get; set; }
-
-        [SugarColumn(IsNullable = false, ColumnDescription = "是否采集了淘宝评论1表示已经采集了淘宝评论", ColumnName = "is_collect_comments")]
+        [SugarColumn(IsNullable = false, ColumnDescription = "是否采集了淘宝评论1表示已经采集了淘宝评论")]
         public int IsCollectComments { get; set; }
 
-        [SugarColumn(Length = 50, IsNullable = true, ColumnDescription = "Quan")]
-        public string Quan { get; set; }
+        [SugarColumn(Length = 500, IsNullable = true, ColumnDescription = "使用条件")]
+        public string Condition { get; set; }
 
+        [SugarColumn(ColumnDescription = "LastTime")]
+        public DateTime LastTime { get; set; }
 
-        [SugarColumn(Length = 500, IsNullable = true, ColumnDescription = "QuanUrl")]
-        public string QuanUrl { get; set; }
-
-        [SugarColumn(Length = 250, IsNullable = true, ColumnDescription = "QuanKouLing")]
-        public int QuanKouLing { get; set; }
-
-
-        [SugarColumn(Length = 250, IsNullable = true, ColumnDescription = "QuanShortUrl")]
-        public string QuanShortUrl { get; set; }
-
-        [SugarColumn(Length = 500, IsNullable = true, ColumnDescription = "QuanCondition", ColumnName = "Quan_condition")]
-        public string QuanCondition { get; set; }
-
-
-
-        [SugarColumn(Length = 50, IsNullable = false, ColumnDescription = "优惠券已领数量", ColumnName = "Quan_receive")]
-        public int QuanReceive { get; set; }
-
-
-        [SugarColumn(ColumnDescription = "LastTime", ColumnName = "last_time")]
-        public int LastTime { get; set; }
-
-
-        [SugarColumn(Length = 50, IsNullable = true, ColumnDescription = "QuanId", ColumnName = "Quan_id")]
-        public string QuanId { get; set; }
-
-
-        [SugarColumn(ColumnDataType ="text", IsNullable = true, ColumnDescription = "Desc")]
+        [SugarColumn(ColumnDataType ="text", IsNullable = true)]
         public string Desc { get; set; }
-
-        [SugarColumn(ColumnDescription = "是否推送")]
-        public int TuiSong { get; set; }
-
-        [SugarColumn( ColumnDescription = "IsCommend", ColumnName = "is_commend")]
-        public int IsCommend { get; set; }
-
-        [SugarColumn(Length = 50, IsNullable = true, ColumnDescription = "默认0",ColumnName = "up_time")]
-        public string UpTime { get; set; }
 
         [MapName("Platform", "平台类型")]
         [SugarColumn(Length = 10, IsNullable = true, ColumnDescription = "平台类型", IsIgnore =true)]
@@ -208,11 +199,11 @@ namespace Entities.Model
         public string TypeName { get; set; }
 
         [MapName("BeginTime", "开始时间")]
-        [SugarColumn(IsNullable = false, ColumnDescription = "开始时间", IsIgnore = true)]
+        [SugarColumn(IsNullable = true, ColumnDescription = "开始时间")]
         public DateTime BeginTime { get; set; }
 
         [MapName("EndTime", "结束时间")]
-        [SugarColumn(IsNullable = false, ColumnDescription = "结束时间", IsIgnore = true)]
+        [SugarColumn(IsNullable = true, ColumnDescription = "结束时间")]
         public DateTime EndTime { get; set; }
 
     }

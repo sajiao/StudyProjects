@@ -40,8 +40,8 @@ Web/WebAPI/obj
 Web/WebAPI/wwwroot/upload
 Web/MyTools/bin
 Web/MyTools/obj
-Web/ThirtyPart/bin
-Web/ThirtyPart/obj
+Web/ThirtyPart/bin/debug/netcoreapp2.1/*
+Web/ThirtyPart/obj/debug/netcoreapp2.1/*
 
 
 

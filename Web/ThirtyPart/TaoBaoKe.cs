@@ -1,12 +1,28 @@
-﻿using System;
+﻿using AutoMapper;
+using Entities.Model;
+using System;
+using System.Collections.Generic;
 using Top.Api;
+using Top.Api.Domain;
 using Top.Api.Request;
 using Top.Api.Response;
+using DotNet.Common;
+using Entities;
+using static Top.Api.Response.TbkDgItemCouponGetResponse;
 
 namespace ThirtyPart
 {
     public static class TaoBaoKe 
     {
+        static TaoBaoKe()
+        {
+            Mapper.Initialize(cfg =>
+            {
+                cfg.CreateMap<NTbkItem, Items>();
+                cfg.CreateMap<TbkCouponDomain, Items>();
+            } 
+           );
+        }
         private static ITopClient GetClient()
         {
             ITopClient client = new DefaultTopClient("http://gw.api.taobao.com/router/rest", "27442968", "61b34d292cd03e501497d2f227216329");
@@ -14,17 +30,72 @@ namespace ThirtyPart
         }
 
         /// <summary>
+        /// taobao.tbk.dg.item.coupon.get( 好券清单API【导购】 )
+        /// </summary>
+        public static List<Items> QueryDgItemCoupon(PageInfo pageInfo)
+        {
+            var client = GetClient();
+            TbkDgItemCouponGetRequest req = new TbkDgItemCouponGetRequest();
+            req.AdzoneId = 108899300176;//pid: mm_25162659_311500292_108899300176的第三位
+            //req.Platform = 1L;
+            req.Cat = "16,18";//后台类目ID，用,分割，最大10个，该ID可以通过taobao.itemcats.get接口获取到
+            req.PageSize = pageInfo.PageSize;
+            //req.Q = "女装";
+            req.PageNo = pageInfo.PageIndex;//第几页，默认：1（当后台类目和查询词均不指定的时候，最多出10000个结果，即page_no*page_size不能超过10000；当指定类目或关键词的时候，则最多出100个结果）
+            TbkDgItemCouponGetResponse rsp = client.Execute(req);
+      
+            var rsps = client.Execute(req);
+            var configMap = new MapperConfiguration(
+                   cfg => cfg.CreateMap<TbkCouponDomain, Items>()
+                        .ForMember(dest => dest.TotalCount, m => m.MapFrom(src => src.CouponTotalCount))
+                       .ForMember(dest => dest.FinalPrice, m => m.MapFrom(src => src.ZkFinalPrice))
+                       .ForMember(dest => dest.CommissionRate, m => m.MapFrom(src => src.CommissionRate))
+                       .ForMember(dest => dest.PicUrl, m => m.MapFrom(src => src.PictUrl))
+                       .ForMember(dest => dest.ShopName, m => m.MapFrom(src => src.ShopTitle))
+                       .ForMember(dest => dest.BeginTime, m => m.MapFrom(src => src.CouponStartTime))
+                       .ForMember(dest => dest.EndTime, m => m.MapFrom(src => src.CouponEndTime))
+                       .ForMember(dest => dest.ClickUrl, m => m.MapFrom(src => src.CouponClickUrl))
+                       .ForMember(dest => dest.Desc, m => m.MapFrom(src => src.ItemDescription))
+                       .ForMember(dest => dest.RemainCount, m => m.MapFrom(src => src.CouponRemainCount))
+                       .ForMember(dest => dest.ItemInfo, m => m.MapFrom(src => src.CouponInfo))
+                       .ForMember(dest => dest.SmallImages, m => m.MapFrom(src => src.SmallImages.ToListString(',')))
+            );
+            var mapper = configMap.CreateMapper();
+
+            if (rsp.TotalResults == 0)
+            {
+                return null;
+            }
+
+            List<Items> result = new List<Items>(rsp.Results.Count);
+            foreach (var item in rsp.Results)
+            {
+                var dest = mapper.Map<TbkCouponDomain, Items>(item);
+                dest.TypeId = 1;
+                dest.LastTime = DateTime.Now;
+                if (dest.Commission <= 0)
+                {
+                    dest.Commission = dest.FinalPrice * dest.CommissionRate/100;
+                }
+                result.Add(dest);
+                Console.WriteLine(string.Format("Title:{0},Rate:{1},smallimages:{2}", dest.Title, dest.CommissionRate, dest.SmallImages));
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// taobao.tbk.item.get( 淘宝客商品查询 )
         /// doc:https://open.taobao.com/api.htm?docId=24515&docType=2
         /// </summary>
-        public static void QueryItem()
+        public static List<Items> QueryItem(PageInfo page)
         {
            var client = GetClient(); 
             TbkItemGetRequest req = new TbkItemGetRequest();
-            req.AddHeaderParameter("accept", "application/json");
+
             req.Fields = "num_iid,title,pict_url,small_images,reserve_price,zk_final_price,user_type,provcity,item_url,seller_id,volume,nick";
-            req.Q = "女装";
-           // req.Cat = "16,18";
+           // req.Q = "女装";
+            req.Cat = "16,18";
             //req.Itemloc = "杭州";
             //req.Sort = "tk_rate_des";
            // req.IsTmall = false;
@@ -34,13 +105,52 @@ namespace ThirtyPart
             //req.StartTkRate = 123L;
             //req.EndTkRate = 123L;
            // req.Platform = 1L;
-            //req.PageNo = 123L;
-           // req.PageSize = 20L;
+            req.PageNo = page.PageIndex;
+            req.PageSize = page.PageSize;
             TbkItemGetResponse rsp = client.Execute(req);
-            Console.WriteLine(rsp.Body);
+
+            var configMap = new MapperConfiguration(
+                cfg => cfg.CreateMap<NTbkItem, Items>()
+                       .ForMember(dest => dest.Area, m => m.MapFrom(src => src.Provcity))
+                       .ForMember(dest => dest.FinalPrice, m => m.MapFrom(src => src.ZkFinalPrice))
+                       .ForMember(dest => dest.CommissionRate, m => m.MapFrom(src => src.TkRate))
+                       .ForMember(dest => dest.PicUrl, m => m.MapFrom(src => src.PictUrl))
+                       .ForMember(dest => dest.ShopName, m => m.MapFrom(src => src.ShopTitle))
+                       .ForMember(dest => dest.PicUrl, m => m.MapFrom(src => src.PictUrl))
+                       .ForMember(dest => dest.SmallImages, m => m.MapFrom(src => src.SmallImages.ToListString(',')))
+            );
+            var mapper = configMap.CreateMapper();
+
+
+            void ConfigureMap(IMappingOperationOptions<NTbkItem, Items> opt)
+            {
+                
+                opt.ConfigureMap()
+                 .ForMember(dest => dest.CommissionRate, m => m.MapFrom(src => src.TkRate));
+                opt.ConfigureMap()
+                 .ForMember(dest => dest.PicUrl, m => m.MapFrom(src => src.PictUrl));
+                opt.ConfigureMap()
+             .ForMember(dest => dest.ShopName, m => m.MapFrom(src => src.ShopTitle));
+
+            };
+
+            if (rsp.TotalResults == 0)
+            {
+                return null;
+            }
+
+            List<Items> result = new List<Items>(rsp.Results.Count);
+            foreach (var item in rsp.Results)
+            {
+                var dest = mapper.Map<NTbkItem, Items>(item, ConfigureMap);
+                dest.LastTime = DateTime.Now;
+                dest.TypeId = 2;
+                result.Add(dest);
+                Console.WriteLine(string.Format("Title:{0},Rate:{1},smallimages:{2}", dest.Title, dest.CommissionRate, dest.SmallImages));
+            }
+
+            return result;
         }
-
-
         /// <summary>
         /// taobao.tbk.item.recommend.get( 淘宝客商品关联推荐查询 )
         /// doc:https://open.taobao.com/api.htm?docId=24517&docType=2
@@ -153,8 +263,7 @@ namespace ThirtyPart
             Console.WriteLine(rsp.Body);
         }
 
-
-        /// <summary>
+/// <summary>
         /// taobao.tbk.ju.tqg.get( 淘抢购api )
         /// doc:https://open.taobao.com/api.htm?docId=27543&docType=2
         /// </summary>
@@ -215,22 +324,6 @@ namespace ThirtyPart
         //    Console.WriteLine(rsp.Body);
         //}
 
-        /// <summary>
-        /// taobao.tbk.dg.item.coupon.get( 好券清单API【导购】 )
-        /// </summary>
-        public static void QueryDgItemCoupon()
-        {
-            var client = GetClient();
-            TbkDgItemCouponGetRequest req = new TbkDgItemCouponGetRequest();
-            req.AdzoneId = 123L;//mm_xxx_xxx_xxx的第三位
-            req.Platform = 1L;
-            req.Cat = "16,18";//后台类目ID，用,分割，最大10个，该ID可以通过taobao.itemcats.get接口获取到
-            req.PageSize = 1L;
-            req.Q = "女装";
-            req.PageNo = 1L;//第几页，默认：1（当后台类目和查询词均不指定的时候，最多出10000个结果，即page_no*page_size不能超过10000；当指定类目或关键词的时候，则最多出100个结果）
-            TbkDgItemCouponGetResponse rsp = client.Execute(req);
-            Console.WriteLine(rsp.Body);
-        }
 
         /// <summary>
         /// taobao.tbk.coupon.get( 阿里妈妈推广券信息查询 )
