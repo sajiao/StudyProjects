@@ -22,7 +22,7 @@
             </div>
             <div class="banner-r">
                     <div class="login">
-                        <img src="/static/tqkpc/images/default.png" class="round"><p>提交订单换积分</p>
+                        <img src="/static/pc/images/default.png" class="round"><p>提交订单换积分</p>
                         <a href="/index.php/login/index.html" class="btn btn-pink">立即登录</a>
                         </div>
                     <div class="jifen flexbox">
@@ -53,92 +53,20 @@
                 </div>
                 <div class="temai cl">
                     <ul>
-                        <li>
+                        <li v-for="item in temaiData" :key="item.Id">
                             <div class="item">
-                                <a target="_blank" href="/item/id/75127.html" class="link">
-                                    <img src="https://img.alicdn.com/bao/uploaded/i1/2094356222/O1CN011vpimdUn4kOsZ8s_!!2094356222.jpg_400x400.jpg">
-                                    <p class="text-overflow">婴儿围巾口水 防水夏季纯棉流的三角巾男女宝宝吸水新生0到3个月</p>
+                                <a target="_blank" :href="item.ClickUrl" class="link">
+                                    <img :src="item.PicUrl">
                                 </a>
+                                <a  target="_blank" :href="item.ProductUrl" :title="item.Title" class="link"> <p class="text-overflow">{{item.Title}}</p></a>
                                 <div class="price">
-                                    <p class="c-main">￥<span>1.59</span>(券后价)</p><p><del>￥6.59</del></p>
+                                    <p class="c-main">￥<span>{{item.FinalPrice}}</span>(券后价)</p><p><del>￥{{item.Price}}</del></p>
                                 </div>
                                 <div class="sales cl">
-                                    <img src="/Public/static/tqkpc/images/taobao.png"> <p>月销量：<span class="c-primary">22</span>件</p>
+                                    <img src="/static/pc/images/taobao.png"> <p>月销量：<span class="c-primary">{{item.Volume}}</span>件</p>
                                 </div>
-                                <a target="_blank" href="/item/id/75127.html" class="coupon">
-                                    <h5>优惠券：<span>5</span>元</h5>
-                                    <p>立即<br>领券</p>
-                                </a>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="item">
-                                <a target="_blank" href="/item/id/953673.html" class="link">
-                                    <img src="https://img.alicdn.com/imgextra/i3/2844544859/O1CN01m3N3Bz1llSzKcpZTS_!!2844544859.jpg_400x400.jpg">
-                                    <p class="text-overflow">15春夏2019新款短袖女装韩版T恤针织衫打底冰丝上衣镂空大码百搭</p>
-                                </a>
-                                <div class="price">
-                                    <p class="c-main">￥<span>67.00</span>(券后价)</p><p><del>￥267.00</del></p>
-                                </div>
-                                <div class="sales cl">
-                                    <img src="/Public/static/tqkpc/images/taobao.png"> <p>月销量：<span class="c-primary">94</span>件</p>
-                                </div>
-                                <a target="_blank" href="/item/id/953673.html" class="coupon">
-                                    <h5>优惠券：<span>200</span>元</h5>
-                                    <p>立即<br>领券</p>
-                                </a>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="item">
-                                <a target="_blank" href="/item/id/979440.html" class="link">
-                                    <img src="https://img.alicdn.com/imgextra/i1/3880252750/O1CN01xDCzsR1WBXhxu0JrA_!!3880252750.jpg_400x400.jpg">
-                                    <p class="text-overflow">15大码雪纺衬衫女短袖2019夏季新款宽松上衣遮肚子小衫衬衣潮</p>
-                                </a>
-                                <div class="price">
-                                    <p class="c-main">￥<span>67.00</span>(券后价)</p><p><del>￥267.00</del></p>
-                                </div>
-                                <div class="sales cl">
-                                    <img src="/Public/static/tqkpc/images/taobao.png"> <p>月销量：<span class="c-primary">87</span>件</p>
-                                </div>
-                                <a target="_blank" href="/item/id/979440.html" class="coupon">
-                                    <h5>优惠券：<span>200</span>元</h5>
-                                    <p>立即<br>领券</p>
-                                </a>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="item">
-                                <a target="_blank" href="/item/id/894808.html" class="link">
-                                    <img src="https://img.alicdn.com/imgextra/i3/2234572648/O1CN017iNinl1VQpJ6eC8Zd_!!2234572648.jpg_400x400.jpg">
-                                    <p class="text-overflow">正品promise me杯子创意清新个性网红玻璃杯少女潮流便携透明水杯</p>
-                                </a>
-                                <div class="price">
-                                    <p class="c-main">￥<span>26.82</span>(券后价)</p><p><del>￥106.82</del></p>
-                                </div>
-                                <div class="sales cl">
-                                    <img src="/Public/static/tqkpc/images/taobao.png"> <p>月销量：<span class="c-primary">110</span>件</p>
-                                </div>
-                                <a target="_blank" href="/item/id/894808.html" class="coupon">
-                                    <h5>优惠券：<span>80</span>元</h5>
-                                    <p>立即<br>领券</p>
-                                </a>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="item">
-                                <a target="_blank" href="/item/id/969633.html" class="link">
-                                    <img src="https://img.alicdn.com/imgextra/i3/2113562173/O1CN01urkvmt1RvHBLdKs8o_!!2113562173.jpg_400x400.jpg">
-                                    <p class="text-overflow">斯凯尔折叠杯折叠水杯子户外随手杯运动杯子便携 防摔</p>
-                                </a>
-                                <div class="price">
-                                    <p class="c-main">￥<span>16.80</span>(券后价)</p><p><del>￥66.80</del></p>
-                                </div>
-                                <div class="sales cl">
-                                    <img src="/Public/static/tqkpc/images/tmall.png"> <p>月销量：<span class="c-primary">50</span>件</p>
-                                </div>
-                                <a target="_blank" href="/item/id/969633.html" class="coupon">
-                                    <h5>优惠券：<span>50</span>元</h5>
+                                <a target="_blank" :href="item.ClickUrl" class="coupon">
+                                    <h5>优惠券：<span>{{item.Commission}}</span>元</h5>
                                     <p>立即<br>领券</p>
                                 </a>
                             </div>
@@ -156,105 +84,21 @@
             </div>
             <div class="hot cl">
                 <ul>
-                    <li>
+                    <li  v-for="item in renqiData" :key="item.Id">
                         <div class="item cl">
                             <div class="pic f-l mr-10">
-                                <a target="_blank" href="/item/id/986908.html"><img src="https://img.alicdn.com/imgextra/i1/2989265740/O1CN01kAnJWw1sGxvKsRAIn_!!2989265740.jpg_400x400.jpg"></a>
+                                <a target="_blank" :href="item.ClickUrl">
+                                    <img :src="item.PicUrl"></a>
                             </div>
                             <div class="txt f-l">
                                 <div class="tit">
-                                    <img src="/Public/static/tqkpc/images/tmall.png"><a href="/item/id/986908.html">夏季冰爽袖套防晒女护臂手臂套袖男袖子开车防紫外线冰丝手套长款</a>
+                                    <img src="/static/pc/images/tmall.png"><a href="/item/id/986908.html">夏季冰爽袖套防晒女护臂手臂套袖男袖子开车防紫外线冰丝手套长款</a>
                                 </div>
                                 <div class="price cl">
-                                    <p class="f-l c-main">￥<span>2.90</span><del>￥7.90</del></p>
-                                    <p class="f-r">省<span class="c-main">5</span>元</p>
+                                    <p class="f-l c-main">￥<span>{{item.FinalPrice}}</span><del>￥{{item.Price}}</del></p>
+                                    <p class="f-r">省<span class="c-main">{{item.YouhuiPrice}}</span>元</p>
                                 </div>
-                                <a target="_blank" href="/item/id/986908.html" class="sales">月销量1677293件</a>
-                            </div>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="item cl">
-                            <div class="pic f-l mr-10">
-                                <a target="_blank" href="/item/id/981033.html"><img src="https://img.alicdn.com/imgextra/i1/2219777101/O1CN01UtbS3T22KIzZfCE42_!!2219777101.jpg_400x400.jpg"></a>
-                            </div>
-                            <div class="txt f-l">
-                                <div class="tit">
-                                    <img src="/Public/static/tqkpc/images/tmall.png"><a href="/item/id/981033.html">洗照片 3/5/6/7寸照片冲印冲洗相片打印刷晒手机照片 拍立得照片</a>
-                                </div>
-                                <div class="price cl">
-                                    <p class="f-l c-main">￥<span>10.40</span><del>￥20.40</del></p>
-                                    <p class="f-r">省<span class="c-main">10</span>元</p>
-                                </div>
-                                <a target="_blank" href="/item/id/981033.html" class="sales">月销量1531367件</a>
-                            </div>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="item cl">
-                            <div class="pic f-l mr-10">
-                                <a target="_blank" href="/item/id/936348.html"><img src="https://img.alicdn.com/bao/uploaded/TB21RNsrb9YBuNjy0FgXXcxcXXa_!!3074628709.png_400x400.jpg"></a>
-                            </div>
-                            <div class="txt f-l">
-                                <div class="tit">
-                                    <img src="/Public/static/tqkpc/images/tmall.png"><a href="/item/id/936348.html">蒙丽丝洗脸巾女纯棉一次性洁面巾美容无菌化妆棉柔巾擦脸纸巾专用</a>
-                                </div>
-                                <div class="price cl">
-                                    <p class="f-l c-main">￥<span>6.90</span><del>￥7.90</del></p>
-                                    <p class="f-r">省<span class="c-main">1</span>元</p>
-                                </div>
-                                <a target="_blank" href="/item/id/936348.html" class="sales">月销量799716件</a>
-                            </div>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="item cl">
-                            <div class="pic f-l mr-10">
-                                <a target="_blank" href="/item/id/978079.html"><img src="https://img.alicdn.com/imgextra/i1/677723513/O1CN01YGUhP71boztfiyExM_!!677723513.jpg_400x400.jpg"></a>
-                            </div>
-                            <div class="txt f-l">
-                                <div class="tit">
-                                    <img src="/Public/static/tqkpc/images/tmall.png"><a href="/item/id/978079.html">14卷本色卷纸家用厕纸整箱批发卫生纸实惠家庭装厕所无芯卷筒纸巾</a>
-                                </div>
-                                <div class="price cl">
-                                    <p class="f-l c-main">￥<span>8.90</span><del>￥9.90</del></p>
-                                    <p class="f-r">省<span class="c-main">1</span>元</p>
-                                </div>
-                                <a target="_blank" href="/item/id/978079.html" class="sales">月销量704718件</a>
-                            </div>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="item cl">
-                            <div class="pic f-l mr-10">
-                                <a target="_blank" href="/item/id/991983.html"><img src="https://img.alicdn.com/bao/uploaded/TB11jYUyMHqK1RjSZFgXXa7JXXa.png_400x400.jpg"></a>
-                            </div>
-                            <div class="txt f-l">
-                                <div class="tit">
-                                    <img src="/Public/static/tqkpc/images/tmall.png"><a href="/item/id/991983.html">植护原木抽纸餐巾纸批发纸巾整箱家庭装卫生纸家用实惠面巾纸27包</a>
-                                </div>
-                                <div class="price cl">
-                                    <p class="f-l c-main">￥<span>26.90</span><del>￥28.90</del></p>
-                                    <p class="f-r">省<span class="c-main">2</span>元</p>
-                                </div>
-                                <a target="_blank" href="/item/id/991983.html" class="sales">月销量640653件</a>
-                            </div>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="item cl">
-                            <div class="pic f-l mr-10">
-                                <a target="_blank" href="/item/id/984295.html"><img src="https://gd3.alicdn.com/imgextra/i3/849090736/O1CN01pf6HeN1HJ80DIFfVL_!!849090736.jpg_400x400.jpg"></a>
-                            </div>
-                            <div class="txt f-l">
-                                <div class="tit">
-                                    <img src="/Public/static/tqkpc/images/taobao.png"><a href="/item/id/984295.html">日式室内家用软底拖鞋浴室洗澡防滑情侣外穿凉拖鞋女夏季男家居鞋</a>
-                                </div>
-                                <div class="price cl">
-                                    <p class="f-l c-main">￥<span>3.50</span><del>￥4.50</del></p>
-                                    <p class="f-r">省<span class="c-main">1</span>元</p>
-                                </div>
-                                <a target="_blank" href="/item/id/984295.html" class="sales">月销量559912件</a>
+                                <a target="_blank"  :href="item.ClickUrl" class="sales">月销量{{item.Volume}}件</a>
                             </div>
                         </div>
                     </li>
@@ -269,12 +113,12 @@
             <div class="goods-list2 cl">
                 <ul>
                     <li  v-for="item in tableData" :key="item.NumIid">
-                        <a :href="item.ClickUrl"   target="_blank" class="img cnzzCounter">
+                        <a :href="item.ProductUrl"   target="_blank" class="img cnzzCounter">
                             <img  v-bind:src="item.PicUrl" class="lazy" width="270" height="270" />
-                            <div class="lq">
+                            <div class="lq" @click="lingquan(item.ClickUrl)">
                                 <div class="lq-t">
                                     <p class="lq-t-d1">领优惠券</p>
-                                    <p class="lq-t-d2">省<span> {{item.Commission}}</span>元</p>
+                                    <p class="lq-t-d2">省<span> {{item.YouhuiPrice}}</span>元</p>
                                 </div>
                                 <div class="lq-b"></div>
                             </div>
@@ -286,7 +130,7 @@
                                     <p class="price">
                                         <span class="f-28 c-main">{{item.FinalPrice}}<i class="quanhou"></i></span>
                                         <del class="c-999">
-                                            淘宝 :￥{{item.FinalPrice}}
+                                            淘宝 :￥{{item.Price}}
                                         </del>
                                     </p>
                                     <div class="num">
@@ -396,6 +240,8 @@
             return {
                 queryKeyword:'',
                 tableData: [],
+                temaiData: [],
+                renqiData: [],
                 //分页
                 totalCount: 0,
                 currentPage: 1,
@@ -406,28 +252,18 @@
         },
         created() {
             this.getData();
+            this.getTemai();
+            this.getRenqi();
         },
         computed: {
-            data() {
-                return this.tableData;
-            }
+           
         },
         methods: {
-            // 分页导航
-            handleCurrentChange(val) {
-                this.currentPage = val;
-                this.getData();
-            },
-            handleSizeChange(v) {
-                this.currentPage = 1;
-                this.pageSize = v;
-                this.getData();
-            },
-            search() {
-                this.fullScreenLoading = true;
-                this.currentPage = 1;
-                this.getData();
-            },
+            lingquan(url)
+            {
+                 window.open(url,"_blank");   
+            }
+            ,
             getData() {
                 this.loading = true;
                 let param = {
@@ -447,6 +283,40 @@
                         }
                     }
                     this.loading = false;
+                })
+            },
+            getTemai() {
+                let param = {
+                    pageIndex: 1,
+                    pageSize: 5,
+                    title: "",
+                    typeId:1,
+                };
+                itemsService.get(param).then((res) => {
+                    if (res && res.statusText == "OK") {
+                        if (res.data && res.data.Result) {
+                            this.temaiData = res.data.Result.Results;                     
+                        } else {
+                            this.temaiData = [];
+                        }
+                    }
+                })
+            },
+            getRenqi() {
+                let param = {
+                    pageIndex: 1,
+                    pageSize: 6,
+                    title: "",
+                    typeId:1,
+                };
+                itemsService.get(param).then((res) => {
+                    if (res && res.statusText == "OK") {
+                        if (res.data && res.data.Result) {
+                            this.renqiData = res.data.Result.Results;                     
+                        } else {
+                            this.renqiData = [];
+                        }
+                    }
                 })
             },
         }

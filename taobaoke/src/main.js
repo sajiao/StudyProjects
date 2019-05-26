@@ -13,6 +13,8 @@ Vue.prototype.$axios = axios;
 
 //使用钩子函数对路由进行权限跳转
 router.beforeEach((to, from, next) => {
+    next();
+    /*
     const role = localStorage.getItem('ms_username');
     if(!role && to.path !== '/login'){
         next('/login');
@@ -28,7 +30,7 @@ router.beforeEach((to, from, next) => {
         }else{
             next();
         }
-    }
+    }*/
 })
 
 new Vue({

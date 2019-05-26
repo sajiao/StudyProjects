@@ -9,6 +9,8 @@ namespace Entities.Request
     {
         public int Id { get; set; }
 
+        public int TypeId { get; set; }
+
         public string Title { get; set; }
 
         public Items ConvertData()
@@ -16,7 +18,8 @@ namespace Entities.Request
             Items data = new Items()
             {
                 Id = this.Id,
-                Title = this.Title
+                Title = this.Title,
+                TypeId = this.TypeId,
             };
 
             return data;

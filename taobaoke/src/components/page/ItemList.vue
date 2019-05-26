@@ -1,16 +1,17 @@
 <template>
-   <div class="main" v-loading="loading">
-    <div class="wrap container cl">
+   <div class="main" >
+      
+    <div class="wrap container cl" v-loading="loading">
      <div class="new">
             <div class="goods-list2 cl">
                 <ul>
-                    <li  v-for="item in tableData" :key="item.NumIid">
-                        <a :href="item.ClickUrl"   target="_blank" class="img cnzzCounter">
+                    <li  v-for="item in tableData" :key="item.Id">
+                        <a :href="item.ProductUrl"   target="_blank" class="img cnzzCounter">
                             <img  v-bind:src="item.PicUrl" class="lazy" width="270" height="270" />
-                            <div class="lq">
+                            <div class="lq"  @click="lingquan(item.ClickUrl)">
                                 <div class="lq-t">
                                     <p class="lq-t-d1">领优惠券</p>
-                                    <p class="lq-t-d2">省<span> {{item.Commission}}</span>元</p>
+                                    <p class="lq-t-d2">省<span> {{item.YouhuiPrice}}</span>元</p>
                                 </div>
                                 <div class="lq-b"></div>
                             </div>
@@ -22,7 +23,7 @@
                                     <p class="price">
                                         <span class="f-28 c-main">{{item.FinalPrice}}<i class="quanhou"></i></span>
                                         <del class="c-999">
-                                            淘宝 :￥{{item.FinalPrice}}
+                                            淘宝 :￥{{item.Price}}
                                         </del>
                                     </p>
                                     <div class="num">
@@ -47,7 +48,7 @@
                                @current-change="handleCurrentChange"
                                :current-page.sync="currentPage"
                                :page-size="pageSize" background
-                               :page-sizes="[16, 32, 64, 80, 100]"
+                               :page-sizes="[40, 60, 80, 100]"
                                layout="total, sizes, prev, pager, next"
                                :total="totalCount">
                 </el-pagination>
@@ -60,7 +61,7 @@
     import itemsService from '@/server/itemsService'
     import session from '@/store/storage'
     import api from '@/server/api'
-    import eventBus from '../common/bus';
+    import eventBus from '@/components/common/bus';
 
     export default {
         name: 'basetable',
@@ -71,27 +72,34 @@
                 //分页
                 totalCount: 0,
                 currentPage: 1,
-                pageSize: 32,
+                pageSize: 40,
                 totalPage: 0,
                 loading: true,
             }
         },
         created() {
-       
-            debugger;
-            if(this.$vm.$route.params != null && this.$vm.$route.params != "")
-            {
-                   this.queryKeyword = this.$vm.$route.params.keyword;
-            }
-            
+            this.queryKeyword = this.$route.query.keyword;
             this.getData();
         },
+        
         computed: {
-            data() {
-                return this.tableData;
-            }
+           
+        },
+        
+        watch: {
+         '$route': 'getParams'
         },
         methods: {
+            getParams () {
+                // 取到路由带过来的参数 
+               this.queryKeyword = this.$route.query.keyword;
+               this.getData();
+            },
+         lingquan(url)
+            {
+                 window.open(url,"_blank");   
+            }
+            ,
             // 分页导航
             handleCurrentChange(val) {
                 this.currentPage = val;
@@ -102,13 +110,7 @@
                 this.pageSize = v;
                 this.getData();
             },
-            search() {
-                this.fullScreenLoading = true;
-                this.currentPage = 1;
-                this.getData();
-            },
             getData() {
-                 
                 this.loading = true;
                 let param = {
                     pageIndex: this.currentPage,
@@ -117,7 +119,6 @@
                 };
                 itemsService.get(param).then((res) => {
                     if (res && res.statusText == "OK") {
-                        this.fullScreenLoading = false;
                         if (res.data && res.data.Result) {
                             this.tableData = res.data.Result.Results;
                             this.totalCount = Math.ceil(res.data.Result.TotalCount);

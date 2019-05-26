@@ -28,11 +28,6 @@ namespace Entities.Model
         [SugarColumn(IsNullable = false, ColumnDescription = "专场")]
         public int ZCId { get; set; }
 
- 
-        [SugarColumn(ColumnDescription = "OrigId")]
-        public int OrigId { get; set; }
-
-
         [MapName("NumIid", "商品id")]
         [SugarColumn(ColumnDescription = "商品id")]
         public Int64 NumIid { get; set; }
@@ -56,11 +51,14 @@ namespace Entities.Model
         public string SmallImages { get; set; }
 
         [MapName("Price", "商品价格(单位：元)")]
-        [SugarColumn(Length = 13, DecimalDigits = 2, IsNullable = false, ColumnDescription = "商品价格(单位：元)")]
+        [SugarColumn(Length = 11, DecimalDigits = 2, IsNullable = false, ColumnDescription = "商品价格(单位：元)")]
         public decimal Price { get; set; }
 
         [SugarColumn(Length = 11, DecimalDigits = 2, IsNullable = false, ColumnDescription = "商品最终价格")]
         public decimal FinalPrice { get; set; }
+
+        [SugarColumn(Length = 11, DecimalDigits = 2, IsNullable = false, ColumnDescription = "优惠多少")]
+        public decimal YouhuiPrice { get; set; }
 
         [SugarColumn( ColumnDescription = "卖家类型，0表示集市，1表示商城")]
         public Int64 UserType { get; set; }
@@ -80,6 +78,7 @@ namespace Entities.Model
         [SugarColumn(Length = 25, IsNullable = true, ColumnDescription = "卖家id")]
         public string SellerId { get; set; }
 
+        [MapName("Volume", "商品月销量")]
         [SugarColumn(ColumnDescription = "月销量数据")]
         public Int64 Volume { get; set; }
 
@@ -107,11 +106,12 @@ namespace Entities.Model
         [SugarColumn(Length = 20 ,IsNullable = true, ColumnDescription = "商品库类型，支持多库类型输出，以“，”区分，1:营销商品主推库")]
         public string MaterialLibType { get; set; }
 
-        [MapName("ItemUrl", "商品详情页链接地址")]
+        [MapName("ProductUrl", "商品详情页链接地址")]
         [SugarColumn(Length = 500, IsNullable = true, ColumnDescription = "商品详情页链接地址")]
         public string ProductUrl { get; set; }
 
         [MapName("ClickUrl", "淘宝客链接")]
+        [MapName("ClickUrl", "优惠券链接")]
         [SugarColumn(Length = 500, IsNullable = true, ColumnDescription = "淘宝客链接/商品链接（是淘客商品返回淘客链接，非淘客商品返回普通h5链接）")]
         public string ClickUrl { get; set; }
 
@@ -143,6 +143,7 @@ namespace Entities.Model
         [SugarColumn(ColumnDescription = "宝贝状态，0失效，1有效；注：失效可能是宝贝已经下线或者是被处罚不能在进行推广")]
         public int Status { get; set; }
 
+        [MapName("ItemInfo", "优惠券面额")]
         [SugarColumn(Length = 200,IsNullable =true,  ColumnDescription = "优惠券面额")]
         public string ItemInfo { get; set; }
 
@@ -165,14 +166,14 @@ namespace Entities.Model
         [SugarColumn(ColumnDescription = "默认0")]
         public int Likes { get; set; }
 
-
-        [MapName("Inventory", "商品月销量")]
         [SugarColumn(IsNullable = false, ColumnDescription = "总库存")]
         public int Inventory { get; set; }
 
+        [MapName("TotalCount", "优惠券总量")]
         [SugarColumn( ColumnDescription = "	优惠券总量")]
         public int TotalCount { get; set; }
 
+        [MapName("RemainCount", "优惠券剩余量")]
         [SugarColumn(IsNullable = false, ColumnDescription = "优惠券剩余量")]
         public int RemainCount { get; set; }
 
@@ -186,23 +187,22 @@ namespace Entities.Model
         [SugarColumn(ColumnDescription = "LastTime")]
         public DateTime LastTime { get; set; }
 
-        [SugarColumn(ColumnDataType ="text", IsNullable = true)]
+        [SugarColumn(ColumnDataType ="text", IsNullable = true, ColumnDescription = "描述")]
         public string Desc { get; set; }
 
         [MapName("Platform", "平台类型")]
-        [SugarColumn(Length = 10, IsNullable = true, ColumnDescription = "平台类型", IsIgnore =true)]
+        [SugarColumn(Length = 10, IsNullable = true, ColumnDescription = "平台类型")]
         public string Platform { get; set; }
-
 
         [MapName("TypeName", "商品一级类目")]
         [SugarColumn(Length = 50, IsNullable = true, ColumnDescription = "商品一级类目", IsIgnore = true)]
         public string TypeName { get; set; }
 
-        [MapName("BeginTime", "开始时间")]
+        [MapName("BeginTime", "优惠券开始时间")]
         [SugarColumn(IsNullable = true, ColumnDescription = "开始时间")]
         public DateTime BeginTime { get; set; }
 
-        [MapName("EndTime", "结束时间")]
+        [MapName("EndTime", "优惠券结束时间")]
         [SugarColumn(IsNullable = true, ColumnDescription = "结束时间")]
         public DateTime EndTime { get; set; }
 

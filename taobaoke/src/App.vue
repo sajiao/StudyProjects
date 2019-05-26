@@ -4,15 +4,12 @@
     </div>
 </template>
 <script>
-    import eventBus from '@/components/common/bus';
-    import registerService from '@/server/registerService';
     import session from '@/store/storage';
 
     export default {
         data() {
             return {
-                websocket: null,
-                socketSendType:'',
+               
             }
         },
         created() {
@@ -23,6 +20,7 @@
         methods: {
           
             getRegisterInformation() {
+                /*
                 registerService.get().then((res) => {
                     if (res && res.statusText == "OK") {
                         if (res.data) {
@@ -35,6 +33,7 @@
                         }
                     }
                 });
+                */
             }
         },
         mounted() {

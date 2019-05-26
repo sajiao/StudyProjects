@@ -5,6 +5,7 @@ import { resolve } from 'path';
 Vue.use(Router);
 
 export default new Router({
+    mode: 'history',
     routes: [
         {
             path: '/',
@@ -24,6 +25,11 @@ export default new Router({
                     path: '/register',
                     component: resolve => require(['../components/page/register.vue'], resolve),
                     meta: { title: '注册模块' }
+                },
+                {
+                    path: '/list',
+                    component: resolve => require(['../components/page/itemlist.vue'], resolve),
+                    meta: { title: '分类' }
                 },
                 {
                     path: '/list/:keyword',
@@ -76,6 +82,28 @@ export default new Router({
                     component: resolve => require(['../components/page/Permission.vue'], resolve),
                     meta: { title: '权限测试', permission: true }
                 }
+            ]
+        },
+        {
+            path: '/m',
+            component: resolve => require(['../components/common/MHome.vue'], resolve),
+            meta: { title: '自述文件' },
+            children:[
+                {
+                    path: '/m/main',
+                    component: resolve => require(['../components/page/main.vue'], resolve),
+                    meta: { title: '评分模块' }
+                },
+                {
+                    path: '/m/list',
+                    component: resolve => require(['../components/page/itemlist.vue'], resolve),
+                    meta: { title: '分类' }
+                },
+                {
+                    path: '/m/list/:keyword',
+                    component: resolve => require(['../components/page/itemlist.vue'], resolve),
+                    meta: { title: '分类' }
+                },
             ]
         },
         {

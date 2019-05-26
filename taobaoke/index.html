@@ -4,13 +4,52 @@
     <meta charset="utf-8">
     <title>优惠券</title>
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
-    <link rel="stylesheet" href="./static/css/ui.css"> 
- <link rel="stylesheet" href="./static/css/style.css">
+   <script language="JavaScript">
+		function loadCSS() 
+		{
+			if((navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|wOSBrowser|BrowserNG|WebOS)/i)))
+			{
+				document.write('<link href="./static/wap/css/mui.min.css" rel="stylesheet" type="text/css" />');
+				document.write('<link href="./static/wap/css/style.css" rel="stylesheet" type="text/css" />');
+				document.write('<link href="./static/skin/default/css/layer.css" rel="stylesheet" type="text/css" />');
+				document.write('<link href="./static/wap/fonts/iconfont.css" rel="stylesheet" type="text/css"  />');
+			    document.write('<script type="text/javascript" src="./static/wap/js/mui.js"><\/script>');
+				document.write('<script type="text/javascript" src="./static/wap/js/mall.js"><\/script>');
+			}
+
+			else {
+				document.write('<link href="./static/pc/css/ui.css" rel="stylesheet" type="text/css" />');
+				document.write('<link href="./static/pc/css/style.css" rel="stylesheet" type="text/css" />');
+			}
+		}
+		loadCSS();
+		
+</script>
 </head>
-<body>
+<body class="mui-fullscreen">
 
 <div id="app"></div>
 
 </body>
 
+<script language="JavaScript">
+function init()
+{
+	if((navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|wOSBrowser|BrowserNG|WebOS)/i)))
+		{
+
+		 mui.init({
+				swipeBack: false,
+			});
+			mui('body').on('tap','a:not(#offCanvasBtn)',function(){
+				window.location.href=this.href;
+			});
+			mui('.mui-scroll-wrapper').scroll({
+				deceleration: 0.002,
+				indicators: false
+			});
+		}
+}
+init();
+    </script>
 </html>

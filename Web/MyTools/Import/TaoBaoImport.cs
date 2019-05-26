@@ -14,6 +14,7 @@ namespace MyTools.Import
 {
    public static class TaoBaoImport
     {
+        private static string pid = "&pid=mm_25162659_311500292_108899300176";
         public static void ImportItems(string path)
         {
             Items t = new Items();
@@ -21,13 +22,30 @@ namespace MyTools.Import
             var tempList = new List<Items>(500);
             foreach (var item in list)
             {
-              
+                item.TypeId = 1;
                 item.CateId = 1;
                 item.OrdId = 1;
                 item.IsShow = 1;
                 item.AliId = "1";
                 item.CateId = 1;
                 item.Status = 1;
+                item.ProductUrl += string.IsNullOrEmpty(item.ProductUrl) ? "" : pid;
+                item.FinalPrice = item.Price;
+                if (!string.IsNullOrEmpty(item.ItemInfo))
+                {
+                    if (item.ItemInfo.Contains("无条件"))
+                    {
+                        var temp = item.ItemInfo.Split("元");
+                        item.YouhuiPrice = temp[0].TryToDecimal();
+                    }
+                    else if (item.ItemInfo.Contains("减"))
+                    {
+                        var temp = item.ItemInfo.Split("减");
+                        item.YouhuiPrice = temp[1].Replace("元","").TryToDecimal();
+                    }
+
+                    item.FinalPrice -= item.YouhuiPrice;
+                }
                 item.Tags = item.TypeName.Replace("/", ",");
                 tempList.Add(item);
                 if (tempList.Count == 500)
@@ -42,8 +60,8 @@ namespace MyTools.Import
                 BLL.ItemsBLL.BatchInsert(tempList);
 
             }
-
-            Console.WriteLine("ImportCouponGood done, total count:" + list.Count.ToString());
+            FileHelper.AppendSuffix(path,"done");
+            Console.WriteLine("ImportItems done, total count:" + list.Count.ToString());
         }
 
 

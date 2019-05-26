@@ -9,11 +9,25 @@ using System.Text;
 using DotNet.Common;
 using SqlSugar;
 using System.Diagnostics;
+using System.Linq;
 
 namespace BLL
 {
     public class ItemsBLL : DbContext
     {
+        private static List<Items> mDict = null;
+
+        static ItemsBLL()
+        {
+            mDict = GetAll();
+        }
+
+        private static Items GetItem(int id)
+        {
+          return  mDict.FirstOrDefault(m=>m.Id == id);
+        }
+
+
         public static Items GetById(int id)
         {
             var dbContext = new DbContext();
@@ -28,6 +42,30 @@ namespace BLL
 
         public static Result<Items> QueryPageList(ReqItems req)
         {
+            if (mDict.HasValue())
+            {
+                Result<Items> results = new Result<Items>();
+                List<Items> temp = mDict.Where(m =>
+               {
+                   bool tempResult = true;
+                   if (req.Title.IsNotNullOrEmpty())
+                   {
+                       tempResult = m.Title.Contains(req.Title);
+                   }
+
+                   if (tempResult && req.TypeId > 0)
+                   {
+                       tempResult = m.TypeId == req.TypeId;
+                   }
+
+                   return tempResult;
+
+               }).ToList();
+               results.Results= temp.Skip(req.PageInfo.PageSize * (req.PageInfo.PageIndex - 1)).Take(req.PageInfo.PageSize).ToList();
+                results.TotalCount = temp.Count;
+                return results;
+            }
+
             var dbContext = new DbContext();
             Expression<Func<Items, bool>> fun = null;
             if (req.Title.IsNotNullOrEmpty())
