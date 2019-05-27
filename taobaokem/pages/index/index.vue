@@ -214,7 +214,7 @@
 			},
 			toSearchIndex:function(){
 				debugger;
-				uni.navigateTo({
+				uni.switchTab({
 					url:"/pages/search/index"
 				})
 			},

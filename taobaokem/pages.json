@@ -121,7 +121,12 @@
 				"navigationBarTextStyle": "white",
 				"app-plus": {
 					"titleNView": false,
-					"bounce": "none"
+					"bounce": "none",
+					"pullToRefresh": {
+						"style": "circle",
+						"color": "#FD575C",
+						"offset": "60px"
+					}
 				},
 				"navigationStyle": "custom"
 			}
