@@ -187,8 +187,14 @@ namespace Entities.Model
         [SugarColumn(ColumnDescription = "LastTime")]
         public DateTime LastTime { get; set; }
 
+        [SugarColumn(Length = 500, IsNullable = true, ColumnDescription = "Item描述")]
+        public string ItemDesc { get; set; }
+
         [SugarColumn(ColumnDataType ="text", IsNullable = true, ColumnDescription = "描述")]
-        public string Desc { get; set; }
+        public string PcDesc { get; set; }
+
+        [SugarColumn(ColumnDataType = "text", IsNullable = true, ColumnDescription = "描述")]
+        public string WapDesc { get; set; }
 
         [MapName("Platform", "平台类型")]
         [SugarColumn(Length = 10, IsNullable = true, ColumnDescription = "平台类型")]

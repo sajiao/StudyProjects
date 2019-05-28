@@ -9,11 +9,13 @@ using Top.Api.Response;
 using DotNet.Common;
 using Entities;
 using static Top.Api.Response.TbkDgItemCouponGetResponse;
+using static Top.Api.Response.TbkItemInfoGetResponse;
 
 namespace ThirtyPart
 {
     public static class TaoBaoKe 
     {
+        private static string pid = "&pid=mm_25162659_311500292_108899300176";
         static TaoBaoKe()
         {
             Mapper.Initialize(cfg =>
@@ -32,15 +34,15 @@ namespace ThirtyPart
         /// <summary>
         /// taobao.tbk.dg.item.coupon.get( 好券清单API【导购】 )
         /// </summary>
-        public static List<Items> QueryDgItemCoupon(PageInfo pageInfo)
+        public static List<Items> QueryDgItemCoupon(PageInfo pageInfo, string keyword)
         {
             var client = GetClient();
             TbkDgItemCouponGetRequest req = new TbkDgItemCouponGetRequest();
             req.AdzoneId = 108899300176;//pid: mm_25162659_311500292_108899300176的第三位
             //req.Platform = 1L;
-            req.Cat = "16,18";//后台类目ID，用,分割，最大10个，该ID可以通过taobao.itemcats.get接口获取到
+            //req.Cat = "16,18";//后台类目ID，用,分割，最大10个，该ID可以通过taobao.itemcats.get接口获取到
             req.PageSize = pageInfo.PageSize;
-            //req.Q = "女装";
+            req.Q = keyword;
             req.PageNo = pageInfo.PageIndex;//第几页，默认：1（当后台类目和查询词均不指定的时候，最多出10000个结果，即page_no*page_size不能超过10000；当指定类目或关键词的时候，则最多出100个结果）
             TbkDgItemCouponGetResponse rsp = client.Execute(req);
       
@@ -55,9 +57,10 @@ namespace ThirtyPart
                        .ForMember(dest => dest.BeginTime, m => m.MapFrom(src => src.CouponStartTime))
                        .ForMember(dest => dest.EndTime, m => m.MapFrom(src => src.CouponEndTime))
                        .ForMember(dest => dest.ClickUrl, m => m.MapFrom(src => src.CouponClickUrl))
-                       .ForMember(dest => dest.Desc, m => m.MapFrom(src => src.ItemDescription))
+                       .ForMember(dest => dest.ItemDesc, m => m.MapFrom(src => src.ItemDescription))
                        .ForMember(dest => dest.RemainCount, m => m.MapFrom(src => src.CouponRemainCount))
                        .ForMember(dest => dest.ItemInfo, m => m.MapFrom(src => src.CouponInfo))
+                        .ForMember(dest => dest.ProductUrl, m => m.MapFrom(src => src.ItemUrl))
                        .ForMember(dest => dest.SmallImages, m => m.MapFrom(src => src.SmallImages.ToListString(',')))
             );
             var mapper = configMap.CreateMapper();
@@ -73,9 +76,32 @@ namespace ThirtyPart
                 var dest = mapper.Map<TbkCouponDomain, Items>(item);
                 dest.TypeId = 1;
                 dest.LastTime = DateTime.Now;
+                dest.Tags = keyword;
                 if (dest.Commission <= 0)
                 {
                     dest.Commission = dest.FinalPrice * dest.CommissionRate/100;
+                }
+                dest.CateId = dest.Category;
+                dest.OrdId = 1;
+                dest.IsShow = 1;
+                dest.AliId = "1";
+                dest.Status = 1;
+                dest.ProductUrl += string.IsNullOrEmpty(dest.ProductUrl) ? "" : pid;
+                dest.FinalPrice = dest.Price;
+                if (!string.IsNullOrEmpty(dest.ItemInfo))
+                {
+                    if (dest.ItemInfo.Contains("无条件"))
+                    {
+                        var temp = dest.ItemInfo.Split("元");
+                        dest.YouhuiPrice = temp[0].TryToDecimal();
+                    }
+                    else if (dest.ItemInfo.Contains("减"))
+                    {
+                        var temp = dest.ItemInfo.Split("减");
+                        dest.YouhuiPrice = temp[1].Replace("元", "").TryToDecimal();
+                    }
+
+                    dest.FinalPrice -= dest.YouhuiPrice;
                 }
                 result.Add(dest);
                 Console.WriteLine(string.Format("Title:{0},Rate:{1},smallimages:{2}", dest.Title, dest.CommissionRate, dest.SmallImages));
@@ -88,16 +114,16 @@ namespace ThirtyPart
         /// taobao.tbk.item.get( 淘宝客商品查询 )
         /// doc:https://open.taobao.com/api.htm?docId=24515&docType=2
         /// </summary>
-        public static List<Items> QueryItem(PageInfo page)
+        public static List<Items> QueryItem(PageInfo page, string keyword)
         {
            var client = GetClient(); 
             TbkItemGetRequest req = new TbkItemGetRequest();
 
             req.Fields = "num_iid,title,pict_url,small_images,reserve_price,zk_final_price,user_type,provcity,item_url,seller_id,volume,nick";
-           // req.Q = "女装";
-            req.Cat = "16,18";
+            req.Q = keyword;
+            //req.Cat = "16,18";
             //req.Itemloc = "杭州";
-            //req.Sort = "tk_rate_des";
+            req.Sort = "tk_rate_des";
            // req.IsTmall = false;
             //req.IsOverseas = false;
             //req.StartPrice = 10L;
@@ -116,23 +142,10 @@ namespace ThirtyPart
                        .ForMember(dest => dest.CommissionRate, m => m.MapFrom(src => src.TkRate))
                        .ForMember(dest => dest.PicUrl, m => m.MapFrom(src => src.PictUrl))
                        .ForMember(dest => dest.ShopName, m => m.MapFrom(src => src.ShopTitle))
-                       .ForMember(dest => dest.PicUrl, m => m.MapFrom(src => src.PictUrl))
                        .ForMember(dest => dest.SmallImages, m => m.MapFrom(src => src.SmallImages.ToListString(',')))
+                       .ForMember(dest => dest.Price, m => m.MapFrom(src => src.ReservePrice))
             );
             var mapper = configMap.CreateMapper();
-
-
-            void ConfigureMap(IMappingOperationOptions<NTbkItem, Items> opt)
-            {
-                
-                opt.ConfigureMap()
-                 .ForMember(dest => dest.CommissionRate, m => m.MapFrom(src => src.TkRate));
-                opt.ConfigureMap()
-                 .ForMember(dest => dest.PicUrl, m => m.MapFrom(src => src.PictUrl));
-                opt.ConfigureMap()
-             .ForMember(dest => dest.ShopName, m => m.MapFrom(src => src.ShopTitle));
-
-            };
 
             if (rsp.TotalResults == 0)
             {
@@ -142,9 +155,21 @@ namespace ThirtyPart
             List<Items> result = new List<Items>(rsp.Results.Count);
             foreach (var item in rsp.Results)
             {
-                var dest = mapper.Map<NTbkItem, Items>(item, ConfigureMap);
+                var dest = mapper.Map<NTbkItem, Items>(item);
                 dest.LastTime = DateTime.Now;
                 dest.TypeId = 2;
+                dest.Tags = keyword;
+                dest.Tags = keyword;
+                if (dest.Commission <= 0)
+                {
+                    dest.Commission = dest.FinalPrice * dest.CommissionRate / 100;
+                }
+                dest.CateId = dest.Category;
+                dest.OrdId = 1;
+                dest.IsShow = 1;
+                dest.AliId = "1";
+                dest.Status = 1;
+                dest.ProductUrl += string.IsNullOrEmpty(dest.ProductUrl) ? "" : pid;
                 result.Add(dest);
                 Console.WriteLine(string.Format("Title:{0},Rate:{1},smallimages:{2}", dest.Title, dest.CommissionRate, dest.SmallImages));
             }
@@ -171,15 +196,50 @@ namespace ThirtyPart
         /// taobao.tbk.item.info.get( 淘宝客商品详情（简版） )
         /// doc:https://open.taobao.com/api.htm?docId=24518&docType=2
         /// </summary>
-        public static void QueryItemInfo()
+        public static List<Items> QueryItemInfo(string numiids)
         {
             var client = GetClient();
             TbkItemInfoGetRequest req = new TbkItemInfoGetRequest();
-            req.NumIids = "123,456";//商品Id,必须
+            req.NumIids = numiids;//123,456商品Id,必须
             // req.Platform = 1L;
             //req.Ip = "11.22.33.43";
+            var configMap = new MapperConfiguration(
+                cfg => cfg.CreateMap<NTbkItemDomain, Items>()
+                       .ForMember(dest => dest.Area, m => m.MapFrom(src => src.Provcity))
+                       .ForMember(dest => dest.FinalPrice, m => m.MapFrom(src => src.ZkFinalPrice))
+                       .ForMember(dest => dest.PicUrl, m => m.MapFrom(src => src.PictUrl))
+                       .ForMember(dest => dest.ShopName, m => m.MapFrom(src => src.Nick))
+                       .ForMember(dest => dest.SmallImages, m => m.MapFrom(src => src.SmallImages.ToListString(',')))
+                       .ForMember(dest => dest.Price, m => m.MapFrom(src => src.ReservePrice))
+            );
+            var mapper = configMap.CreateMapper();
             TbkItemInfoGetResponse rsp = client.Execute(req);
-            Console.WriteLine(rsp.Body);
+            if (rsp.Results.Count == 0)
+            {
+                return null;
+            }
+            List<Items> result = new List<Items>(rsp.Results.Count);
+            foreach (var item in rsp.Results)
+            {
+                var dest = mapper.Map<NTbkItemDomain, Items>(item);
+                dest.LastTime = DateTime.Now;
+                dest.TypeId = 2;
+                dest.Tags = item.CatName;
+                if (dest.Commission <= 0)
+                {
+                    dest.Commission = dest.FinalPrice * dest.CommissionRate / 100;
+                }
+                dest.CateId = dest.Category;
+                dest.OrdId = 1;
+                dest.IsShow = 1;
+                dest.AliId = "1";
+                dest.Status = 1;
+                dest.ProductUrl += string.IsNullOrEmpty(dest.ProductUrl) ? "" : pid;
+                result.Add(dest);
+                Console.WriteLine(string.Format("Title:{0},Rate:{1},smallimages:{2}", dest.Title, dest.CommissionRate, dest.SmallImages));
+            }
+
+            return result;
         }
 
         /// <summary>
