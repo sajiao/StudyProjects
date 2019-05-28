@@ -91,7 +91,7 @@ namespace MyTools
                };
 
                 TaskParallelHelper.ExecuteTask(actionCoupon);
-                TaskParallelHelper.ExecuteTask(actionItem);
+                //TaskParallelHelper.ExecuteTask(actionItem);
  
             }
 

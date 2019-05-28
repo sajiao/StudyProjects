@@ -60,7 +60,7 @@
                                 </a>
                                 <a  target="_blank" :href="item.ProductUrl" :title="item.Title" class="link"> <p class="text-overflow">{{item.Title}}</p></a>
                                 <div class="price">
-                                    <p class="c-main">￥<span>{{item.FinalPrice}}</span>(券后价)</p><p><del>￥{{item.Price}}</del></p>
+                                    <p class="c-main">￥<span>{{item.FinalPrice}}</span>(券后价)</p><p><del>￥{{item.SellPrice}}</del></p>
                                 </div>
                                 <div class="sales cl">
                                     <img src="/static/pc/images/taobao.png"> <p>月销量：<span class="c-primary">{{item.Volume}}</span>件</p>
@@ -95,7 +95,7 @@
                                     <img src="/static/pc/images/tmall.png"><a href="/item/id/986908.html">夏季冰爽袖套防晒女护臂手臂套袖男袖子开车防紫外线冰丝手套长款</a>
                                 </div>
                                 <div class="price cl">
-                                    <p class="f-l c-main">￥<span>{{item.FinalPrice}}</span><del>￥{{item.Price}}</del></p>
+                                    <p class="f-l c-main">￥<span>{{item.FinalPrice}}</span><del>￥{{item.SellPrice}}</del></p>
                                     <p class="f-r">省<span class="c-main">{{item.YouhuiPrice}}</span>元</p>
                                 </div>
                                 <a target="_blank"  :href="item.ClickUrl" class="sales">月销量{{item.Volume}}件</a>
@@ -130,7 +130,7 @@
                                     <p class="price">
                                         <span class="f-28 c-main">{{item.FinalPrice}}<i class="quanhou"></i></span>
                                         <del class="c-999">
-                                            淘宝 :￥{{item.Price}}
+                                            淘宝 :￥{{item.SellPrice}}
                                         </del>
                                     </p>
                                     <div class="num">
@@ -184,7 +184,7 @@
                                     对很多人来说，冬天里最舒服的事情，一定就是躲在温暖的被窝里面，玩着手机安然入睡了。但是在天气寒冷的情况下，很多体质弱的MM总是会发现，被窝总是冰冷冷的，怎么捂都
                                 </p>
                                 <p>
-                                    <span class="f-l">2017-10-13</span>
+                                    <span class="f-l">2019-05-13</span>
                                 </p>
                             </div>
                         </div>
@@ -200,7 +200,7 @@
                                     很多朋友，都喜欢在家里养养花草，让家里绿意嫣然，显得生机勃勃，不仅赏心悦目，对净化空气也很有一套。但是身为一个上班族，相信很多朋友都像小编一样，没有太多的时间去
                                 </p>
                                 <p>
-                                    <span class="f-l">2017-10-13</span>
+                                    <span class="f-l">2019-05-23</span>
                                 </p>
                             </div>
                         </div>
@@ -216,7 +216,7 @@
                                     周末回娘家看望妈妈，发现她正在收拾食材，一大堆的食材往冰箱放，却唯独把一部分留出来。我很是惊讶，觉得这样很浪费冰箱空间，妈妈却不以为然，她笑着解释说，这些食物每
                                 </p>
                                 <p>
-                                    <span class="f-l">2017-10-13</span>
+                                    <span class="f-l">2019-05-23</span>
                                 </p>
                             </div>
                         </div>

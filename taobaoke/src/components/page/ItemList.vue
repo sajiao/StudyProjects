@@ -23,7 +23,7 @@
                                     <p class="price">
                                         <span class="f-28 c-main">{{item.FinalPrice}}<i class="quanhou"></i></span>
                                         <del class="c-999">
-                                            淘宝 :￥{{item.Price}}
+                                            淘宝 :￥{{item.SellPrice}}
                                         </del>
                                     </p>
                                     <div class="num">
@@ -115,7 +115,8 @@
                 let param = {
                     pageIndex: this.currentPage,
                     pageSize: this.pageSize,
-                    title: this.queryKeyword
+                    title: this.queryKeyword,
+					tags: this.queryKeyword
                 };
                 itemsService.get(param).then((res) => {
                     if (res && res.statusText == "OK") {
