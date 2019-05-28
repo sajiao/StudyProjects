@@ -13,6 +13,8 @@ namespace Entities.Request
 
         public string Title { get; set; }
 
+        public string Tags { get; set; }
+
         public Items ConvertData()
         {
             Items data = new Items()
@@ -20,6 +22,7 @@ namespace Entities.Request
                 Id = this.Id,
                 Title = this.Title,
                 TypeId = this.TypeId,
+                Tags = this.Tags,
             };
 
             return data;

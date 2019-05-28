@@ -47,8 +47,6 @@ namespace MyTools
             //var xmlPaths = "D:\\BaiduNetdiskDownload\\COCAXML";
             //WordImport.Import(xmlPaths);
 
-
-
             ImportTaobaoke();
             Console.ReadLine();
         }
@@ -72,6 +70,8 @@ namespace MyTools
                         {
                             break;
                         }
+                        TaoBaoKe.QueryProductDetail(result,1);
+                        TaoBaoKe.QueryProductDetail(result, 2);
                         ItemsBLL.BatchInsert(result);
                     }
                 };
@@ -84,6 +84,8 @@ namespace MyTools
                         {
                             break;
                         }
+                        TaoBaoKe.QueryProductDetail(result, 1);
+                        TaoBaoKe.QueryProductDetail(result, 2);
                         ItemsBLL.BatchInsert(result);
                     }
                };

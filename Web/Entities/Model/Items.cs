@@ -54,7 +54,10 @@ namespace Entities.Model
         [SugarColumn(Length = 11, DecimalDigits = 2, IsNullable = false, ColumnDescription = "商品价格(单位：元)")]
         public decimal Price { get; set; }
 
-        [SugarColumn(Length = 11, DecimalDigits = 2, IsNullable = false, ColumnDescription = "商品最终价格")]
+        [SugarColumn(Length = 11, DecimalDigits = 2, IsNullable = false, ColumnDescription = "销售价格")]
+        public decimal SellPrice { get; set; }
+
+        [SugarColumn(Length = 11, DecimalDigits = 2, IsNullable = false, ColumnDescription = "商品最终价格，减去优惠券后")]
         public decimal FinalPrice { get; set; }
 
         [SugarColumn(Length = 11, DecimalDigits = 2, IsNullable = false, ColumnDescription = "优惠多少")]
@@ -109,6 +112,10 @@ namespace Entities.Model
         [MapName("ProductUrl", "商品详情页链接地址")]
         [SugarColumn(Length = 500, IsNullable = true, ColumnDescription = "商品详情页链接地址")]
         public string ProductUrl { get; set; }
+
+        [MapName("ProductUrl", "商品详情页链接地址")]
+        [SugarColumn(Length = 500, IsNullable = true, ColumnDescription = "商品详情页链接地址")]
+        public string ProductWapUrl { get; set; }
 
         [MapName("ClickUrl", "淘宝客链接")]
         [MapName("ClickUrl", "优惠券链接")]
@@ -190,11 +197,8 @@ namespace Entities.Model
         [SugarColumn(Length = 500, IsNullable = true, ColumnDescription = "Item描述")]
         public string ItemDesc { get; set; }
 
-        [SugarColumn(ColumnDataType ="text", IsNullable = true, ColumnDescription = "描述")]
-        public string PcDesc { get; set; }
-
-        [SugarColumn(ColumnDataType = "text", IsNullable = true, ColumnDescription = "描述")]
-        public string WapDesc { get; set; }
+        [SugarColumn(ColumnDataType ="text", IsNullable = true, ColumnDescription = "商品描述")]
+        public string Desc { get; set; }
 
         [MapName("Platform", "平台类型")]
         [SugarColumn(Length = 10, IsNullable = true, ColumnDescription = "平台类型")]

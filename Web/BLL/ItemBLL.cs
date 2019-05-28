@@ -58,6 +58,11 @@ namespace BLL
                        tempResult = m.TypeId == req.TypeId;
                    }
 
+                   if (tempResult && req.Tags.IsNotNullOrEmpty())
+                   {
+                       tempResult = m.Tags.Contains(req.Tags);
+                   }
+
                    return tempResult;
 
                }).ToList();

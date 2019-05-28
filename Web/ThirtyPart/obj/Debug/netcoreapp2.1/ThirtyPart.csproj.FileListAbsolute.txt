@@ -24,3 +24,7 @@ D:\git\github\StudyProjects\Web\ThirtyPart\bin\Debug\netcoreapp2.1\DotNet.Common
 D:\git\github\StudyProjects\Web\ThirtyPart\bin\Debug\netcoreapp2.1\Entities.dll
 D:\git\github\StudyProjects\Web\ThirtyPart\bin\Debug\netcoreapp2.1\DotNet.Common.pdb
 D:\git\github\StudyProjects\Web\ThirtyPart\bin\Debug\netcoreapp2.1\Entities.pdb
+D:\projects\StudyProjects\Web\ThirtyPart\bin\Debug\netcoreapp2.1\DotNet.Common.dll
+D:\projects\StudyProjects\Web\ThirtyPart\bin\Debug\netcoreapp2.1\Entities.dll
+D:\projects\StudyProjects\Web\ThirtyPart\bin\Debug\netcoreapp2.1\DotNet.Common.pdb
+D:\projects\StudyProjects\Web\ThirtyPart\bin\Debug\netcoreapp2.1\Entities.pdb
