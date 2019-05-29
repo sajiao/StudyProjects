@@ -269,7 +269,9 @@
                 let param = {
                     pageIndex: this.currentPage,
                     pageSize: this.pageSize,
-                    title: this.queryKeyword
+                    keyword: this.queryKeyword,
+					SortFields:'volume',
+					Sort:'desc',
                 };
                 itemsService.get(param).then((res) => {
                     if (res && res.statusText == "OK") {
@@ -289,7 +291,8 @@
                 let param = {
                     pageIndex: 1,
                     pageSize: 5,
-                    title: "",
+					SortFields:'youhuiprice',
+					Sort:'desc',
                     typeId:1,
                 };
                 itemsService.get(param).then((res) => {
@@ -306,7 +309,8 @@
                 let param = {
                     pageIndex: 1,
                     pageSize: 6,
-                    title: "",
+				    SortFields:'volume',
+					Sort:'desc',
                     typeId:1,
                 };
                 itemsService.get(param).then((res) => {

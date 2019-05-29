@@ -14,7 +14,7 @@ namespace Entities.Request
         public string KeyWord { get; set; }
         public string Title { get; set; }
 
-        public string Tags { get; set; }
+        public string Tag { get; set; }
 
         public int ZCId { get; set; }
 
@@ -25,7 +25,7 @@ namespace Entities.Request
                 Id = this.Id,
                 Title = this.Title,
                 TypeId = this.TypeId,
-                Tags = this.Tags,
+                Tags = this.Tag,
                 ZCId = this.ZCId,
             };
 

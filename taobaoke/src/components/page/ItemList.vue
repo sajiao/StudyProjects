@@ -68,6 +68,7 @@
         data() {
             return {
                 queryKeyword:'',
+				tag:'',
                 tableData: [],
                 //分页
                 totalCount: 0,
@@ -79,6 +80,7 @@
         },
         created() {
             this.queryKeyword = this.$route.query.keyword;
+			this.tag = this.$route.query.tag;
             this.getData();
         },
         
@@ -93,6 +95,7 @@
             getParams () {
                 // 取到路由带过来的参数 
                this.queryKeyword = this.$route.query.keyword;
+			   this.tag = this.$route.query.tag;
                this.getData();
             },
          lingquan(url)
@@ -115,8 +118,10 @@
                 let param = {
                     pageIndex: this.currentPage,
                     pageSize: this.pageSize,
-                    title: this.queryKeyword,
-					tags: this.queryKeyword
+                    keyword: this.queryKeyword,
+					tags: this.tag,
+					SortFields:'volume',
+					Sort:'desc',
                 };
                 itemsService.get(param).then((res) => {
                     if (res && res.statusText == "OK") {

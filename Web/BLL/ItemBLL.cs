@@ -23,7 +23,7 @@ namespace BLL
             mDict = GetAll();
         }
 
-        private static Items GetItem(Int64 id)
+        public static Items GetItem(Int64 id)
         {
           return  mDict.FirstOrDefault(m=>m.NumIid == id);
         }
@@ -58,8 +58,8 @@ namespace BLL
                 Result<Items> results = new Result<Items>();
                 List<Items> temp = mDict.Where(m =>
                {
-                   bool tempResult = true;
-                   if (req.KeyWord.IsNotNullOrEmpty())
+                   bool tempResult = m.Status == 1;
+                   if (tempResult && req.KeyWord.IsNotNullOrEmpty())
                    {
                        tempResult = m.Title.Contains(req.KeyWord);
                    }
@@ -74,9 +74,9 @@ namespace BLL
                        tempResult = m.ZCId == req.ZCId;
                    }
 
-                   if (tempResult && req.Tags.IsNotNullOrEmpty())
+                   if (tempResult && req.Tag.IsNotNullOrEmpty())
                    {
-                       tempResult = m.Tags.Contains(req.Tags) || m.Title.Contains(req.Tags);
+                       tempResult = m.Tags.Contains(req.Tag) || m.Title.Contains(req.Tag);
                    }
 
                    return tempResult;
@@ -128,6 +128,20 @@ namespace BLL
             var id = dbContext.ItemsDb.InsertReturnIdentity(param);
             return GetById(param.Id);
         }
+
+        public static void AddCache(Items param)
+        {
+            if (param == null)
+            {
+                return;
+            }
+         
+            if (GetItem(param.NumIid) == null)
+            {
+                mDict.Add(param);
+            }
+        }
+
         public static void UpdateCache(List<Items> param)
         {
             if (param == null)
@@ -201,6 +215,14 @@ namespace BLL
         {
             var dbContext = new DbContext();
             return dbContext.ItemsDb.DeleteById(id);
+        }
+
+        public static bool DeleteByStatus()
+        {
+            var dbContext = new DbContext();
+            Expression<Func<Items, bool>> fun = null;
+            fun = (r) => r.Status == 2;
+            return dbContext.ItemsDb.Delete(fun);
         }
     }
 }

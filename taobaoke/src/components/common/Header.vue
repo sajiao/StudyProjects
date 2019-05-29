@@ -33,9 +33,6 @@
 					
 					   <router-link  :to="{
                                 path: '/list', 
-                                params: { 
-                                    keyword: keyWord, 
-                                },
                                 query: {
                                     keyword: keyWord, 
                                 }
@@ -67,7 +64,12 @@
             <div class="container cl">
                 <ul>
                     <li class="cur"><router-link to='/list'>全部</router-link></li>
-                    <li ><a href="/list">女装</a></li>
+                    <li > <router-link  :to="{
+                                path: '/list', 
+                               query: {
+                                   tag: '女装', 
+                               }
+                            }">女装</router-link></li>
                     <li ><a href="/list">男装</a></li>
                     <li ><a href="/list">鞋包</a></li>
                     <li ><a href="/list">美妆</a></li>

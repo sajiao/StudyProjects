@@ -14,17 +14,12 @@ export default new Router({
         {
             path: '/',
             component: resolve => require(['../components/common/Home.vue'], resolve),
-            meta: { title: '自述文件' },
+            meta: { title: '主页' },
             children:[
                 {
                     path: '/main',
                     component: resolve => require(['../components/page/main.vue'], resolve),
-                    meta: { title: '评分模块' }
-                },
-                {
-                    path: '/register',
-                    component: resolve => require(['../components/page/register.vue'], resolve),
-                    meta: { title: '注册模块' }
+                    meta: { title: '主页' }
                 },
                 {
                     path: '/list',
@@ -32,67 +27,22 @@ export default new Router({
                     meta: { title: '分类' }
                 },
                 {
-                    path: '/list/:keyword',
+                    path: '/list/:tag',
                     component: resolve => require(['../components/page/itemlist.vue'], resolve),
-                    meta: { title: '分类' }
-                },
-                {
-                    path: '/addtest',
-                    component: resolve => require(['../components/page/addtest.vue'], resolve),
-                    meta: { title: '添加题库' }
-                },
-                {
-                    path: '/testdetail',
-                    component: resolve => require(['../components/page/testdetail.vue'], resolve),
-                    meta: { title: '题库详情' }
-                },
-                {
-                    // 富文本编辑器组件
-                    path: '/socket',
-                    component: resolve => require(['../components/page/socket.vue'], resolve),
-                    meta: { title: 'socket' }
-                },
-                //{
-                //    // markdown组件
-                //    path: '/markdown',
-                //    component: resolve => require(['../components/page/Markdown.vue'], resolve),
-                //    meta: { title: 'markdown编辑器' }    
-                //},
-                {
-                    // 图片上传组件
-                    path: '/upload',
-                    component: resolve => require(['../components/page/Upload.vue'], resolve),
-                    meta: { title: '文件上传' }   
-                },
-                {
-                    // vue-schart组件
-                    path: '/charts',
-                    component: resolve => require(['../components/page/BaseCharts.vue'], resolve),
-                    meta: { title: 'schart图表' }
-                },
-                {
-                    // 拖拽列表组件
-                    path: '/drag',
-                    component: resolve => require(['../components/page/DragList.vue'], resolve),
-                    meta: { title: '拖拽列表' }
-                },
-                {
-                    // 权限页面
-                    path: '/permission',
-                    component: resolve => require(['../components/page/Permission.vue'], resolve),
-                    meta: { title: '权限测试', permission: true }
+                    meta: { title: '分类' },
+					props: true 
                 }
             ]
         },
         {
             path: '/m',
             component: resolve => require(['../components/common/MHome.vue'], resolve),
-            meta: { title: '自述文件' },
+            meta: { title: '主页' },
             children:[
                 {
                     path: '/m/main',
                     component: resolve => require(['../components/page/main.vue'], resolve),
-                    meta: { title: '评分模块' }
+                    meta: { title: '主页' }
                 },
                 {
                     path: '/m/list',

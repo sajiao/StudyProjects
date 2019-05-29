@@ -23,10 +23,14 @@ namespace BLL.ThirtyPart
             List<Items> updateItems = new List<Items>(50);
             foreach (var item in result)
             {
-                if (ItemsBLL.GetById(item.NumIid) != null)
+                if (ItemsBLL.GetItem(item.NumIid) != null)
                 {
                     item.Status = 2;
                     updateItems.Add(item);
+                }
+                else
+                {
+                    ItemsBLL.AddCache(item);
                 }
             }
 
@@ -37,7 +41,7 @@ namespace BLL.ThirtyPart
 
             ItemsBLL.BatchInsert(result);
             ItemsBLL.UpdateCache(result);
-
+            ItemsBLL.DeleteByStatus();
             return result;
         }
     }

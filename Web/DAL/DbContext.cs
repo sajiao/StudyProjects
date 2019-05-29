@@ -41,5 +41,7 @@ namespace DAL
 
         public DbSet<Items> ItemsDb { get { return new DbSet<Items>(Db); } }
 
+        public DbSet<ItemCate> ItemCateDb { get { return new DbSet<ItemCate>(Db); } }
+
     }
 }
