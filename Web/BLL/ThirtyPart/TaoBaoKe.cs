@@ -12,7 +12,7 @@ using static Top.Api.Response.TbkDgItemCouponGetResponse;
 using static Top.Api.Response.TbkItemInfoGetResponse;
 using System.Linq;
 
-namespace ThirtyPart
+namespace BLL.ThirtyPart
 {
     public static class TaoBaoKe 
     {

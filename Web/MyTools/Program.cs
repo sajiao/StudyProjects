@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BLL;
+using BLL.ThirtyPart;
 using DotNet.Common;
 using Entities;
 using Entities.Model;

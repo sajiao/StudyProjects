@@ -10,7 +10,6 @@
     <ProjectReference Include="..\DAL\DAL.csproj" />
     <ProjectReference Include="..\DotNet.Common\DotNet.Common.csproj" />
     <ProjectReference Include="..\Entities\Entities.csproj" />
-    <ProjectReference Include="..\ThirtyPart\ThirtyPart.csproj" />
   </ItemGroup>
 
 </Project>

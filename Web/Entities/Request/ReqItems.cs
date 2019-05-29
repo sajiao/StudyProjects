@@ -11,9 +11,12 @@ namespace Entities.Request
 
         public int TypeId { get; set; }
 
+        public string KeyWord { get; set; }
         public string Title { get; set; }
 
         public string Tags { get; set; }
+
+        public int ZCId { get; set; }
 
         public Items ConvertData()
         {
@@ -23,6 +26,7 @@ namespace Entities.Request
                 Title = this.Title,
                 TypeId = this.TypeId,
                 Tags = this.Tags,
+                ZCId = this.ZCId,
             };
 
             return data;
