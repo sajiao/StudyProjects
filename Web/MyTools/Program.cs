@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 namespace MyTools
 {
@@ -47,8 +48,8 @@ namespace MyTools
             //var xmlPaths = "D:\\BaiduNetdiskDownload\\COCAXML";
             //WordImport.Import(xmlPaths);
 
-            //ImportTaobaoke();
-            
+            ImportTaobaoke();
+
             Console.ReadLine();
         }
 
@@ -58,61 +59,66 @@ namespace MyTools
             PageInfo page = new PageInfo();
             page.PageSize = 100;
 
-            int pageNum = 10;
-            foreach (var item in Cates)
+            int pageNum = 100;
+            var items = ItemsBLL.GetAll();
+            //foreach (var item in Cates)
+            //{
+            Action<int> actionCoupon = (pageIndex) =>
             {
-                Action<string> actionCoupon = (keyword) =>
+                List<Items> updateItems = new List<Items>(50);
+                List<Items> addItems = new List<Items>(100);
+                page.PageIndex = pageIndex;
+                var result = TaoBaoKe.QueryDgItemCoupon(page, "");
+                if (result.Count == 0)
                 {
-                    for (int i = 1; i <= pageNum; i++)
+                    return;
+                }
+                TaoBaoKe.QueryProductDetail(result, 1);
+                TaoBaoKe.QueryProductDetail(result, 2);
+                foreach (var item2 in result)
+                {
+                    var temp = items.FirstOrDefault(a => a.NumIid == item2.NumIid);
+                    if (temp != null)
                     {
-                        page.PageIndex = i;
-                        var result = TaoBaoKe.QueryDgItemCoupon(page, keyword);
-                        if (result.Count == 0)
-                        {
-                            break;
-                        }
-                        TaoBaoKe.QueryProductDetail(result, 1);
-                        TaoBaoKe.QueryProductDetail(result, 2);
-                        List<Items> updateItems = new List<Items>(50);
-                        foreach (var item2 in result)
-                        {
-                            var temp = ItemsBLL.GetItem(item2.NumIid);
-                            if (temp != null)
-                            {
-                                temp.Status = 2;
-                                updateItems.Add(temp);
-                            }
-                            else
-                            {
-                                ItemsBLL.AddCache(item2);
-                            }
-                        }
-                        ItemsBLL.BatchInsert(result);
-                        ItemsBLL.BatchUpdate(updateItems);
+                        temp.Status = 2;
+                        updateItems.Add(temp);
+                    }
+                    else
+                    {
+                        items.Add(item2);
                     }
 
-                    ItemsBLL.DeleteByStatus();
-                };
+                    addItems.Add(item2);
+                }
 
-                Action actionItem = () => {
-                    for (int i = 1; i <= pageNum; i++)
-                    {
-                        var result = TaoBaoKe.QueryItem(page, item);
-                        if (result.Count == 0)
-                        {
-                            break;
-                        }
-                        TaoBaoKe.QueryProductDetail(result, 1);
-                        TaoBaoKe.QueryProductDetail(result, 2);
-                        ItemsBLL.BatchInsert(result);
-                    }
-                };
+                ItemsBLL.BatchInsert(addItems);
+                ItemsBLL.BatchUpdate(updateItems);
+            };
 
-                actionCoupon(item);
-
-                //TaskParallelHelper.ExecuteTask(actionItem);
-
+           Action actionItem = () => {
+            for (int i = 1; i <= pageNum; i++)
+            {
+                var result = TaoBaoKe.QueryItem(page, "");
+                if (result.Count == 0)
+                {
+                    break;
+                }
+                TaoBaoKe.QueryProductDetail(result, 1);
+                TaoBaoKe.QueryProductDetail(result, 2);
+                ItemsBLL.BatchInsert(result);
             }
+        };
+
+          
+           for (int i = 1; i <= pageNum; i++)
+           {
+              actionCoupon(i);
+           }
+           
+           ItemsBLL.DeleteByStatus();
+            //TaskParallelHelper.ExecuteTask(actionItem);
+
+            //}
 
         }
 
@@ -123,50 +129,50 @@ namespace MyTools
                 new ItemCate(){ CateId = 16, CateName ="女装"},
                 new ItemCate(){ CateId = 50344007, CateName ="男装"},
                 new ItemCate(){ CateId = 1625, CateName ="内衣"},
-                new ItemCate(){ CateId = 16, CateName ="鞋靴"},
-                new ItemCate(){ CateId = 16, CateName ="箱包"},
-                new ItemCate(){ CateId = 16, CateName ="配件"},
-                new ItemCate(){ CateId = 16, CateName ="童装玩具"},
-                new ItemCate(){ CateId = 16, CateName ="孕产"},
-                new ItemCate(){ CateId = 16, CateName ="用品"},
-                new ItemCate(){ CateId = 16, CateName ="家电"},
-                new ItemCate(){ CateId = 16, CateName ="数码"},
-                new ItemCate(){ CateId = 16, CateName ="手机"},
-                new ItemCate(){ CateId = 16, CateName ="美妆"},
-                new ItemCate(){ CateId = 16, CateName ="洗护"},
-                new ItemCate(){ CateId = 16, CateName ="保健品"},
-                new ItemCate(){ CateId = 16, CateName ="珠宝"},
-                new ItemCate(){ CateId = 16, CateName ="眼镜"},
-                new ItemCate(){ CateId = 16, CateName ="手表"},
-                new ItemCate(){ CateId = 16, CateName ="运动"},
-                new ItemCate(){ CateId = 16, CateName ="户外"},
-                new ItemCate(){ CateId = 16, CateName ="乐器"},
-                new ItemCate(){ CateId = 16, CateName ="游戏"},
-                new ItemCate(){ CateId = 16, CateName ="动漫"},
-                new ItemCate(){ CateId = 16, CateName ="影视"},
-                new ItemCate(){ CateId = 16, CateName ="美食"},
-                new ItemCate(){ CateId = 16, CateName ="生鲜"},
-                new ItemCate(){ CateId = 16, CateName ="零食"},
-                new ItemCate(){ CateId = 16, CateName ="鲜花"},
-                new ItemCate(){ CateId = 16, CateName ="宠物"},
-                new ItemCate(){ CateId = 16, CateName ="农资"},
-                new ItemCate(){ CateId = 16, CateName ="工具"},
+                new ItemCate(){ CateId = 50016853, CateName ="鞋靴"},
+                new ItemCate(){ CateId = 50006842, CateName ="箱包"},
+                new ItemCate(){ CateId = 50010404, CateName ="配件"},
+                new ItemCate(){ CateId = 0, CateName ="童装玩具"},
+                new ItemCate(){ CateId = 0, CateName ="孕产"},
+                new ItemCate(){ CateId = 0, CateName ="用品"},
+                new ItemCate(){ CateId = 0, CateName ="家电"},
+                new ItemCate(){ CateId = 0, CateName ="数码"},
+                new ItemCate(){ CateId = 0, CateName ="手机"},
+                new ItemCate(){ CateId = 0, CateName ="美妆"},
+                new ItemCate(){ CateId = 1801, CateName ="洗护"},
+                new ItemCate(){ CateId = 0, CateName ="保健品"},
+                new ItemCate(){ CateId = 50015926, CateName ="珠宝"},
+                new ItemCate(){ CateId = 50015926, CateName ="眼镜"},
+                new ItemCate(){ CateId = 0, CateName ="手表"},
+                new ItemCate(){ CateId = 0, CateName ="运动"},
+                new ItemCate(){ CateId = 0, CateName ="户外"},
+                new ItemCate(){ CateId = 0, CateName ="乐器"},
+                new ItemCate(){ CateId = 0, CateName ="游戏"},
+                new ItemCate(){ CateId = 0, CateName ="动漫"},
+                new ItemCate(){ CateId = 0, CateName ="影视"},
+                new ItemCate(){ CateId = 0, CateName ="美食"},
+                new ItemCate(){ CateId = 0, CateName ="生鲜"},
+                new ItemCate(){ CateId = 0, CateName ="零食"},
+                new ItemCate(){ CateId = 0, CateName ="鲜花"},
+                new ItemCate(){ CateId = 0, CateName ="宠物"},
+                new ItemCate(){ CateId = 0, CateName ="农资"},
+                new ItemCate(){ CateId = 0, CateName ="工具"},
                 new ItemCate(){ CateId = 50097129, CateName ="装修"},
-                new ItemCate(){ CateId = 16, CateName ="建材"},
-                new ItemCate(){ CateId = 16, CateName ="家具"},
+                new ItemCate(){ CateId = 0, CateName ="建材"},
+                new ItemCate(){ CateId = 0, CateName ="家具"},
                 new ItemCate(){ CateId = 50008163, CateName ="家饰"},
-                new ItemCate(){ CateId = 16, CateName ="家纺"},
-                new ItemCate(){ CateId = 16, CateName ="汽车"},
-                new ItemCate(){ CateId = 16, CateName ="二手车"},
-                new ItemCate(){ CateId = 16, CateName ="用品"},
-                new ItemCate(){ CateId = 16, CateName ="办公"},
-                new ItemCate(){ CateId = 16, CateName ="DIY"},
-                new ItemCate(){ CateId = 16, CateName ="五金电子"},
-                new ItemCate(){ CateId = 16, CateName ="百货"},
-                new ItemCate(){ CateId = 16, CateName ="餐厨"},
-                new ItemCate(){ CateId = 16, CateName ="家庭保健"},
-                new ItemCate(){ CateId = 16, CateName ="学习"},
-                new ItemCate(){ CateId = 16, CateName ="卡券"},
+                new ItemCate(){ CateId = 50008163, CateName ="家纺"},
+                new ItemCate(){ CateId = 56974003, CateName ="汽车"},
+                new ItemCate(){ CateId = 56974003, CateName ="二手车"},
+                new ItemCate(){ CateId = 0, CateName ="用品"},
+                new ItemCate(){ CateId = 0, CateName ="办公"},
+                new ItemCate(){ CateId = 0, CateName ="DIY"},
+                new ItemCate(){ CateId = 0, CateName ="五金电子"},
+                new ItemCate(){ CateId = 0, CateName ="百货"},
+                new ItemCate(){ CateId = 0, CateName ="餐厨"},
+                new ItemCate(){ CateId = 0, CateName ="家庭保健"},
+                new ItemCate(){ CateId = 0, CateName ="学习"},
+                new ItemCate(){ CateId = 0, CateName ="卡券"},
                 new ItemCate(){ CateId = 50097750, CateName ="本地服务"},
             };
 

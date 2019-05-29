@@ -119,7 +119,7 @@
                     pageIndex: this.currentPage,
                     pageSize: this.pageSize,
                     keyword: this.queryKeyword,
-					tags: this.tag,
+					tag: this.tag,
 					SortFields:'volume',
 					Sort:'desc',
                 };

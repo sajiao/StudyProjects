@@ -38,7 +38,7 @@ namespace DotNet.Common
            }
        }
 
-       public static void ExecuteTask(Action action1)
+        public static void ExecuteTask(Action action1)
        {
            if (action1 != null)
            {

@@ -70,15 +70,60 @@
                                    tag: '女装', 
                                }
                             }">女装</router-link></li>
-                    <li ><a href="/list">男装</a></li>
-                    <li ><a href="/list">鞋包</a></li>
-                    <li ><a href="/list">美妆</a></li>
-                    <li ><a href="/list">母婴</a></li>
-                    <li ><a href="/list">食品</a></li>
-                    <li ><a href="/list">内衣</a></li>
-                    <li ><a href="/list">数码</a></li>
-                    <li ><a href="/list">家居用品</a></li>
-                    <li ><a href="/list">文体车品</a></li></ul>
+                    <li ><router-link  :to="{
+                                path: '/list', 
+                               query: {
+                                   tag: '男装', 
+                               }
+                            }">男装</router-link></li>
+                    <li > <router-link  :to="{
+                                path: '/list', 
+                               query: {
+                                   tag: '鞋包', 
+                               }
+                            }">鞋包</router-link></li>
+                    <li ><router-link  :to="{
+                                path: '/list', 
+                               query: {
+                                   tag: '美妆', 
+                               }
+                            }">美妆</router-link></li>
+                    <li > <router-link  :to="{
+                                path: '/list', 
+                               query: {
+                                   tag: '母婴', 
+                               }
+                            }">母婴</router-link></li>
+                    <li ><router-link  :to="{
+                                path: '/list', 
+                               query: {
+                                   tag: '食品', 
+                               }
+                            }">食品</router-link></li>
+                    <li ><router-link  :to="{
+                                path: '/list', 
+                               query: {
+                                   tag: '内衣', 
+                               }
+                            }">内衣</router-link></li>
+                    <li ><router-link  :to="{
+                                path: '/list', 
+                               query: {
+                                   tag: '数码', 
+                               }
+                            }">数码</router-link></li>
+                    <li ><router-link  :to="{
+                                path: '/list', 
+                               query: {
+                                   tag: '家居用品', 
+                               }
+                            }">家居用品</router-link></li>
+                    <li ><router-link  :to="{
+                                path: '/list', 
+                               query: {
+                                   tag: '文体车品', 
+                               }
+                            }">文体车品</router-link></li></ul>
              </div>
         </div>
  
