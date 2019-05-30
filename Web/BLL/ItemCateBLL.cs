@@ -21,6 +21,11 @@ namespace BLL
             mDict = GetAll();
         }
 
+        public static List<ItemCate> GetData()
+        {
+            return mDict;
+        }
+
         public static ItemCate GetItem(Int32 id)
         {
             return mDict.FirstOrDefault(m => m.CateId == id);

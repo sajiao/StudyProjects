@@ -18,9 +18,53 @@ namespace BLL
     {
         private static List<Items> mDict = null;
 
+        private static object LockObject = new object();
+
         static ItemsBLL()
         {
             mDict = GetAll();
+        }
+
+        public static List<Items> GetData()
+        {
+            return mDict;
+        }
+
+        public static void ClearSameData()
+        {
+            var data = GetAll();
+            if (data.HasValue() == false)
+            {
+                return;
+            }
+            data = data.OrderByDescending(d => d.LastTime).ToList();
+            List<Items> newData = new List<Items>(10000);
+            List<Items> deleteData = new List<Items>(500);
+            foreach (var item in data)
+            {
+                if (newData.Exists(d => d.NumIid == item.NumIid))
+                {
+                    item.Status = 2;
+                    deleteData.Add(item);
+                    continue;
+                }
+                newData.Add(item);
+                if (deleteData.Count == 500)
+                {
+                    BatchUpdate(deleteData);
+                    deleteData.Clear();
+                }
+            }
+
+            lock (LockObject)
+            {
+                mDict = newData;
+            }
+            if (deleteData.Count > 500)
+            {
+                BatchUpdate(deleteData);
+            }
+            DeleteByStatus();
         }
 
         public static Items GetItem(Int64 id)
@@ -56,7 +100,7 @@ namespace BLL
             Result<Items> results = new Result<Items>();
             if (req.IsFull)
             {
-                var tempItems = TaoBaoKeHelper.QueryCoupon(req.KeyWord);
+                var tempItems = TaoBaoKeHelper.QueryCoupon(0,req.KeyWord);
                 if (tempItems.Count > req.PageInfo.PageSize)
                 {
                     results.Results = tempItems.Take(req.PageInfo.PageSize).ToList();
@@ -126,7 +170,7 @@ namespace BLL
                 results.TotalCount = temp.Count;
                 if (results.TotalCount == 0)
                 {
-                    var tempItems = TaoBaoKeHelper.QueryCoupon(req.KeyWord);
+                    var tempItems = TaoBaoKeHelper.QueryCoupon(0,req.KeyWord);
                     if (tempItems.Count > req.PageInfo.PageSize)
                     {
                         results.Results = tempItems.Take(req.PageInfo.PageSize).ToList();

@@ -9,12 +9,12 @@ namespace BLL.ThirtyPart
 {
     public static class TaoBaoKeHelper
     {
-        public static List<Items> QueryCoupon(string keyword)
+        public static List<Items> QueryCoupon(int cateid,string keyword)
         {
             PageInfo page = new PageInfo();
             page.PageSize = 100;
             page.PageIndex = 1;
-            var result = TaoBaoKe.QueryDgItemCoupon(page, keyword);
+            var result = TaoBaoKe.QueryDgItemCoupon(page, cateid, keyword);
             if (result.Count == 0)
             {
                 return result;

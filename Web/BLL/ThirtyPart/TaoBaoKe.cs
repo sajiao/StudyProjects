@@ -35,15 +35,23 @@ namespace BLL.ThirtyPart
         /// <summary>
         /// taobao.tbk.dg.item.coupon.get( 好券清单API【导购】 )
         /// </summary>
-        public static List<Items> QueryDgItemCoupon(PageInfo pageInfo, string keyword)
+        public static List<Items> QueryDgItemCoupon(PageInfo pageInfo,int cateId, string keyword)
         {
             var client = GetClient();
             TbkDgItemCouponGetRequest req = new TbkDgItemCouponGetRequest();
             req.AdzoneId = 108899300176;//pid: mm_25162659_311500292_108899300176的第三位
             //req.Platform = 1L;
-            //req.Cat = "16,18";//后台类目ID，用,分割，最大10个，该ID可以通过taobao.itemcats.get接口获取到
+            if (cateId > 0)
+            {
+                req.Cat = cateId.ToString();//后台类目ID，用,分割，最大10个，该ID可以通过taobao.itemcats.get接口获取到
+            }
+            else
+            {
+                req.Q = keyword;
+            }
+          
             req.PageSize = pageInfo.PageSize;
-            req.Q = keyword;
+           
             req.PageNo = pageInfo.PageIndex;//第几页，默认：1（当后台类目和查询词均不指定的时候，最多出10000个结果，即page_no*page_size不能超过10000；当指定类目或关键词的时候，则最多出100个结果）
             TbkDgItemCouponGetResponse rsp = client.Execute(req);
       
@@ -154,8 +162,12 @@ namespace BLL.ThirtyPart
                         temp.HPayRate30 = item.HPayRate30;
                         temp.HGoodRate = item.HGoodRate;
                         temp.FreeShipment = item.FreeShipment;
-                        temp.CateId = item.CateId;
-                        temp.Category = item.Category;
+                        if (item.CateId > 0)
+                        {
+                            temp.CateId = item.CateId;
+                            temp.Category = item.Category;
+                        }
+                        
                         temp.CategoryName = item.CategoryName;
                         temp.CatLeafName = item.CatLeafName;
                         if (item.CategoryName != null)

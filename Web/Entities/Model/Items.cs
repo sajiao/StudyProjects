@@ -47,7 +47,7 @@ namespace Entities.Model
         public string PicUrl { get; set; }
 
         [MapName("PicUrls", "商品主图")]
-        [SugarColumn(Length = 500, IsNullable = true, ColumnDescription = "商品小图列表")]
+        [SugarColumn(Length = 1200, IsNullable = true, ColumnDescription = "商品小图列表")]
         public string SmallImages { get; set; }
 
         [MapName("Price", "商品价格(单位：元)")]

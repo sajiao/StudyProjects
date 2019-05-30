@@ -53,22 +53,18 @@ namespace MyTools
             Console.ReadLine();
         }
 
-        private static string[] Cates = new string[] { "女装", "男装", "鞋包", "美妆", "母婴", "食品", "内衣", "数码", "家居用品", "文体车品" };
         public static void ImportTaobaoke()
         {
             PageInfo page = new PageInfo();
             page.PageSize = 100;
-
-            int pageNum = 100;
-            var items = ItemsBLL.GetAll();
-            //foreach (var item in Cates)
-            //{
-            Action<int> actionCoupon = (pageIndex) =>
+            var cateItems = ItemCateBLL.GetData();
+            var items = ItemsBLL.GetData();
+            List<Items> updateItems = new List<Items>(500);
+            List<Items> addItems = new List<Items>(500);
+            foreach (var item in cateItems)
             {
-                List<Items> updateItems = new List<Items>(50);
-                List<Items> addItems = new List<Items>(100);
-                page.PageIndex = pageIndex;
-                var result = TaoBaoKe.QueryDgItemCoupon(page, "");
+                page.PageIndex = 1;
+                var result = TaoBaoKe.QueryDgItemCoupon(page, 0, item.CateName);
                 if (result.Count == 0)
                 {
                     return;
@@ -80,46 +76,48 @@ namespace MyTools
                     var temp = items.FirstOrDefault(a => a.NumIid == item2.NumIid);
                     if (temp != null)
                     {
-                        temp.Status = 2;
-                        updateItems.Add(temp);
+                        item2.Id = temp.Id;
+                        temp = item2;
+                        if (updateItems.Exists(d => d.NumIid == temp.NumIid) == false)
+                        {
+                            updateItems.Add(temp);
+                        }
                     }
                     else
                     {
                         items.Add(item2);
+                        addItems.Add(item2);
                     }
-
-                    addItems.Add(item2);
                 }
-
-                ItemsBLL.BatchInsert(addItems);
-                ItemsBLL.BatchUpdate(updateItems);
-            };
-
-           Action actionItem = () => {
-            for (int i = 1; i <= pageNum; i++)
-            {
-                var result = TaoBaoKe.QueryItem(page, "");
-                if (result.Count == 0)
+  
+                if (addItems.Count >= 500)
                 {
-                    break;
+                    ItemsBLL.BatchInsert(addItems);
+                    addItems.Clear();
                 }
-                TaoBaoKe.QueryProductDetail(result, 1);
-                TaoBaoKe.QueryProductDetail(result, 2);
-                ItemsBLL.BatchInsert(result);
+                if (updateItems.Count >= 500)
+                {
+                    ItemsBLL.BatchUpdate(updateItems);
+                    updateItems.Clear();
+                }
+          }
+ 
+            if (addItems.Count > 0)
+            {
+                ItemsBLL.BatchInsert(addItems);
+                addItems.Clear();
             }
-        };
 
-          
-           for (int i = 1; i <= pageNum; i++)
-           {
-              actionCoupon(i);
-           }
-           
-           ItemsBLL.DeleteByStatus();
+            if (updateItems.Count > 0)
+            {
+                ItemsBLL.BatchUpdate(updateItems);
+                updateItems.Clear();
+            }
+
+            ItemsBLL.ClearSameData();
+
+            Console.WriteLine("Done:"+ DateTime.Now);
             //TaskParallelHelper.ExecuteTask(actionItem);
-
-            //}
-
         }
 
         public static void InitCate()
