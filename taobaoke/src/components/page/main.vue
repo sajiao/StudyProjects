@@ -270,7 +270,7 @@
                     pageIndex: this.currentPage,
                     pageSize: this.pageSize,
                     keyword: this.queryKeyword,
-					SortFields:'volume',
+					SortFields:'youhuiprice',
 					Sort:'desc',
                 };
                 itemsService.get(param).then((res) => {

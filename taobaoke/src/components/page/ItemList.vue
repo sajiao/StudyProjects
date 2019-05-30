@@ -69,6 +69,7 @@
             return {
                 queryKeyword:'',
 				tag:'',
+				isFull:false,
                 tableData: [],
                 //分页
                 totalCount: 0,
@@ -81,6 +82,7 @@
         created() {
             this.queryKeyword = this.$route.query.keyword;
 			this.tag = this.$route.query.tag;
+			this.isFull =this.$route.query.isFull;
             this.getData();
         },
         
@@ -96,6 +98,7 @@
                 // 取到路由带过来的参数 
                this.queryKeyword = this.$route.query.keyword;
 			   this.tag = this.$route.query.tag;
+			   this.isFull = this.$route.query.ifFull;
                this.getData();
             },
          lingquan(url)
@@ -120,7 +123,8 @@
                     pageSize: this.pageSize,
                     keyword: this.queryKeyword,
 					tag: this.tag,
-					SortFields:'volume',
+					isFull:this.isFull,
+					SortFields:'NumIid',
 					Sort:'desc',
                 };
                 itemsService.get(param).then((res) => {

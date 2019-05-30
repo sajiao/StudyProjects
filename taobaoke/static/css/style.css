@@ -36,6 +36,7 @@ a:hover{color: #fb3434;text-decoration: none;}
 .head .search .input-text{padding-left: 40px;height: 40px;border: 2px solid #fb3434;border-radius: 50px;}
 .head .search i{position: absolute;left: 15px;top: 5px;font-size: 20px;color: #999;}
 .head .search .btn{padding: 0 30px;position: absolute;right: 0;top: 0;height: 40px;border-radius: 50px;}
+.head .search .btn1{padding: 0 80px;position: absolute;right: 0;top: 0;height: 40px;border-radius: 50px;}
 .head .barcode{float: right;margin-top: 10px;width: 200px;}
 .head .barcode p{font-size: 14px;color: #646464;}
 /*navigation*/

@@ -3,6 +3,7 @@ using Entities.Model;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BLL.ThirtyPart
 {
@@ -39,9 +40,11 @@ namespace BLL.ThirtyPart
                 ItemsBLL.BatchUpdate(updateItems);
             }
 
-            ItemsBLL.BatchInsert(result);
-            ItemsBLL.UpdateCache(result);
-            ItemsBLL.DeleteByStatus();
+            Task.Factory.StartNew(()=> {
+                ItemsBLL.BatchInsert(result);
+                ItemsBLL.UpdateCache(result);
+            });
+            
             return result;
         }
     }

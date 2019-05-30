@@ -30,14 +30,27 @@
 						<input type="text" v-model="keyWord" class="input-text" placeholder="请输入您要查找的优惠券商品名称" />
 						<i class="iconfont icon-sousuo"></i>
                            
-					
-					   <router-link  :to="{
-                                path: '/list', 
-                                query: {
-                                    keyword: keyWord, 
-                                }
-                            }"
-                        class="btn btn-main radius">搜索</router-link>
+					<div  class="btn ">
+						 <router-link  :to="{
+						         path: '/list', 
+						         query: {
+						             keyword: keyWord, 
+															isFull:false,
+						         }
+						     }"
+						class="btn-main radius">搜索</router-link>
+												
+						 <router-link  :to="{
+								 path: '/list', 
+								 query: {
+									 keyword: keyWord, 
+									 isFull:true,
+								 }
+							 }"
+						class="btn-main radius">搜全网</router-link>
+						
+					</div>
+					  
 				</div>
 				<div class="barcode cl">
 					<div class="f-l mr-5">
@@ -52,11 +65,36 @@
 		</div>
 		<!--nav-->
         <div class="navigation"><div class="container cl"><ul><li ><a href="/">首页</a></li>
-        <li ><a href="/list">超级人气榜</a></li>
-        <li  ><a href="/list">特卖精选</a></li>
-        <li  ><a href="/list">九块九包邮</a></li>
-        <li  ><a href="/list">二十元封顶</a></li>
-        <li  ><a href="/list">优惠券头条</a></li></ul>
+        <li><router-link  :to="{
+                                path: '/list', 
+                               query: {
+								   keyword: '特卖精选', 
+                               }
+                            }">特卖精选</router-link></li>
+        <li  > <router-link  :to="{
+                                path: '/list', 
+                               query: {
+								   keyword: '女装', 
+                               }
+                            }">女装</router-link></li>
+        <li  ><router-link  :to="{
+                                path: '/list', 
+                               query: {
+								   keyword: '九块九包邮', 
+                               }
+                            }">九块九包邮</router-link></li>
+        <li  ><router-link  :to="{
+                                path: '/list', 
+                               query: {
+								   keyword: '二十元封顶', 
+                               }
+                            }">二十元封顶</router-link></li>
+        <li  ><router-link  :to="{
+                                path: '/list', 
+                               query: {
+								   keyword: '优惠券头条', 
+                               }
+                            }">优惠券头条</router-link></li></ul>
         </div>
         </div>
         <!--series-->
@@ -153,3 +191,6 @@
         }
     }
 </script>
+<style>
+.head .search .btn-main{height: 40px;border-radius: 50px;}
+</style>

@@ -18,6 +18,8 @@ namespace Entities.Request
 
         public int ZCId { get; set; }
 
+        public bool IsFull { get; set; }
+
         public Items ConvertData()
         {
             Items data = new Items()

@@ -53,15 +53,40 @@ namespace BLL
 
         public static Result<Items> QueryPageList(ReqItems req)
         {
+            Result<Items> results = new Result<Items>();
+            if (req.IsFull)
+            {
+                var tempItems = TaoBaoKeHelper.QueryCoupon(req.KeyWord);
+                if (tempItems.Count > req.PageInfo.PageSize)
+                {
+                    results.Results = tempItems.Take(req.PageInfo.PageSize).ToList();
+                }
+                results.TotalCount = tempItems.Count;
+                return results;
+            }
             if (mDict.HasValue())
             {
-                Result<Items> results = new Result<Items>();
                 List<Items> temp = mDict.Where(m =>
                {
                    bool tempResult = m.Status == 1;
                    if (tempResult && req.KeyWord.IsNotNullOrEmpty())
                    {
                        tempResult = m.Title.Contains(req.KeyWord);
+
+                       if (tempResult == false)
+                       {
+                           tempResult = m.Tags.Contains(req.KeyWord);
+                       }
+
+                       if (tempResult == false)
+                       {
+                           tempResult = m.ProductUrl.Contains(req.KeyWord);
+                       }
+
+                       if (tempResult == false)
+                       {
+                           tempResult = m.ProductWapUrl.Contains(req.KeyWord);
+                       }
                    }
 
                    if (tempResult && req.TypeId > 0)
@@ -69,7 +94,7 @@ namespace BLL
                        tempResult = m.TypeId == req.TypeId;
                    }
 
-                   if (tempResult && req.ZCId > 0)
+                   if (tempResult&& req.ZCId > 0)
                    {
                        tempResult = m.ZCId == req.ZCId;
                    }
