@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using System.Threading;
 namespace MyTools
 {
     public class WordBook
@@ -47,10 +48,17 @@ namespace MyTools
             // var temp =  ObjectXmlSerializer.LoadFromXml<WordBook>(path);
             //var xmlPaths = "D:\\BaiduNetdiskDownload\\COCAXML";
             //WordImport.Import(xmlPaths);
-
-            ImportTaobaoke();
-
-            Console.ReadLine();
+            while (true)
+            {
+                var now = DateTime.Now;
+                if (now.Hour / 6 == 0)
+                {
+                    ImportTaobaoke();
+                }
+                Thread.Sleep(1000*60*10);
+            }
+          
+            //Console.ReadLine();
         }
 
         public static void ImportTaobaoke()
@@ -89,7 +97,7 @@ namespace MyTools
                         addItems.Add(item2);
                     }
                 }
-  
+                
                 if (addItems.Count >= 500)
                 {
                     ItemsBLL.BatchInsert(addItems);
@@ -187,19 +195,19 @@ namespace MyTools
             var path = "D:\\tb\\淘宝网 - 淘！我喜欢.html";
             var text = FileHelper.ReadBinaryFile(path);
             var pattern = "<a.+?href=\"(.+?)\".*>(.+)</a>";
-            var catStr = "cat=(\\d{1,})[&|\"]";
+           // var catStr = "cat=(\\d{1,})[&|\"]";
             Dictionary<string, Int32> dict = new Dictionary<string, Int32>(100);
             foreach (Match match in Regex.Matches(text, pattern, RegexOptions.IgnoreCase))
             {
-                var groups = Regex.Matches(match.Groups[1].Value, catStr, RegexOptions.IgnoreCase);
-                if (groups.HasValue())
-                {
-                    var cat = groups[0].Groups[1].Value;
+                //var groups = Regex.Matches(match.Groups[1].Value, catStr, RegexOptions.IgnoreCase);
+                //if (groups.HasValue())
+                //{
+                //    var cat = groups[0].Groups[1].Value;
                     if (dict.ContainsKey(match.Groups[2].Value) == false)
                     {
-                        dict[match.Groups[2].Value] = cat.TryToInt();
+                        dict[match.Groups[2].Value] = 0;
                     }
-                }
+                //}
                 
             }
 
@@ -210,6 +218,7 @@ namespace MyTools
                 ItemCateBLL.Insert(tempItem);
                 Console.WriteLine(item.Key+":"+ item.Value);
             }
+            Console.WriteLine("Total:" + temp.Count());
             return dict;
         }
     }
