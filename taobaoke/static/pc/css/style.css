@@ -38,6 +38,8 @@ a:hover{color: #fb3434;text-decoration: none;}
 .head .search .btn{padding: 0 30px;position: absolute;right: 0;top: 0;height: 40px;border-radius: 50px;}
 .head .barcode{float: right;margin-top: 10px;width: 200px;}
 .head .barcode p{font-size: 14px;color: #646464;}
+.head .searchbtn {float: left;display: -webkit-box;display: -ms-flexbox;display: flex;align-items: center;width: 200px;}
+.head .searchbtn a{border-radius: 50px; min-width: 65px;height: 40px;margin: 30px 0 0 10px; text-align: center;line-height: 40px; font-size:16px; font-weight: 600;}
 /*navigation*/
 .navigation{height: 44px;background: #fb3434;}
 .navigation ul{padding-top: 4px;}

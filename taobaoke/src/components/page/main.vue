@@ -8,27 +8,48 @@
             <div class="banner-l">
                 <h3>[今日推荐]</h3>
                 <div class="recom">
-                    <div class="pbd"><ul></ul></div>
-                    <div class="phd"><ul></ul></div>
+                    <div class="pbd" >
+						<ul>
+							<li v-for="item in tuijianData" :key="item.Id">
+								<a :href="item.ClickUrl">
+								<img :src="item.PicUrl">
+								<p>券后价：<span class="c-main">￥{{item.FinalPrice}}</span></p>
+								<p class="text-overflow">{{item.Title}}</p>
+								</a>
+							</li>
+						</ul>
+						</div>
+                    <div class="phd"><ul>
+					<li>0</li>
+					<li>1</li>
+					<li>2</li>
+					<li>3</li>
+					<li>4</li>
+					</ul></div>
                 </div>
             </div>
             <div class="banner cl">
                 <div class="bd">
-                <ul><li _src="#" style="width: 100%;">
-                <a href="#" target="_blank">
-                <img src="/static/img/5971438c5f4f5.png" width="760" height="338"></a></li></ul>
+                <ul>
+					<li _src="#" style="width: 100%;">
+						<a href="#" target="_blank">
+						<img src="/static/img/5971438c5f4f5.png" width="760" height="338">
+						</a>
+					</li>
+				</ul>
                 </div>
                 <div class="hd"><ul></ul></div>
             </div>
             <div class="banner-r">
                     <div class="login">
                         <img src="/static/pc/images/default.png" class="round"><p>提交订单换积分</p>
-                        <a href="/index.php/login/index.html" class="btn btn-pink">立即登录</a>
+                        <a href="/login/index.html" class="btn btn-pink">立即登录</a>
                         </div>
-                    <div class="jifen flexbox">
+                   <!-- <div class="jifen flexbox">
                             <div class="txt"><span class="title">直播数量</span>
-                        <span>当前优惠<em>0</em>款</span></div>
+                        <span>当前优惠<em>100</em>款</span></div>
                         </div>
+						 -->
             </div>
         </div>
      </div>
@@ -66,7 +87,7 @@
                                     <img src="/static/pc/images/taobao.png"> <p>月销量：<span class="c-primary">{{item.Volume}}</span>件</p>
                                 </div>
                                 <a target="_blank" :href="item.ClickUrl" class="coupon">
-                                    <h5>优惠券：<span>{{item.Commission}}</span>元</h5>
+                                    <h5>优惠券：<span>{{item.YouhuiPrice}}</span>元</h5>
                                     <p>立即<br>领券</p>
                                 </a>
                             </div>
@@ -149,7 +170,7 @@
             
         </div>
     </div>
-
+<!--
     <div class="container cl">
         <div class="indexblock">
             <div class="hottitle">
@@ -225,7 +246,7 @@
             </div>
         </div>
     </div>
-
+ -->
   </div>
 </template>
 
@@ -242,10 +263,11 @@
                 tableData: [],
                 temaiData: [],
                 renqiData: [],
+				tuijianData: [],
                 //分页
                 totalCount: 0,
                 currentPage: 1,
-                pageSize: 16,
+                pageSize: 20,
                 totalPage: 0,
                 loading: true,
             }
@@ -294,6 +316,7 @@
 					SortFields:'youhuiprice',
 					Sort:'desc',
                     typeId:1,
+					tag:"特卖",
                 };
                 itemsService.get(param).then((res) => {
                     if (res && res.statusText == "OK") {
@@ -312,6 +335,7 @@
 				    SortFields:'volume',
 					Sort:'desc',
                     typeId:1,
+					tag:"人气",
                 };
                 itemsService.get(param).then((res) => {
                     if (res && res.statusText == "OK") {
@@ -323,6 +347,25 @@
                     }
                 })
             },
+			 getTuijian() {
+			    let param = {
+			        pageIndex: 1,
+			        pageSize: 4,
+				    SortFields:'volume',
+					Sort:'desc',
+			        typeId:1,
+					tag:"人气",
+			    };
+			    itemsService.get(param).then((res) => {
+			        if (res && res.statusText == "OK") {
+			            if (res.data && res.data.Result) {
+			                this.tuijianData = res.data.Result.Results;                     
+			            } else {
+			                this.tuijianData = [];
+			            }
+			        }
+			    })
+			},
         }
     }
 

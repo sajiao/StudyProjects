@@ -11,10 +11,10 @@
 				</div>
 				<div class="f-r">
 
-					<p><a href="login/index" class="c-main">亲，请登录</a><span>或</span>
+					<!--<p><a href="login/index" class="c-main">亲，请登录</a><span>或</span>
                     <a href="login/register">免费注册</a></p>
 				
-					<p><a rel="nofollow" href="http://wpa.qq.com/msgrd?v=3&uin={:C('yh_qq')}&site=qq&menu=yes">在线客服</a></p>
+					<p><a rel="nofollow" href="http://wpa.qq.com/msgrd?v=3&uin={:C('yh_qq')}&site=qq&menu=yes">在线客服</a></p>-->
 					<p><a href="javascript:;" class="btn_baoming" msg="请不要修改“卖家报名”否则将无法享受推券客免费产品服务">商家报名</a></p>
 				</div>
 			</div>	
@@ -27,15 +27,18 @@
 				</div>
 				<div class="search">
 				
-						<input type="text" v-model="keyWord" class="input-text" placeholder="请输入您要查找的优惠券商品名称" />
+						<input type="text" v-model="keyword" class="input-text" placeholder="请输入您要查找的优惠券商品名称" />
 						<i class="iconfont icon-sousuo"></i>
                            
-					<div  class="btn ">
+			
+				</div>
+			   <div class="searchbtn">
+							
 						 <router-link  :to="{
 						         path: '/list', 
 						         query: {
-						             keyword: keyWord, 
-															isFull:false,
+						             keyword: keyword, 
+									 isFull:false,
 						         }
 						     }"
 						class="btn-main radius">搜索</router-link>
@@ -43,14 +46,12 @@
 						 <router-link  :to="{
 								 path: '/list', 
 								 query: {
-									 keyword: keyWord, 
+									 keyword: keyword, 
 									 isFull:true,
 								 }
 							 }"
 						class="btn-main radius">搜全网</router-link>
-						
-					</div>
-					  
+			
 				</div>
 				<div class="barcode cl">
 					<div class="f-l mr-5">
@@ -66,35 +67,36 @@
 		<!--nav-->
         <div class="navigation"><div class="container cl"><ul><li ><a href="/">首页</a></li>
         <li><router-link  :to="{
-                                path: '/list', 
+                               path: '/list', 
                                query: {
-								   keyword: '特卖精选', 
+								   tag: '特卖', 
                                }
                             }">特卖精选</router-link></li>
         <li  > <router-link  :to="{
-                                path: '/list', 
+                               path: '/list', 
                                query: {
-								   keyword: '女装', 
+								   tag: '女装', 
                                }
                             }">女装</router-link></li>
         <li  ><router-link  :to="{
-                                path: '/list', 
+                               path: '/list', 
                                query: {
-								   keyword: '九块九包邮', 
+								   tag: '9.9', 
                                }
                             }">九块九包邮</router-link></li>
         <li  ><router-link  :to="{
-                                path: '/list', 
+                               path: '/list', 
                                query: {
-								   keyword: '二十元封顶', 
+								   tag: '20', 
                                }
                             }">二十元封顶</router-link></li>
         <li  ><router-link  :to="{
                                 path: '/list', 
-                               query: {
-								   keyword: '优惠券头条', 
-                               }
-                            }">优惠券头条</router-link></li></ul>
+							    query: {
+									  tag: '人气', 
+								}
+                               
+                            }">超级人气榜</router-link></li></ul>
         </div>
         </div>
         <!--series-->
@@ -103,61 +105,61 @@
                 <ul>
                     <li class="cur"><router-link to='/list'>全部</router-link></li>
                     <li > <router-link  :to="{
-                                path: '/list', 
+                               path: '/list', 
                                query: {
                                    tag: '女装', 
                                }
                             }">女装</router-link></li>
                     <li ><router-link  :to="{
-                                path: '/list', 
+                               path: '/list', 
                                query: {
                                    tag: '男装', 
                                }
                             }">男装</router-link></li>
                     <li > <router-link  :to="{
-                                path: '/list', 
+                               path: '/list', 
                                query: {
                                    tag: '鞋包', 
                                }
                             }">鞋包</router-link></li>
                     <li ><router-link  :to="{
-                                path: '/list', 
+                               path: '/list', 
                                query: {
                                    tag: '美妆', 
                                }
                             }">美妆</router-link></li>
                     <li > <router-link  :to="{
-                                path: '/list', 
+                               path: '/list', 
                                query: {
                                    tag: '母婴', 
                                }
                             }">母婴</router-link></li>
                     <li ><router-link  :to="{
-                                path: '/list', 
+                               path: '/list', 
                                query: {
                                    tag: '食品', 
                                }
                             }">食品</router-link></li>
                     <li ><router-link  :to="{
-                                path: '/list', 
+                               path: '/list', 
                                query: {
                                    tag: '内衣', 
                                }
                             }">内衣</router-link></li>
                     <li ><router-link  :to="{
-                                path: '/list', 
+                               path: '/list', 
                                query: {
                                    tag: '数码', 
                                }
                             }">数码</router-link></li>
                     <li ><router-link  :to="{
-                                path: '/list', 
+                               path: '/list', 
                                query: {
                                    tag: '家居用品', 
                                }
                             }">家居用品</router-link></li>
                     <li ><router-link  :to="{
-                                path: '/list', 
+                               path: '/list', 
                                query: {
                                    tag: '文体车品', 
                                }
@@ -172,7 +174,7 @@
         data() {
             return {
                 title: 'Header',
-                keyWord:"",
+                keyword:"",
             }
         },
         created() {
@@ -192,5 +194,6 @@
     }
 </script>
 <style>
-.head .search .btn-main{height: 40px;border-radius: 50px;}
+
+
 </style>
