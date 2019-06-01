@@ -1,18 +1,15 @@
-﻿using AutoMapper;
-using BLL;
+﻿using BLL;
 using BLL.ThirtyPart;
 using DotNet.Common;
 using Entities;
 using Entities.Model;
-using MyTools.Import;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 using System.Threading;
+
 namespace MyTools
 {
     public class WordBook
@@ -48,17 +45,46 @@ namespace MyTools
             // var temp =  ObjectXmlSerializer.LoadFromXml<WordBook>(path);
             //var xmlPaths = "D:\\BaiduNetdiskDownload\\COCAXML";
             //WordImport.Import(xmlPaths);
+            ImportTaobaoke();
             while (true)
             {
                 var now = DateTime.Now;
-                if (now.Hour / 6 == 0)
+                if (now.Hour / 8 == 0)
                 {
                     ImportTaobaoke();
                 }
-                Thread.Sleep(1000*60*10);
+                Thread.Sleep(1000 * 60 * 60);
             }
-          
+        
+            //ImportItemDetail();
             //Console.ReadLine();
+        }
+
+        public static void ImportItemDetail()
+        {
+            //var items = ItemsBLL.GetData();
+           
+           // foreach (var item in items)
+            //{
+                var body = WebRequestHelper.GetResponseContent("https://h5.m.taobao.com/awp/core/detail.htm?id=588292874603&pid=mm_25162659_311500292_108899300176");
+                //if (body.Contains("descUrl"))
+                //{
+                //    var temp = body.Remove(0, body.IndexOf("descUrl"));
+                //    temp = temp.Remove(0, temp.IndexOf("?"));
+                //    temp = temp.Substring(1, temp.IndexOf(":") -1).Replace("'", "").Trim();
+                //    if (temp.StartsWith("http") == false)
+                //    {
+                //         temp = "http:" + temp;
+                //    }
+                //    item.ProductDetailUrl = temp;
+                //}
+                if (body.Contains("detail-content"))
+                {
+                   var temp = body.Remove(0, body.IndexOf("detail-content"));
+                }
+            //}
+
+
         }
 
         public static void ImportTaobaoke()
@@ -72,11 +98,13 @@ namespace MyTools
             foreach (var item in cateItems)
             {
                 page.PageIndex = 1;
-                var result = TaoBaoKe.QueryDgItemCoupon(page, 0, item.CateName);
-                if (result.Count == 0)
+                var result = TaoBaoKe.QueryDgItemCoupon(page, 0, item.CateName,1);
+                var tianmaoresult = TaoBaoKe.QueryDgItemCoupon(page, 0, item.CateName, 2);
+                if (result.Count == 0 && tianmaoresult.Count == 0)
                 {
                     return;
                 }
+                result.AddRange(tianmaoresult);
                 TaoBaoKe.QueryProductDetail(result, 1);
                 TaoBaoKe.QueryProductDetail(result, 2);
                 foreach (var item2 in result)
@@ -125,6 +153,9 @@ namespace MyTools
             ItemsBLL.ClearSameData();
 
             Console.WriteLine("Done:"+ DateTime.Now);
+
+            WebRequestHelper.GetResponseContent("http://api.bestddd.com/api/items/refresh/AutoReInit" + DateTime.Now.Hour.ToString());
+
             //TaskParallelHelper.ExecuteTask(actionItem);
         }
 

@@ -29,8 +29,7 @@
                                     <div class="num">
                                         <p>月销量 <span class="c-main">{{item.Volume}}</span></p>
                                         <span class="lingqu">
-                                            预计返￥
-                                            {{item.Commission}}
+                                            
                                         </span>
                                     </div>
                                 </div>

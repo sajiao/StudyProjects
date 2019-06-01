@@ -16,10 +16,28 @@ namespace DotNet.Common
 
         static WebRequestHelper()
         {
-            m_proxy = WebProxy.GetDefaultProxy();
+            //m_proxy = WebProxy.GetDefaultProxy();
 
             //m_proxy.Credentials = new NetworkCredential(ConfigurationManager.AppSettings["ProxyUserName"],ConfigurationManager.AppSettings["ProxyPassword"],ConfigurationManager.AppSettings["ProxyDomain"]);
         }
+
+        public static string GetHtmlSource(string url)
+        {
+            //处理内容
+            string html = "";
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            request.Accept = "*/*"; //接受任意文件
+            request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36)"; // 模拟使用IE在浏览
+            //request.CookieContainer = new CookieContainer();//cookie容器，
+       
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            Stream stream = response.GetResponseStream();
+            StreamReader reader = new StreamReader(stream);
+            html = reader.ReadToEnd();
+            stream.Close();
+            return html;
+        }
+
 
         public static string GetResponseContent(string url)
         {
@@ -27,12 +45,11 @@ namespace DotNet.Common
             try
             {
                 HttpWebRequest request = WebRequest.CreateDefault(new Uri(url)) as HttpWebRequest;
-                request.Proxy = m_proxy;
+                //request.Proxy = m_proxy;
                 HttpWebResponse response = request.GetResponse() as HttpWebResponse;
 
-                using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                using (StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8))
                 {
-
                     content = reader.ReadToEnd();
                 }
 

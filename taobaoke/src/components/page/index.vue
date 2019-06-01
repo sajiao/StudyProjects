@@ -43,7 +43,7 @@
             <div class="banner-r">
                     <div class="login">
                         <img src="/static/pc/images/default.png" class="round"><p>提交订单换积分</p>
-                        <a href="/login/index.html" class="btn btn-pink">立即登录</a>
+                        <a href="/" class="btn btn-pink">立即登录</a>
                         </div>
                    <!-- <div class="jifen flexbox">
                             <div class="txt"><span class="title">直播数量</span>
@@ -157,8 +157,7 @@
                                     <div class="num">
                                         <p>月销量 <span class="c-main">{{item.Volume}}</span></p>
                                         <span class="lingqu">
-                                            预计返￥
-                                            {{item.Commission}}
+                                         
                                         </span>
                                     </div>
                                 </div>
@@ -370,4 +369,6 @@
     }
 
 </script>
+
+
 

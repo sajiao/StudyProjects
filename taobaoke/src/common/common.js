@@ -1,5 +1,4 @@
 'use strict'
-import testjsService from '@/server/testjsService'
 import { rejects } from 'assert';
 import { resolve } from 'url';
 export default {
@@ -80,21 +79,7 @@ export default {
 
         return result;
     },
-    testJs(variables, str) {
-        var obj = {};
-        obj.Variables = variables;
-        obj.Func = str;
-        var p = new Promise(function (resolve, reject) {
-            testjsService.post(obj).then((res) => {
-                if (!res.data.result) {
-                    reject(res.data.message);
-                } else {
-                    resolve();
-                }
-            });
-        });
-        return p;
-    },
+
     valueIsNotNullOrEmpty(value) {
         if (value == undefined || value == null || value == "") {
             return false;

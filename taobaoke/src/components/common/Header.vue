@@ -4,7 +4,7 @@
         <!-- <a href="#" rel="nofollow" target="_blank">
             <div style="width: 100%; height: 90px; background:url(/data/upload/site/201811/5c0140c425dae.png) no-repeat center;"></div>
             </a> -->
-		<div class="top">
+		<div class="top" id="top">
 			<div class="container cl">
 				<div class="f-l">
 					<p class="c-666"> </p>
@@ -65,38 +65,19 @@
 			</div>
 		</div>
 		<!--nav-->
-        <div class="navigation"><div class="container cl"><ul><li ><a href="/">首页</a></li>
-        <li><router-link  :to="{
-                               path: '/list', 
-                               query: {
-								   tag: '特卖', 
-                               }
-                            }">特卖精选</router-link></li>
-        <li  > <router-link  :to="{
-                               path: '/list', 
-                               query: {
-								   tag: '女装', 
-                               }
-                            }">女装</router-link></li>
-        <li  ><router-link  :to="{
-                               path: '/list', 
-                               query: {
-								   tag: '9.9', 
-                               }
-                            }">九块九包邮</router-link></li>
-        <li  ><router-link  :to="{
-                               path: '/list', 
-                               query: {
-								   tag: '20', 
-                               }
-                            }">二十元封顶</router-link></li>
-        <li  ><router-link  :to="{
-                                path: '/list', 
-							    query: {
-									  tag: '人气', 
-								}
-                               
-                            }">超级人气榜</router-link></li></ul>
+        <div class="navigation">
+			<div class="container cl">
+				<ul><li ><a href="/">首页</a></li>
+					<li v-for="item in navList" :key="item.Name">
+						<router-link  :to="{
+										   path: '/list', 
+										   query: {
+											   tag: item.Tag, 
+										   }
+										}">{{item.Name}}</router-link>
+					</li>
+								
+	            </ul>
         </div>
         </div>
         <!--series-->
@@ -104,66 +85,13 @@
             <div class="container cl">
                 <ul>
                     <li class="cur"><router-link to='/list'>全部</router-link></li>
-                    <li > <router-link  :to="{
+                    <li v-for="item in tagList" :key="item.id"> <router-link  :to="{
                                path: '/list', 
                                query: {
-                                   tag: '女装', 
+                                   tag: item.Tag, 
                                }
-                            }">女装</router-link></li>
-                    <li ><router-link  :to="{
-                               path: '/list', 
-                               query: {
-                                   tag: '男装', 
-                               }
-                            }">男装</router-link></li>
-                    <li > <router-link  :to="{
-                               path: '/list', 
-                               query: {
-                                   tag: '鞋包', 
-                               }
-                            }">鞋包</router-link></li>
-                    <li ><router-link  :to="{
-                               path: '/list', 
-                               query: {
-                                   tag: '美妆', 
-                               }
-                            }">美妆</router-link></li>
-                    <li > <router-link  :to="{
-                               path: '/list', 
-                               query: {
-                                   tag: '母婴', 
-                               }
-                            }">母婴</router-link></li>
-                    <li ><router-link  :to="{
-                               path: '/list', 
-                               query: {
-                                   tag: '食品', 
-                               }
-                            }">食品</router-link></li>
-                    <li ><router-link  :to="{
-                               path: '/list', 
-                               query: {
-                                   tag: '内衣', 
-                               }
-                            }">内衣</router-link></li>
-                    <li ><router-link  :to="{
-                               path: '/list', 
-                               query: {
-                                   tag: '数码', 
-                               }
-                            }">数码</router-link></li>
-                    <li ><router-link  :to="{
-                               path: '/list', 
-                               query: {
-                                   tag: '家居用品', 
-                               }
-                            }">家居用品</router-link></li>
-                    <li ><router-link  :to="{
-                               path: '/list', 
-                               query: {
-                                   tag: '文体车品', 
-                               }
-                            }">文体车品</router-link></li></ul>
+                            }">{{item.Tag}}</router-link></li>
+                 </ul>
              </div>
         </div>
  
@@ -175,6 +103,28 @@
             return {
                 title: 'Header',
                 keyword:"",
+				navList:[
+						{Name:"特卖", Tag:"特卖"},
+						{Name:"精选", Tag:"精选"},
+						{Name:"女装", Tag:"女装"},
+						{Name:"九块九包邮", Tag:"9.9"},
+						{Name:"二十元封顶", Tag:"20"},
+						{Name:"超级人气榜", Tag:"人气"},
+					],
+				tagList:[
+					{id:1, Tag:"女装"},
+					{id:2, Tag:"男装"},
+					{id:2, Tag:"鞋包"},
+					{id:4, Tag:"母婴"},
+					{id:5, Tag:"食品"},
+					{id:6, Tag:"内衣"},
+					{id:7, Tag:"家用"},
+					{id:8, Tag:"文体"},
+					{id:9, Tag:"数码"},
+					{id:10, Tag:"文具"},
+					{id:11, Tag:"体育"},
+					{id:12, Tag:"车"},
+				],
             }
         },
         created() {

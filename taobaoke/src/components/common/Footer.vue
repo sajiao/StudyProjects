@@ -27,6 +27,12 @@
 								   tag: '特卖', 
 		                       }
 		                    }">特卖精选</router-link></a></dd>
+	   <dd><router-link  :to="{
+					   path: '/list', 
+					   query: {
+						   tag: '精选', 
+					   }
+					}">精选</router-link></a></dd>
         <dd><router-link  :to="{
 		                       path: '/list', 
 		                       query: {
@@ -55,7 +61,7 @@
 <div class="bottom"><p>Copyright © 2019-2020 无忧优惠券 版权所有  蜀ICP备9999999号</p>
 <p style="display: none;"></p></div>
 <div id="back_top" class="back_top">
-    <a href="javascript:;" class="call-top" title="返回顶部" _hover-ignore="1" style="display: block;"></a>
+    <a href="#top" class="call-top" title="返回顶部" _hover-ignore="1" style="display: block;"></a>
    <!-- <a id="checkTrap" rel="nofollow" class="checkTrap" target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=234234234&site=qq&menu=yes">
     <span class="call-check" title="联系客服"></span></a>-->
     </div>

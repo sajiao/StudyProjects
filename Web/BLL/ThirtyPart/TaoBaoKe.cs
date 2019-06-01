@@ -35,12 +35,12 @@ namespace BLL.ThirtyPart
         /// <summary>
         /// taobao.tbk.dg.item.coupon.get( 好券清单API【导购】 )
         /// </summary>
-        public static List<Items> QueryDgItemCoupon(PageInfo pageInfo,int cateId, string keyword)
+        public static List<Items> QueryDgItemCoupon(PageInfo pageInfo,int cateId, string keyword,int platformId = 1)
         {
             var client = GetClient();
             TbkDgItemCouponGetRequest req = new TbkDgItemCouponGetRequest();
             req.AdzoneId = 108899300176;//pid: mm_25162659_311500292_108899300176的第三位
-            //req.Platform = 1L;
+            req.Platform = platformId;// 1 淘宝，2 天猫
             if (cateId > 0)
             {
                 req.Cat = cateId.ToString();//后台类目ID，用,分割，最大10个，该ID可以通过taobao.itemcats.get接口获取到
@@ -85,7 +85,6 @@ namespace BLL.ThirtyPart
                 var dest = mapper.Map<TbkCouponDomain, Items>(item);
                 dest.TypeId = 1;
                 dest.LastTime = DateTime.Now;
-                dest.Tags = keyword;
                 if (dest.Commission <= 0)
                 {
                     dest.Commission = dest.SellPrice * dest.CommissionRate/100;
@@ -93,8 +92,9 @@ namespace BLL.ThirtyPart
                 dest.CateId = dest.Category;
                 dest.OrdId = 1;
                 dest.IsShow = 1;
-                dest.AliId = "1";
+                dest.AliId = platformId.ToString();
                 dest.Status = 1;
+                dest.Platform = platformId.ToString();
                 dest.ProductUrl += string.IsNullOrEmpty(dest.ProductUrl) ? "" : pid;
                 if (!string.IsNullOrEmpty(dest.ItemInfo))
                 {
@@ -167,7 +167,42 @@ namespace BLL.ThirtyPart
                             temp.CateId = item.CateId;
                             temp.Category = item.Category;
                         }
-                        
+
+                        if (temp.Volume > 10000)
+                        {
+                            temp.Tags += ",人气";
+                        }
+
+                        if (temp.FinalPrice == 9.9m && temp.FreeShipment)
+                        {
+                            temp.Tags += ",9.9";
+                        }
+
+                        if (temp.Volume > 100 && temp.YouhuiPrice > 200)
+                        {
+                            temp.Tags += ",特卖";
+                        }
+
+                        if (temp.Volume > 5000 && temp.YouhuiPrice > 100)
+                        {
+                            temp.Tags += ",精选";
+                        }
+
+                        if (temp.Volume > 20000 && temp.HGoodRate && temp.HPayRate30 && temp.IRfdRate && temp.IsPrepay && temp.FreeShipment && temp.CommissionRate >= 10)
+                        {
+                            temp.Tags += ",推荐";
+                        }
+
+                        if (temp.Volume > 10000 && temp.HGoodRate && temp.HPayRate30 && temp.IRfdRate && temp.IsPrepay && temp.FreeShipment && temp.CommissionRate >= 10)
+                        {
+                            temp.Tags += ",首页";
+                        }
+
+                        if (temp.FinalPrice <= 20m && temp.FreeShipment)
+                        {
+                            temp.Tags += ",20";
+                        }
+
                         temp.CategoryName = item.CategoryName;
                         temp.CatLeafName = item.CatLeafName;
                         if (item.CategoryName != null)

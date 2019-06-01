@@ -50,6 +50,33 @@ namespace Entities.Model
         [SugarColumn(Length = 1200, IsNullable = true, ColumnDescription = "商品小图列表")]
         public string SmallImages { get; set; }
 
+        [MapName("ProductUrl", "商品详情页链接地址")]
+        [SugarColumn(Length = 500, IsNullable = true, ColumnDescription = "商品详情页链接地址")]
+        public string ProductUrl { get; set; }
+
+        [SugarColumn(Length = 500, IsNullable = true, ColumnDescription = "商品详情内容链接地址")]
+        public string ProductDetailUrl { get; set; }
+
+        [MapName("ProductUrl", "商品详情页链接地址")]
+        [SugarColumn(Length = 500, IsNullable = true, ColumnDescription = "商品详情页链接地址")]
+        public string ProductWapUrl { get; set; }
+
+        [SugarColumn(Length = 500, IsNullable = true, ColumnDescription = "商品详情内容链接地址")]
+        public string ProductDetailWapUrl { get; set; }
+
+        [MapName("ClickUrl", "淘宝客链接")]
+        [MapName("ClickUrl", "优惠券链接")]
+        [SugarColumn(Length = 500, IsNullable = true, ColumnDescription = "淘宝客链接/商品链接（是淘客商品返回淘客链接，非淘客商品返回普通h5链接）")]
+        public string ClickUrl { get; set; }
+
+        [MapName("CommissionRate", "收入比率(%)")]
+        [SugarColumn(Length = 12, DecimalDigits = 2, ColumnDescription = "收入比例，举例，取值为20.00，表示比例20.00%")]
+        public decimal CommissionRate { get; set; }
+
+        [MapName("Commission", "佣金")]
+        [SugarColumn(Length = 12, DecimalDigits = 2, ColumnDescription = "佣金")]
+        public decimal Commission { get; set; }
+
         [MapName("Price", "商品价格(单位：元)")]
         [SugarColumn(Length = 11, DecimalDigits = 2, IsNullable = false, ColumnDescription = "商品价格(单位：元)")]
         public decimal Price { get; set; }
@@ -108,27 +135,6 @@ namespace Entities.Model
 
         [SugarColumn(Length = 20 ,IsNullable = true, ColumnDescription = "商品库类型，支持多库类型输出，以“，”区分，1:营销商品主推库")]
         public string MaterialLibType { get; set; }
-
-        [MapName("ProductUrl", "商品详情页链接地址")]
-        [SugarColumn(Length = 500, IsNullable = true, ColumnDescription = "商品详情页链接地址")]
-        public string ProductUrl { get; set; }
-
-        [MapName("ProductUrl", "商品详情页链接地址")]
-        [SugarColumn(Length = 500, IsNullable = true, ColumnDescription = "商品详情页链接地址")]
-        public string ProductWapUrl { get; set; }
-
-        [MapName("ClickUrl", "淘宝客链接")]
-        [MapName("ClickUrl", "优惠券链接")]
-        [SugarColumn(Length = 500, IsNullable = true, ColumnDescription = "淘宝客链接/商品链接（是淘客商品返回淘客链接，非淘客商品返回普通h5链接）")]
-        public string ClickUrl { get; set; }
-
-        [MapName("CommissionRate", "收入比率(%)")]
-        [SugarColumn(Length = 12, DecimalDigits = 2, ColumnDescription = "收入比例，举例，取值为20.00，表示比例20.00%")]
-        public decimal CommissionRate { get; set; }
-
-        [MapName("Commission", "佣金")]
-        [SugarColumn(Length = 12, DecimalDigits = 2, ColumnDescription = "佣金")]
-        public decimal Commission { get; set; }
 
         [SugarColumn(Length = 50, IsNullable = true, ColumnDescription = "	无线折扣价，即宝贝在无线上的实际售卖价格。")]
         public string FinalPriceWap { get; set; }
@@ -199,6 +205,9 @@ namespace Entities.Model
 
         [SugarColumn(ColumnDataType ="text", IsNullable = true, ColumnDescription = "商品描述")]
         public string Desc { get; set; }
+
+        [SugarColumn(ColumnDataType = "text", IsNullable = true, ColumnDescription = "无线商品描述")]
+        public string WapDesc { get; set; }
 
         [MapName("Platform", "平台类型")]
         [SugarColumn(Length = 10, IsNullable = true, ColumnDescription = "平台类型")]

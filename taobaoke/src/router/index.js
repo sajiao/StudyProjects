@@ -9,7 +9,7 @@ export default new Router({
     routes: [
         {
             path: '/',
-            redirect: '/main'
+            redirect: '/index'
         },
         {
             path: '/',
@@ -17,8 +17,8 @@ export default new Router({
             meta: { title: '主页' },
             children:[
                 {
-                    path: '/main',
-                    component: resolve => require(['../components/page/main.vue'], resolve),
+                    path: '/index',
+                    component: resolve => require(['../components/page/index.vue'], resolve),
                     meta: { title: '主页' }
                 },
                 {
@@ -32,28 +32,6 @@ export default new Router({
                     meta: { title: '分类' },
 					props: true 
                 }
-            ]
-        },
-        {
-            path: '/m',
-            component: resolve => require(['../components/common/MHome.vue'], resolve),
-            meta: { title: '主页' },
-            children:[
-                {
-                    path: '/m/main',
-                    component: resolve => require(['../components/page/main.vue'], resolve),
-                    meta: { title: '主页' }
-                },
-                {
-                    path: '/m/list',
-                    component: resolve => require(['../components/page/itemlist.vue'], resolve),
-                    meta: { title: '分类' }
-                },
-                {
-                    path: '/m/list/:keyword',
-                    component: resolve => require(['../components/page/itemlist.vue'], resolve),
-                    meta: { title: '分类' }
-                },
             ]
         },
         {

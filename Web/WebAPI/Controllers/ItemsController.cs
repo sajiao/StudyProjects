@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using DotNet.Common;
 using Entities;
 using Entities.Model;
 using Entities.Request;
@@ -37,6 +39,27 @@ namespace WebAPI.Controllers
         public ResponseResult Get(int id)
         {
             return new ResponseResult(0, "", BLL.ItemsBLL.GetById(id));
+        }
+
+        /// <summary>
+        /// 获取模块接口
+        /// </summary>
+        /// <param name="id">id</param>
+        /// <returns>操作结果</returns>
+        // GET api/Items/refresh/{key}
+        [HttpGet("refresh/{key}")]
+        public ResponseResult Refresh(string key)
+        {
+            if (key == "AutoReInit" + DateTime.Now.Hour.ToString())
+            {
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
+                BLL.ItemsBLL.Refresh();
+                sw.Stop();
+                Logger.WriteProcessLog($"refresh key{key},耗时：{sw.ElapsedMilliseconds/1000} s, end time:{DateTime.Now}");
+            }
+          
+            return new ResponseResult(0, "", "");
         }
 
         /// <summary>

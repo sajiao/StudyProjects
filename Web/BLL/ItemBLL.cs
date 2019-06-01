@@ -25,6 +25,16 @@ namespace BLL
             mDict = GetAll();
         }
 
+        public static void Refresh()
+        {
+            var temp = GetAll();
+
+            lock (LockObject)
+            {
+                mDict = temp;
+            }
+        }
+
         public static List<Items> GetData()
         {
             return mDict;
