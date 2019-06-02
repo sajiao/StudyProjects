@@ -37,83 +37,96 @@ namespace BLL.ThirtyPart
         /// </summary>
         public static List<Items> QueryDgItemCoupon(PageInfo pageInfo,int cateId, string keyword,int platformId = 1)
         {
-            var client = GetClient();
-            TbkDgItemCouponGetRequest req = new TbkDgItemCouponGetRequest();
-            req.AdzoneId = 108899300176;//pid: mm_25162659_311500292_108899300176的第三位
-            req.Platform = platformId;// 1 淘宝，2 天猫
-            if (cateId > 0)
+            List<Items> result = new List<Items>(100);
+            try
             {
-                req.Cat = cateId.ToString();//后台类目ID，用,分割，最大10个，该ID可以通过taobao.itemcats.get接口获取到
-            }
-            else
-            {
-                req.Q = keyword;
-            }
-          
-            req.PageSize = pageInfo.PageSize;
-           
-            req.PageNo = pageInfo.PageIndex;//第几页，默认：1（当后台类目和查询词均不指定的时候，最多出10000个结果，即page_no*page_size不能超过10000；当指定类目或关键词的时候，则最多出100个结果）
-            TbkDgItemCouponGetResponse rsp = client.Execute(req);
-      
-            var rsps = client.Execute(req);
-            var configMap = new MapperConfiguration(
-                   cfg => cfg.CreateMap<TbkCouponDomain, Items>()
-                       .ForMember(dest => dest.TotalCount, m => m.MapFrom(src => src.CouponTotalCount))
-                       .ForMember(dest => dest.SellPrice, m => m.MapFrom(src => src.ZkFinalPrice))
-                       .ForMember(dest => dest.CommissionRate, m => m.MapFrom(src => src.CommissionRate))
-                       .ForMember(dest => dest.PicUrl, m => m.MapFrom(src => src.PictUrl))
-                       .ForMember(dest => dest.ShopName, m => m.MapFrom(src => src.ShopTitle))
-                       .ForMember(dest => dest.BeginTime, m => m.MapFrom(src => src.CouponStartTime))
-                       .ForMember(dest => dest.EndTime, m => m.MapFrom(src => src.CouponEndTime))
-                       .ForMember(dest => dest.ClickUrl, m => m.MapFrom(src => src.CouponClickUrl))
-                       .ForMember(dest => dest.ItemDesc, m => m.MapFrom(src => src.ItemDescription))
-                       .ForMember(dest => dest.RemainCount, m => m.MapFrom(src => src.CouponRemainCount))
-                       .ForMember(dest => dest.ItemInfo, m => m.MapFrom(src => src.CouponInfo))
-                       .ForMember(dest => dest.ProductUrl, m => m.MapFrom(src => src.ItemUrl))
-                       .ForMember(dest => dest.SmallImages, m => m.MapFrom(src => src.SmallImages.ToListString(',')))
-            );
-            var mapper = configMap.CreateMapper();
-
-            if (rsp.TotalResults == 0)
-            {
-                return null;
-            }
-
-            List<Items> result = new List<Items>(rsp.Results.Count);
-            foreach (var item in rsp.Results)
-            {
-                var dest = mapper.Map<TbkCouponDomain, Items>(item);
-                dest.TypeId = 1;
-                dest.LastTime = DateTime.Now;
-                if (dest.Commission <= 0)
+                var client = GetClient();
+                TbkDgItemCouponGetRequest req = new TbkDgItemCouponGetRequest();
+                req.AdzoneId = 108899300176;//pid: mm_25162659_311500292_108899300176的第三位
+                req.Platform = platformId;// 1 淘宝，2 天猫
+                if (cateId > 0)
                 {
-                    dest.Commission = dest.SellPrice * dest.CommissionRate/100;
+                    req.Cat = cateId.ToString();//后台类目ID，用,分割，最大10个，该ID可以通过taobao.itemcats.get接口获取到
                 }
-                dest.CateId = dest.Category;
-                dest.OrdId = 1;
-                dest.IsShow = 1;
-                dest.AliId = platformId.ToString();
-                dest.Status = 1;
-                dest.Platform = platformId.ToString();
-                dest.ProductUrl += string.IsNullOrEmpty(dest.ProductUrl) ? "" : pid;
-                if (!string.IsNullOrEmpty(dest.ItemInfo))
+                else
                 {
-                    if (dest.ItemInfo.Contains("无条件"))
-                    {
-                        var temp = dest.ItemInfo.Split("元");
-                        dest.YouhuiPrice = temp[0].TryToDecimal();
-                    }
-                    else if (dest.ItemInfo.Contains("减"))
-                    {
-                        var temp = dest.ItemInfo.Split("减");
-                        dest.YouhuiPrice = temp[1].Replace("元", "").TryToDecimal();
-                    }
-                    dest.FinalPrice = dest.SellPrice - dest.YouhuiPrice;
+                    req.Q = keyword;
                 }
-                result.Add(dest);
-                Console.WriteLine(string.Format("Title:{0},Rate:{1},smallimages:{2}", dest.Title, dest.CommissionRate, dest.SmallImages));
+
+                req.PageSize = pageInfo.PageSize;
+
+                req.PageNo = pageInfo.PageIndex;//第几页，默认：1（当后台类目和查询词均不指定的时候，最多出10000个结果，即page_no*page_size不能超过10000；当指定类目或关键词的时候，则最多出100个结果）
+                TbkDgItemCouponGetResponse rsp = client.Execute(req);
+
+                var rsps = client.Execute(req);
+                var configMap = new MapperConfiguration(
+                       cfg => cfg.CreateMap<TbkCouponDomain, Items>()
+                           .ForMember(dest => dest.TotalCount, m => m.MapFrom(src => src.CouponTotalCount))
+                           .ForMember(dest => dest.SellPrice, m => m.MapFrom(src => src.ZkFinalPrice))
+                           .ForMember(dest => dest.CommissionRate, m => m.MapFrom(src => src.CommissionRate))
+                           .ForMember(dest => dest.PicUrl, m => m.MapFrom(src => src.PictUrl))
+                           .ForMember(dest => dest.ShopName, m => m.MapFrom(src => src.ShopTitle))
+                           .ForMember(dest => dest.BeginTime, m => m.MapFrom(src => src.CouponStartTime))
+                           .ForMember(dest => dest.EndTime, m => m.MapFrom(src => src.CouponEndTime))
+                           .ForMember(dest => dest.ClickUrl, m => m.MapFrom(src => src.CouponClickUrl))
+                           .ForMember(dest => dest.ItemDesc, m => m.MapFrom(src => src.ItemDescription))
+                           .ForMember(dest => dest.RemainCount, m => m.MapFrom(src => src.CouponRemainCount))
+                           .ForMember(dest => dest.ItemInfo, m => m.MapFrom(src => src.CouponInfo))
+                           .ForMember(dest => dest.ProductUrl, m => m.MapFrom(src => src.ItemUrl))
+                           .ForMember(dest => dest.SmallImages, m => m.MapFrom(src => src.SmallImages.ToListString(',')))
+                );
+                var mapper = configMap.CreateMapper();
+
+                if (rsp.TotalResults == 0)
+                {
+                    return new List<Items>();
+                }
+
+
+                foreach (var item in rsp.Results)
+                {
+                    var dest = mapper.Map<TbkCouponDomain, Items>(item);
+                    dest.TypeId = 1;
+                    dest.LastTime = DateTime.Now;
+                    if (dest.Commission <= 0)
+                    {
+                        dest.Commission = dest.SellPrice * dest.CommissionRate / 100;
+                    }
+                    dest.CateId = dest.Category;
+                    dest.OrdId = 1;
+                    dest.IsShow = 1;
+                    dest.AliId = platformId.ToString();
+                    dest.Status = 1;
+                    dest.Platform = platformId.ToString();
+                    dest.ProductUrl += string.IsNullOrEmpty(dest.ProductUrl) ? "" : pid;
+                    if (keyword != null && keyword.Length < 6)
+                    {
+                        dest.Tags = keyword;
+                    }
+
+                    if (!string.IsNullOrEmpty(dest.ItemInfo))
+                    {
+                        if (dest.ItemInfo.Contains("无条件"))
+                        {
+                            var temp = dest.ItemInfo.Split("元");
+                            dest.YouhuiPrice = temp[0].TryToDecimal();
+                        }
+                        else if (dest.ItemInfo.Contains("减"))
+                        {
+                            var temp = dest.ItemInfo.Split("减");
+                            dest.YouhuiPrice = temp[1].Replace("元", "").TryToDecimal();
+                        }
+                        dest.FinalPrice = dest.SellPrice - dest.YouhuiPrice;
+                    }
+                    result.Add(dest);
+                    Console.WriteLine($"Title:{dest.Title},Rate:{dest.CommissionRate},Time:{DateTime.Now}");
+                }
             }
-           
+            catch (Exception ex)
+            {
+                Logger.WriteErrorLog(ex.Message);
+            }
+
             return result;
         }
 
@@ -125,106 +138,115 @@ namespace BLL.ThirtyPart
         /// <returns></returns>
         public static List<Items> QueryProductDetail(List<Items> req, int platform)
         {
-            int pageSize = 35;
-            int pageTotal = req.Count / pageSize + 1;
-            if (platform == 0)
+            try
             {
-                platform = 1;
-            }
-
-            for (int i = 0; i < pageTotal; i++)
-            {
-               var queryList = req.Skip(i * pageSize).Take(pageSize);
-               string ids = queryList.Select(q => q.NumIid).JoinToString();
-               var result = QueryItemDetailInfo(ids, platform);
-                if (result == null || result.Count == 0)
+                int pageSize = 35;
+                int pageTotal = req.Count / pageSize + 1;
+                if (platform == 0)
                 {
-                    continue;
+                    platform = 1;
                 }
 
-                foreach (var item in result)
+                for (int i = 0; i < pageTotal; i++)
                 {
-                    var temp = req.FirstOrDefault(q => q.NumIid == item.NumIid);
-                    if (temp == null)
+                    var queryList = req.Skip(i * pageSize).Take(pageSize);
+                    string ids = queryList.Select(q => q.NumIid).JoinToString();
+                    var result = QueryItemDetailInfo(ids, platform);
+                    if (result == null || result.Count == 0)
                     {
                         continue;
                     }
-                    if (platform == 1)
+
+                    foreach (var item in result)
                     {
-                        temp.UserType = item.UserType;
-                        temp.ShopDsr = item.ShopDsr;
-                        temp.RateSum = item.RateSum;
-                        temp.Price = item.Price;
-                        temp.MaterialLibType = item.MaterialLibType;
-                        temp.ProductUrl = item.ItemUrl + pid;
-                        temp.IsPrepay = item.IsPrepay;
-                        temp.IRfdRate = item.IRfdRate;
-                        temp.HPayRate30 = item.HPayRate30;
-                        temp.HGoodRate = item.HGoodRate;
-                        temp.FreeShipment = item.FreeShipment;
-                        if (item.CateId > 0)
+                        var temp = req.FirstOrDefault(q => q.NumIid == item.NumIid);
+                        if (temp == null)
                         {
-                            temp.CateId = item.CateId;
-                            temp.Category = item.Category;
+                            continue;
                         }
+                        if (platform == 1)
+                        {
+                            temp.UserType = item.UserType;
+                            temp.ShopDsr = item.ShopDsr;
+                            temp.RateSum = item.RateSum;
+                            temp.Price = item.Price;
+                            temp.MaterialLibType = item.MaterialLibType;
+                            temp.ProductUrl = item.ItemUrl + pid;
+                            temp.IsPrepay = item.IsPrepay;
+                            temp.IRfdRate = item.IRfdRate;
+                            temp.HPayRate30 = item.HPayRate30;
+                            temp.HGoodRate = item.HGoodRate;
+                            temp.FreeShipment = item.FreeShipment;
+                            if (item.CateId > 0)
+                            {
+                                temp.CateId = item.CateId;
+                                temp.Category = item.Category;
+                            }
 
-                        if (temp.Volume > 10000)
-                        {
-                            temp.Tags += ",人气";
-                        }
+                            if (temp.Volume > 10000)
+                            {
+                                temp.Tags += ",人气";
+                            }
 
-                        if (temp.FinalPrice == 9.9m && temp.FreeShipment)
-                        {
-                            temp.Tags += ",9.9";
-                        }
+                            if (temp.FinalPrice == 9.9m && temp.FreeShipment)
+                            {
+                                temp.Tags += ",9.9";
+                            }
 
-                        if (temp.Volume > 100 && temp.YouhuiPrice > 200)
-                        {
-                            temp.Tags += ",特卖";
-                        }
+                            if (temp.Volume > 100 && temp.YouhuiPrice > 200)
+                            {
+                                temp.Tags += ",特卖";
+                            }
 
-                        if (temp.Volume > 5000 && temp.YouhuiPrice > 100)
-                        {
-                            temp.Tags += ",精选";
-                        }
+                            if (temp.Volume > 5000 && temp.YouhuiPrice > 100)
+                            {
+                                temp.Tags += ",精选";
+                            }
 
-                        if (temp.Volume > 20000 && temp.HGoodRate && temp.HPayRate30 && temp.IRfdRate && temp.IsPrepay && temp.FreeShipment && temp.CommissionRate >= 10)
-                        {
-                            temp.Tags += ",推荐";
-                        }
+                            if (temp.Volume > 30000 && temp.CommissionRate >= 10)
+                            {
+                                temp.Tags += ",推荐";
+                            }
 
-                        if (temp.Volume > 10000 && temp.HGoodRate && temp.HPayRate30 && temp.IRfdRate && temp.IsPrepay && temp.FreeShipment && temp.CommissionRate >= 10)
-                        {
-                            temp.Tags += ",首页";
-                        }
+                            if (temp.Volume > 20000 && temp.CommissionRate >= 10)
+                            {
+                                temp.Tags += ",首页";
+                            }
 
-                        if (temp.FinalPrice <= 20m && temp.FreeShipment)
-                        {
-                            temp.Tags += ",20";
-                        }
+                            if (temp.FinalPrice <= 20m && temp.FreeShipment)
+                            {
+                                temp.Tags += ",20";
+                            }
 
-                        temp.CategoryName = item.CategoryName;
-                        temp.CatLeafName = item.CatLeafName;
-                        if (item.CategoryName != null)
-                        {
-                            temp.Tags += "," + item.CategoryName.Replace("/", ",");
-                        }
+                            temp.CategoryName = item.CategoryName;
+                            temp.CatLeafName = item.CatLeafName;
+                            if (item.CategoryName != null)
+                            {
+                                temp.Tags += "," + item.CategoryName.Replace("/", ",");
+                            }
 
-                        if (item.CatLeafName != null)
-                        {
-                            temp.Tags += "," + temp.CatLeafName.Replace("/", ",");
+                            if (item.CatLeafName != null)
+                            {
+                                temp.Tags += "," + temp.CatLeafName.Replace("/", ",");
+                            }
+                            if (temp.ItemUrl != null && temp.ItemUrl.Contains("pid") == false)
+                            {
+                                temp.ItemUrl = item.ItemUrl + pid;
+                            }
+                            temp.Tags = temp.Tags.Trim(',');
                         }
-                        if (temp.ItemUrl != null && temp.ItemUrl.Contains("pid") == false)
+                        else if (platform == 2)
                         {
-                            temp.ItemUrl = item.ItemUrl + pid;
+                            temp.ProductWapUrl = item.ItemUrl + pid;
                         }
-                    }
-                    else if(platform == 2)
-                    {
-                        temp.ProductWapUrl = item.ItemUrl+ pid;
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                Logger.WriteErrorLog(ex.Message);
+            }
+            
 
             return req;
         }
@@ -270,11 +292,14 @@ namespace BLL.ThirtyPart
                     {
                         dest.Commission = dest.SellPrice * dest.CommissionRate / 100;
                     }
-                    dest.CateId = dest.Category;
+                    if (dest.Category > 0)
+                    {
+                        dest.CateId = dest.Category;
+                    }
+                  
                     dest.Status = 1;
                     dest.ProductUrl += string.IsNullOrEmpty(dest.ProductUrl) ? "" : pid;
                     result.Add(dest);
-                    Console.WriteLine(string.Format("Title:{0},Rate:{1},smallimages:{2}", dest.Title, dest.CommissionRate, dest.SmallImages));
                 }
             }
             catch (Exception ex)

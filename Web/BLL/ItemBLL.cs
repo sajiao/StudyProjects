@@ -11,18 +11,22 @@ using SqlSugar;
 using System.Diagnostics;
 using System.Linq;
 using BLL.ThirtyPart;
+using System.Threading.Tasks;
 
 namespace BLL
 {
     public class ItemsBLL : DbContext
     {
-        private static List<Items> mDict = null;
+        private static List<Items> mDict = new List<Items>();
 
         private static object LockObject = new object();
 
         static ItemsBLL()
         {
-            mDict = GetAll();
+            lock (LockObject)
+            {
+                mDict = GetAll();
+            }
         }
 
         public static void Refresh()
@@ -35,6 +39,7 @@ namespace BLL
             }
         }
 
+
         public static List<Items> GetData()
         {
             return mDict;
@@ -42,44 +47,63 @@ namespace BLL
 
         public static void ClearSameData()
         {
-            var data = GetAll();
-            if (data.HasValue() == false)
+            PageInfo page = new PageInfo();
+            page.PageIndex = 0;
+            page.PageSize = 1000;
+            page.SortFields = "NumIid";
+            long totalPage = 100;
+            while (totalPage > 0)
             {
-                return;
-            }
-            data = data.OrderByDescending(d => d.LastTime).ToList();
-            List<Items> newData = new List<Items>(10000);
-            List<Items> deleteData = new List<Items>(500);
-            foreach (var item in data)
-            {
-                if (newData.Exists(d => d.NumIid == item.NumIid))
+                var dbContext = new DbContext();
+                var req = new Items();
+                req.Status = 1;
+
+                page.PageIndex++;
+               var data = dbContext.ItemsDb.GetPages(new Items(), null, page);
+                totalPage = data.TotalCount / page.PageSize + 1;
+                if (data.TotalCount == 0 || data.Results == null)
                 {
-                    item.Status = 2;
-                    deleteData.Add(item);
-                    continue;
+                    break;
                 }
-                newData.Add(item);
-                if (deleteData.Count == 500)
+                if (data.Results.Count < page.PageSize)
+                {
+                    totalPage = 0;
+                }
+                
+                var tempData = data.Results.OrderByDescending(d => d.LastTime).ToList();
+                List<Items> newData = new List<Items>(1000);
+                List<Items> deleteData = new List<Items>(500);
+                foreach (var item in tempData)
+                {
+                    if (newData.Exists(d => d.NumIid == item.NumIid))
+                    {
+                        item.Status = 2;
+                        deleteData.Add(item);
+                        continue;
+                    }
+                    else
+                    {
+                        newData.Add(item);
+                    }
+                    if (deleteData.Count >= 500)
+                    {
+                        BatchUpdate(deleteData);
+                        deleteData.Clear();
+                    }
+                }
+
+                if (deleteData.Count > 0)
                 {
                     BatchUpdate(deleteData);
-                    deleteData.Clear();
                 }
             }
-
-            lock (LockObject)
-            {
-                mDict = newData;
-            }
-            if (deleteData.Count > 500)
-            {
-                BatchUpdate(deleteData);
-            }
+            
             DeleteByStatus();
         }
 
         public static Items GetItem(Int64 id)
         {
-          return  mDict.FirstOrDefault(m=>m.NumIid == id);
+          return  mDict.FirstOrDefault(m=> m.NumIid == id);
         }
 
         private static void Delete(Items item)
@@ -100,8 +124,38 @@ namespace BLL
         {
             var dbContext = new DbContext();
             Expression<Func<Items, bool>> fun = null;
-            fun = (r) => r.Status == 1 && r.EndTime > DateTime.Now.AddMonths(-2) && r.EndTime < DateTime.Now;
-            
+            fun = (r) => r.Status == 1;
+            List<Items> temp = new List<Items>(50000);
+            PageInfo page = new PageInfo();
+            page.PageIndex = 0;
+            page.PageSize = 10000;
+            bool isRun = true;
+            while (isRun)
+            {
+                page.PageIndex++;
+                var data = dbContext.ItemsDb.GetPages(new Items(), fun, page);
+                
+                if (data.TotalCount == 0 || data.Results == null)
+                {
+                    isRun = false;
+                    break;
+                }
+                if (data.Results.Count < page.PageSize)
+                {
+                    isRun = false;
+                }
+                temp.AddRange(data.Results);
+            }
+
+            return temp;
+        }
+
+        public static List<Items> GetByTag(string tag)
+        {
+            var dbContext = new DbContext();
+            Expression<Func<Items, bool>> fun = null;
+            fun = (r) => r.Tags.Contains(tag);
+
             return dbContext.ItemsDb.GetList(fun);
         }
 
@@ -110,12 +164,20 @@ namespace BLL
             Result<Items> results = new Result<Items>();
             if (req.IsFull)
             {
-                var tempItems = TaoBaoKeHelper.QueryCoupon(0,req.KeyWord);
+                var tempItems = TaoBaoKeHelper.QueryCoupon(req.KeyWord);
                 if (tempItems.Count > req.PageInfo.PageSize)
                 {
-                    results.Results = tempItems.Take(req.PageInfo.PageSize).ToList();
+                    results.Results = tempItems.OrderByDescending(t => t.CommissionRate).ThenByDescending(t => t.Volume).Skip(req.PageInfo.PageSize * (req.PageInfo.PageIndex - 1)).Take(req.PageInfo.PageSize).ToList();
+                }
+                else
+                {
+                    results.Results = tempItems;
                 }
                 results.TotalCount = tempItems.Count;
+                Task.Factory.StartNew(() =>
+                {
+                    UpdateCache(tempItems);
+                });
                 return results;
             }
             if (mDict.HasValue())
@@ -125,21 +187,21 @@ namespace BLL
                    bool tempResult = m.Status == 1;
                    if (tempResult && req.KeyWord.IsNotNullOrEmpty())
                    {
-                       tempResult = m.Title.Contains(req.KeyWord);
+                       tempResult = m.Title.TryContains(req.KeyWord);
 
                        if (tempResult == false)
                        {
-                           tempResult = m.Tags.Contains(req.KeyWord);
+                           tempResult = m.Tags.TryContains(req.KeyWord);
                        }
 
                        if (tempResult == false)
                        {
-                           tempResult = m.ProductUrl.Contains(req.KeyWord);
+                           tempResult = m.ProductUrl.TryContains(req.KeyWord);
                        }
 
-                       if (tempResult == false)
+                       if (tempResult == false )
                        {
-                           tempResult = m.ProductWapUrl.Contains(req.KeyWord);
+                           tempResult = m.ProductWapUrl.TryContains(req.KeyWord);
                        }
                    }
 
@@ -153,9 +215,9 @@ namespace BLL
                        tempResult = m.ZCId == req.ZCId;
                    }
 
-                   if (tempResult && req.Tag.IsNotNullOrEmpty())
+                   if (tempResult && req.Tag.IsNotNullOrEmpty() && m.Tags != null)
                    {
-                       tempResult = m.Tags.Contains(req.Tag) || m.Title.Contains(req.Tag);
+                       tempResult = m.Tags.TryContains(req.Tag) || m.Title.TryContains(req.Tag);
                    }
 
                    return tempResult;
@@ -180,12 +242,16 @@ namespace BLL
                 results.TotalCount = temp.Count;
                 if (results.TotalCount == 0)
                 {
-                    var tempItems = TaoBaoKeHelper.QueryCoupon(0,req.KeyWord);
+                    var tempItems = TaoBaoKeHelper.QueryCoupon(req.KeyWord);
                     if (tempItems.Count > req.PageInfo.PageSize)
                     {
-                        results.Results = tempItems.Take(req.PageInfo.PageSize).ToList();
+                        results.Results = tempItems.OrderByDescending(t=> t.CommissionRate).ThenByDescending(t => t.Volume).Take(req.PageInfo.PageSize).ToList();
                     }
                     results.TotalCount = tempItems.Count;
+                    Task.Factory.StartNew(() =>
+                    {
+                        UpdateCache(tempItems);
+                    });
                 }
                 return results;
             }
@@ -227,16 +293,21 @@ namespace BLL
             {
                 return;
             }
-            foreach (var item in param)
+            lock (LockObject)
             {
-                if (GetItem(item.NumIid) == null)
+                foreach (var item in param)
                 {
-                    continue;
+                    var temp = GetItem(item.NumIid);
+                    if (temp == null)
+                    {
+                        continue;
+                    }
+                    mDict.Remove(temp);
                 }
-                mDict.Remove(item);
+
+                mDict.AddRange(param);
             }
             
-            mDict.AddRange(param);
         }
 
         public static void BatchInsert(List<Items> param)

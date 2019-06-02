@@ -123,7 +123,7 @@
                     keyword: this.queryKeyword,
 					tag: this.tag,
 					isFull:this.isFull,
-					SortFields:'NumIid',
+					SortFields:'volume',
 					Sort:'desc',
                 };
                 itemsService.get(param).then((res) => {

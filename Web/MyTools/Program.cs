@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace MyTools
 {
@@ -46,20 +47,25 @@ namespace MyTools
             //var xmlPaths = "D:\\BaiduNetdiskDownload\\COCAXML";
             //WordImport.Import(xmlPaths);
             ImportTaobaoke();
-            while (true)
-            {
-                var now = DateTime.Now;
-                if (now.Hour / 8 == 0)
-                {
-                    ImportTaobaoke();
-                }
-                Thread.Sleep(1000 * 60 * 60);
-            }
+            //while (true)
+            //{
+            //    var now = DateTime.Now;
+            //    if (now.Hour / 8 == 0)
+            //    {
+            //        ImportTaobaoke();
+            //    }
+            //    Thread.Sleep(1000 * 60 * 60);
+            //}
         
             //ImportItemDetail();
-            //Console.ReadLine();
+           // Console.ReadLine();
         }
 
+        public static void ImportTaobaoke()
+        {
+            TaoBaoKeHelper.ImportAllTaobaoke();
+            WebRequestHelper.GetResponseContent("http://api.bestddd.com/api/items/refresh/AutoReInit" + DateTime.Now.Hour.ToString());
+        }
         public static void ImportItemDetail()
         {
             //var items = ItemsBLL.GetData();
@@ -85,78 +91,6 @@ namespace MyTools
             //}
 
 
-        }
-
-        public static void ImportTaobaoke()
-        {
-            PageInfo page = new PageInfo();
-            page.PageSize = 100;
-            var cateItems = ItemCateBLL.GetData();
-            var items = ItemsBLL.GetData();
-            List<Items> updateItems = new List<Items>(500);
-            List<Items> addItems = new List<Items>(500);
-            foreach (var item in cateItems)
-            {
-                page.PageIndex = 1;
-                var result = TaoBaoKe.QueryDgItemCoupon(page, 0, item.CateName,1);
-                var tianmaoresult = TaoBaoKe.QueryDgItemCoupon(page, 0, item.CateName, 2);
-                if (result.Count == 0 && tianmaoresult.Count == 0)
-                {
-                    return;
-                }
-                result.AddRange(tianmaoresult);
-                TaoBaoKe.QueryProductDetail(result, 1);
-                TaoBaoKe.QueryProductDetail(result, 2);
-                foreach (var item2 in result)
-                {
-                    var temp = items.FirstOrDefault(a => a.NumIid == item2.NumIid);
-                    if (temp != null)
-                    {
-                        item2.Id = temp.Id;
-                        temp = item2;
-                        if (updateItems.Exists(d => d.NumIid == temp.NumIid) == false)
-                        {
-                            updateItems.Add(temp);
-                        }
-                    }
-                    else
-                    {
-                        items.Add(item2);
-                        addItems.Add(item2);
-                    }
-                }
-                
-                if (addItems.Count >= 500)
-                {
-                    ItemsBLL.BatchInsert(addItems);
-                    addItems.Clear();
-                }
-                if (updateItems.Count >= 500)
-                {
-                    ItemsBLL.BatchUpdate(updateItems);
-                    updateItems.Clear();
-                }
-          }
- 
-            if (addItems.Count > 0)
-            {
-                ItemsBLL.BatchInsert(addItems);
-                addItems.Clear();
-            }
-
-            if (updateItems.Count > 0)
-            {
-                ItemsBLL.BatchUpdate(updateItems);
-                updateItems.Clear();
-            }
-
-            ItemsBLL.ClearSameData();
-
-            Console.WriteLine("Done:"+ DateTime.Now);
-
-            WebRequestHelper.GetResponseContent("http://api.bestddd.com/api/items/refresh/AutoReInit" + DateTime.Now.Hour.ToString());
-
-            //TaskParallelHelper.ExecuteTask(actionItem);
         }
 
         public static void InitCate()

@@ -17,7 +17,18 @@ namespace DotNet.Common
         /// <returns>任意包含返回true,不包含返回false</returns>
         public static bool IsContainsIn(this string thisValue, params string[] inValues)
         {
-            return inValues.Any(it => thisValue.Contains(it));
+            return inValues.Any(it => thisValue.TryContains(it));
+        }
+
+
+        public static bool TryContains(this string thisValue, string param)
+        {
+            if (thisValue == null)
+            {
+                return false;
+            }
+
+           return thisValue.Contains(param);
         }
 
         public static bool IsEqual(this string thisValue, params string[] inValues)

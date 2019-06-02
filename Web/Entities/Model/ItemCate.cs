@@ -34,5 +34,7 @@ namespace Entities.Model
         [SugarColumn(ColumnDescription = "状态，0失效，1有效")]
         public int Status { get; set; }
 
+        [SugarColumn(ColumnDescription = "上一次更新时间")]
+        public DateTime LastUpdateTime { get; set; }
     }
 }

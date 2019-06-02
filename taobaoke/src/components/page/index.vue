@@ -7,8 +7,9 @@
         <div class="container cl">
             <div class="banner-l">
                 <h3>[今日推荐]</h3>
-                <div class="recom">
-                    <div class="pbd" >
+                <div class="slider">
+					<v-slider v-bind="tuijianSlider"></v-slider>
+                   <!-- <div class="pbd" >
 						<ul>
 							<li v-for="item in tuijianData" :key="item.Id">
 								<a :href="item.ClickUrl">
@@ -18,15 +19,17 @@
 								</a>
 							</li>
 						</ul>
-						</div>
-                    <div class="phd"><ul>
-					<li>0</li>
-					<li>1</li>
-					<li>2</li>
-					<li>3</li>
-					<li>4</li>
-					</ul></div>
-                </div>
+					</div>
+					<div class="phd">
+						<ul>
+						<li>0</li>
+						<li>1</li>
+						<li>2</li>
+						<li>3</li>
+						<li>4</li>
+						</ul>
+					</div> -->
+				</div>
             </div>
             <div class="banner cl">
                 <div class="bd">
@@ -51,7 +54,8 @@
                         </div>
 						 -->
             </div>
-        </div>
+          </div>
+    
      </div>
   
   <!--service-->
@@ -70,7 +74,37 @@
      <div class="container cl">
         <div class="indexblock" style="margin-top: 0px;">
                 <div class="hottitle">
-                    <p><i class="iconfont icon-fire"></i>特卖精选</p>
+                    <p><i class="iconfont icon-fire"></i>精选</p>
+                </div>
+                <div class="temai cl">
+                    <ul>
+                        <li v-for="item in jingxuanData" :key="item.Id">
+                            <div class="item">
+                                <a target="_blank" :href="item.ClickUrl" class="link">
+                                    <img :src="item.PicUrl">
+                                </a>
+                                <a  target="_blank" :href="item.ProductUrl" :title="item.Title" class="link"> <p class="text-overflow">{{item.Title}}</p></a>
+                                <div class="price">
+                                    <p class="c-main">￥<span>{{item.FinalPrice}}</span>(券后价)</p><p><del>￥{{item.SellPrice}}</del></p>
+                                </div>
+                                <div class="sales cl">
+                                    <img src="/static/pc/images/taobao.png"> <p>月销量：<span class="c-primary">{{item.Volume}}</span>件</p>
+                                </div>
+                                <a target="_blank" :href="item.ClickUrl" class="coupon">
+                                    <h5>优惠券：<span>{{item.YouhuiPrice}}</span>元</h5>
+                                    <p>立即<br>领券</p>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+        </div>
+    </div>
+
+     <div class="container cl">
+        <div class="indexblock" style="margin-top: 0px;">
+                <div class="hottitle">
+                    <p><i class="iconfont icon-fire"></i>特卖</p>
                 </div>
                 <div class="temai cl">
                     <ul>
@@ -96,7 +130,6 @@
                 </div>
         </div>
     </div>
-
         
       <div class="container cl">
         <div class="indexblock">
@@ -253,9 +286,13 @@
     import itemsService from '@/server/itemsService'
     import session from '@/store/storage'
     import api from '@/server/api'
+     import vSlider from '@/components/common/Slider.vue';
 
     export default {
         name: 'basetable',
+		components: {
+			vSlider
+		},
         data() {
             return {
                 queryKeyword:'',
@@ -263,18 +300,38 @@
                 temaiData: [],
                 renqiData: [],
 				tuijianData: [],
+				jingxuanData:[],
                 //分页
                 totalCount: 0,
                 currentPage: 1,
                 pageSize: 20,
                 totalPage: 0,
                 loading: true,
-            }
-        },
+				tuijianSlider:
+				{
+					styleObject: {
+					  width: '210',
+					  height: '250',
+					  borderRadius: '10px'
+					},
+					interval: 3000,
+					imgStyle: {
+					  borderRadius: '10px'
+					},
+					autoRoll: true,
+					direction: 'right',
+					images: [
+								
+						   ],
+				}
+			}
+		},
         created() {
             this.getData();
             this.getTemai();
             this.getRenqi();
+			this.getTuijian();
+			this.getJingxuan();
         },
         computed: {
            
@@ -290,7 +347,7 @@
                 let param = {
                     pageIndex: this.currentPage,
                     pageSize: this.pageSize,
-                    keyword: this.queryKeyword,
+                    keyword: '首页',
 					SortFields:'youhuiprice',
 					Sort:'desc',
                 };
@@ -308,6 +365,25 @@
                     this.loading = false;
                 })
             },
+			getJingxuan() {
+			    let param = {
+			        pageIndex: 1,
+			        pageSize: 5,
+					SortFields:'youhuiprice',
+					Sort:'desc',
+			        typeId:1,
+					tag:"精选",
+			    };
+			    itemsService.get(param).then((res) => {
+			        if (res && res.statusText == "OK") {
+			            if (res.data && res.data.Result) {
+			                this.jingxuanData = res.data.Result.Results;                     
+			            } else {
+			                this.jingxuanData = [];
+			            }
+			        }
+			    })
+			},
             getTemai() {
                 let param = {
                     pageIndex: 1,
@@ -349,18 +425,22 @@
 			 getTuijian() {
 			    let param = {
 			        pageIndex: 1,
-			        pageSize: 4,
+			        pageSize: 5,
 				    SortFields:'volume',
 					Sort:'desc',
 			        typeId:1,
-					tag:"人气",
+					tag:"推荐",
 			    };
 			    itemsService.get(param).then((res) => {
 			        if (res && res.statusText == "OK") {
 			            if (res.data && res.data.Result) {
-			                this.tuijianData = res.data.Result.Results;                     
+							for (let i in res.data.Result.Results) {
+								var item = res.data.Result.Results[i];
+								this.tuijianSlider.images.push({src:item.PicUrl,title:item.title, tagName: "", url: item.ClickUrl});
+							}
+						   
 			            } else {
-			                this.tuijianData = [];
+			                this.tuijianSlider.images = [];
 			            }
 			        }
 			    })

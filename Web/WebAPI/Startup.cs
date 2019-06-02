@@ -1,7 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using System.Threading.Tasks;
 using BLL;
+using BLL.ThirtyPart;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -86,6 +88,10 @@ namespace WebAPI
             InitBLL.Start();
 #endif
             InitBLL.Start();
+            Task.Factory.StartNew(()=> {
+                TaoBaoKeHelper.ImportAllTaobaoke();
+                TaoBaoKeHelper.ImportTaobaoke();
+            });
         }
     }
 }

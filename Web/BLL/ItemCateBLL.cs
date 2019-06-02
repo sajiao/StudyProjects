@@ -73,6 +73,27 @@ namespace BLL
                 mDict.Add(param);
             }
         }
+        public static void BatchUpdate(List<ItemCate> param)
+        {
+            if (param == null || param.Count == 0)
+            {
+                return;
+            }
+
+            try
+            {
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
+                var dbContext = new DbContext();
+                dbContext.ItemCateDb.UpdateRange(param);
+                sw.Stop();
+                Logger.WriteProcessLog(string.Format("ItemCateBLL.BatchUpdate：{0} 条数据，耗时:{0} ms", param.Count, sw.ElapsedMilliseconds));
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteErrorLog(ex.Message);
+            }
+        }
 
         public static ItemCate Update(ItemCate param)
         {
