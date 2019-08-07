@@ -2,7 +2,7 @@
   <div class="app-container">
     <div class="filter-container">
       <el-input v-model="listQuery.Word" placeholder="word" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter"/>
-			      <el-input v-model="listQuery.Tags" placeholder="tag" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter"/>
+			<el-input v-model="listQuery.Tags" placeholder="tag" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter"/>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{ $t('table.search') }}</el-button>
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">{{ $t('table.add') }}</el-button>
       <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">{{ $t('table.export') }}</el-button>
@@ -29,9 +29,15 @@
         </template>
       </el-table-column>
 			   <el-table-column label="Tags" width="150px">
-			  <template slot-scope="scope">
-			    <span>{{ scope.row.Tags }}</span>
-			  </template>
+				<template slot-scope="scope">
+					<template v-if="scope.row.edit">
+					   <el-input v-model="scope.row.Tags" class="edit-input" size="small"/>
+					   <el-button class="cancel-btn" size="small" icon="el-icon-cancel" type="warning" @click="cancelEdit(scope.row)">cancel</el-button>
+					 </template>
+					 <span v-else>{{ scope.row.Tags }}</span>
+					 <el-button v-if="scope.row.edit" type="success" size="small" icon="el-icon-circle-check-outline" @click="confirmEdit(scope.row)">Ok</el-button>
+					 <el-button v-else type="primary" size="small" icon="el-icon-edit" @click="scope.row.edit=!scope.row.edit"></el-button>
+			  	 </template>
 			</el-table-column>
       <el-table-column label="Trans" width="150px">
         <template slot-scope="scope">
@@ -80,19 +86,9 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="frequency2" align="left" min-width="60">
-        <template slot-scope="scope">
-          <span>{{ scope.row.Frequency2 }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column label="Examination" align="left" min-width="70">
-        <template slot-scope="scope">
-          <span>{{ scope.row.Examination }}</span>
-        </template>
-      </el-table-column>
       <el-table-column :label="$t('table.actions')" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="scope">
+					
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{ $t('table.edit') }}</el-button>
 					 <el-button type="primary" size="mini" @click="handleDelete(scope.row)">{{ $t('table.delete') }}</el-button>
         </template>
@@ -264,6 +260,7 @@ export default {
 				this.total = response.data.Result.TotalCount;
         this.list = items.map(v => {
           this.$set(v, 'edit', false) // https://vuejs.org/v2/guide/reactivity.html
+					v.originalTags = v.Tags;
           return v
         })
         this.loading = false
@@ -352,6 +349,29 @@ export default {
         this.$refs['dataForm'].clearValidate()
       })
     },
+		 cancelEdit(row) {
+		  row.Tags = row.originalTags;
+		  row.edit = false;
+		  this.$message({
+		    message: 'The title has been restored to the original value',
+		    type: 'warning'
+		  })
+		},
+		confirmEdit(row){
+			row.edit = false;
+			baseapi.post(api.wordAPI,row).then(response => {
+			  if (response.data.Id > 0) {
+			    row.originalTags = row.Tags;
+			    this.$notify({
+			      title: '成功',
+			      message: '更新成功',
+			      type: 'success',
+			      duration: 2000
+			    })
+			  }
+			})
+		
+		},
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
