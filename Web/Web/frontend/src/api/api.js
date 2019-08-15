@@ -10,6 +10,7 @@ export default {
   moduleAPI: 'module',
   modulesubAPI: 'modulesub',
   userAPI: 'user',
-  loginAPI: 'login'
+  loginAPI: 'login',
+	tagAPI: 'tag'
 }
 

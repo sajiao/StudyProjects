@@ -49,8 +49,8 @@ export default {
       }
     )
   },
-  delete(apiname,params) {
-    return http.delete(apiname, params
+  delete(apiname,id) {
+    return http.delete(apiname+"/"+id, null
     ).then(
       (response) => {
         return response

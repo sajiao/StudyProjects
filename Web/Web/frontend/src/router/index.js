@@ -190,6 +190,15 @@ export const asyncRouterMap = [
       roles: ['admin', 'editor'] // you can set roles in root nav
     },
     children: [
+			 {
+			  path: 'tag',
+			  component: () => import('@/views/english/tag'),
+			  name: 'tagpage',
+			  meta: {
+			    title: 'tag page',
+			    roles: ['admin'] // or you can only set roles in sub nav
+			  }
+			},
       {
         path: 'page',
         component: () => import('@/views/english/etyma'),

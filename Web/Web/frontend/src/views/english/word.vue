@@ -1,7 +1,8 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.word" placeholder="word" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter"/>
+      <el-input v-model="listQuery.Word" placeholder="word" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter"/>
+			      <el-input v-model="listQuery.Tags" placeholder="tag" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter"/>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{ $t('table.search') }}</el-button>
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">{{ $t('table.add') }}</el-button>
       <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">{{ $t('table.export') }}</el-button>
@@ -16,127 +17,146 @@
       highlight-current-row
       style="width: 100%;"
       @sort-change="sortChange">
-      <el-table-column :label="$t('table.id')" prop="id" sortable="custom" align="center" width="65">
+      <el-table-column :label="$t('table.Id')" prop="Id" sortable="custom" align="center" width="65">
         <template slot-scope="scope">
-          <span>{{ scope.row.id }}</span>
+          <span>{{ scope.row.Id }}</span>
         </template>
       </el-table-column>
 
       <el-table-column label="word" width="150px">
         <template slot-scope="scope">
-          <a href="#" @click="handleUpdate(scope.row)">{{ scope.row.word }}</a>
+          <a href="#" @click="handleUpdate(scope.row)">{{ scope.row.Word }}</a>
         </template>
       </el-table-column>
-
-      <el-table-column label="SplitWord" width="150px">
+			   <el-table-column label="Tags" width="150px">
+			  <template slot-scope="scope">
+			    <span>{{ scope.row.Tags }}</span>
+			  </template>
+			</el-table-column>
+      <el-table-column label="Trans" width="150px">
         <template slot-scope="scope">
-          <span>{{ scope.row.splitWordDesc }}</span>
+          <span>{{ scope.row.Trans }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="SplitWordDesc" width="150px">
+        <template slot-scope="scope">
+          <span>{{ scope.row.SplitWordDesc }}</span>
         </template>
       </el-table-column>
 
       <el-table-column label="EtymaWord" width="150px">
         <template slot-scope="scope">
-          <span>{{ scope.row.etymaWord }}</span>
+          <span>{{ scope.row.EtymaWord }}</span>
         </template>
       </el-table-column>
 
       <el-table-column label="phoneticSymbolUS" width="160px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.phoneticSymbolUS }}</span>
+          <span>{{ scope.row.PhoneticSymbolUS }}</span>
         </template>
       </el-table-column>
 
       <el-table-column label="phoneticSymbolUK" width="160px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.phoneticSymbolUK }}</span>
+          <span>{{ scope.row.PhoneticSymbolUK }}</span>
         </template>
       </el-table-column>
 
       <el-table-column label="desc" align="center" width="150">
         <template slot-scope="scope">
-          <span>{{ scope.row.desc }}</span>
+          <span>{{ scope.row.Desc }}</span>
         </template>
       </el-table-column>
 
       <el-table-column label="zhDesc" align="center" width="150">
         <template slot-scope="scope">
-          <span>{{ scope.row.zhDesc }}</span>
+          <span>{{ scope.row.ZhDesc }}</span>
         </template>
       </el-table-column>
 
       <el-table-column label="frequency" align="left" min-width="60">
         <template slot-scope="scope">
-          <span>{{ scope.row.frequency }}</span>
+          <span>{{ scope.row.Frequency }}</span>
         </template>
       </el-table-column>
 
       <el-table-column label="frequency2" align="left" min-width="60">
         <template slot-scope="scope">
-          <span>{{ scope.row.frequency2 }}</span>
+          <span>{{ scope.row.Frequency2 }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="Examination" align="left" min-width="60">
+      <el-table-column label="Examination" align="left" min-width="70">
         <template slot-scope="scope">
-          <span>{{ scope.row.examination }}</span>
+          <span>{{ scope.row.Examination }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('table.actions')" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{ $t('table.edit') }}</el-button>
+					 <el-button type="primary" size="mini" @click="handleDelete(scope.row)">{{ $t('table.delete') }}</el-button>
         </template>
       </el-table-column>
     </el-table>
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.pageIndex" :limit.sync="listQuery.pageSize" @pagination="getList" />
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="150px" style="width: 700px; margin-left:50px;">
 
-        <el-form-item label="Word" prop="word">
-          <el-input v-model="temp.word" />
+        <el-form-item label="Word" prop="Word">
+          <el-input v-model="temp.Word" />
         </el-form-item>
-
+				
+				 <el-form-item label="Tags">
+				  <el-input v-model="temp.Tags" />
+				</el-form-item>
+				
+        <el-form-item label="Trans" prop="Trans">
+          <el-input v-model="temp.Trans" />
+        </el-form-item>
+				
         <el-form-item label="SplitWord">
-          <el-input v-model="temp.splitWord" />
+          <el-input v-model="temp.SplitWord" />
         </el-form-item>
 
         <el-form-item label="SplitWordDesc">
-          <el-input :autosize="{ minRows: 2, maxRows: 4}" v-model="temp.splitWordDesc" type="textarea" placeholder="Please input" />
+          <el-input :autosize="{ minRows: 2, maxRows: 4}" v-model="temp.SplitWordDesc" type="textarea" placeholder="Please input" />
         </el-form-item>
 
         <el-form-item label="EtymaId" prop="etymaId">
-          <el-input v-model="temp.etymaId" />
+          <el-input v-model="temp.EtymaId" />
         </el-form-item>
 
         <el-form-item label="Level">
-          <el-input v-model="temp.level" />
+          <el-input v-model="temp.Level" />
         </el-form-item>
 
         <el-form-item label="PhoneticSymbolUK" prop="PhoneticSymbolUK">
-          <el-input v-model="temp.phoneticSymbolUK" />
+          <el-input v-model="temp.PhoneticSymbolUK" />
         </el-form-item>
         <el-form-item label="PhoneticSymbolUS" prop="phoneticSymbolUS">
-          <el-input v-model="temp.phoneticSymbolUS" />
+          <el-input v-model="temp.PhoneticSymbolUS" />
         </el-form-item>
         <el-form-item label="Desc">
-          <el-input :autosize="{ minRows: 2, maxRows: 4}" v-model="temp.desc" type="textarea" placeholder="Please input" />
+          <el-input :autosize="{ minRows: 2, maxRows: 4}" v-model="temp.Desc" type="textarea" placeholder="Please input" />
         </el-form-item>
 
         <el-form-item label="ZhDesc">
-          <el-input :autosize="{ minRows: 2, maxRows: 4}" v-model="temp.zhDesc" type="textarea" placeholder="Please input" />
+          <el-input :autosize="{ minRows: 2, maxRows: 4}" v-model="temp.ZhDesc" type="textarea" placeholder="Please input" />
         </el-form-item>
 
         <el-form-item label="FullDesc">
-          <el-input :autosize="{ minRows: 2, maxRows: 6}" v-model="temp.fullDesc" type="textarea" placeholder="Please input" />
+          <el-input :autosize="{ minRows: 2, maxRows: 6}" v-model="temp.FullDesc" type="textarea" placeholder="Please input" />
         </el-form-item>
 
         <el-form-item label="Frequency">
-          <el-input v-model="temp.frequency" />
+          <el-input v-model="temp.Frequency" />
         </el-form-item>
         <el-form-item label="Frequency2">
-          <el-input v-model="temp.frequency2" />
+          <el-input v-model="temp.Frequency2" />
         </el-form-item>
         <el-form-item label="Examination">
-          <el-input v-model="temp.examination" />
+          <el-input v-model="temp.Examination" />
         </el-form-item>
 
       </el-form>
@@ -191,28 +211,30 @@ export default {
       listQuery: {
         pageIndex: 1,
         pageSize: 10,
-        sort: 'id'
+        sort: 'Id'
       },
       importanceOptions: [1, 2, 3],
-      sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
+      sortOptions: [{ label: 'ID Ascending', key: '+Id' }, { label: 'ID Descending', key: '-Id' }],
       showReviewer: false,
       temp: {
-        id: undefined,
-        word: '',
-        etymaId: 0,
-        desc: '',
-        extention: '',
-        phoneticSymbolUK: '',
-        phoneticSymbolUS: '',
-        fullDesc: '',
-        zhDesc: '',
-        frequency: 0,
-        frequency2: '',
-        examination: '',
-        splitWord: '',
-        splitWordDesc: '',
-        level: '',
-        status: 1
+        Id: undefined,
+				Trans:'',
+				Tags:'',
+        Word: '',
+        EtymaId: 0,
+        Desc: '',
+        Extention: '',
+        PhoneticSymbolUK: '',
+        PhoneticSymbolUS: '',
+        FullDesc: '',
+        ZhDesc: '',
+        Frequency: 0,
+        Frequency2: '',
+        Examination: '',
+        SplitWord: '',
+        SplitWordDesc: '',
+        Level: '',
+        Status: 1
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -223,22 +245,23 @@ export default {
       dialogPvVisible: false,
       pvData: [],
       rules: {
-        word: [{ required: true, message: 'word is required', trigger: 'change' }],
-        extention: [{ required: true, message: 'extention is required', trigger: 'change' }]
+        Word: [{ required: true, message: 'word is required', trigger: 'change' }],
+        Extention: [{ required: true, message: 'extention is required', trigger: 'change' }]
       },
       downloadLoading: false
     }
   },
   created() {
     const id = this.$route.params && this.$route.params.id
-    this.getList(id)
+		this.listQuery.EtymaId = id;
+    this.getList()
   },
   methods: {
-    getList(id) {
-      this.loading = true
-      this.listQuery.etymaId = id
+    getList() {
+      this.loading = true;
       baseapi.get(api.wordAPI,this.listQuery).then(response => {
-        const items = response.data.result
+        const items = response.data.Result.Results;
+				this.total = response.data.Result.TotalCount;
         this.list = items.map(v => {
           this.$set(v, 'edit', false) // https://vuejs.org/v2/guide/reactivity.html
           return v
@@ -259,36 +282,38 @@ export default {
     },
     sortChange(data) {
       const { prop, order } = data
-      if (prop === 'id') {
+      if (prop === 'Id') {
         this.sortByID(order)
       }
     },
     sortByID(order) {
       if (order === 'ascending') {
-        this.listQuery.sort = '+id'
+        this.listQuery.sort = 'Id'
       } else {
-        this.listQuery.sort = '-id'
+        this.listQuery.sort = 'Id'
       }
       this.handleFilter()
     },
     resetTemp() {
       this.temp = {
-        id: undefined,
-        word: '',
-        etymaId: 0,
-        desc: '',
-        extention: '',
-        phoneticSymbolUK: '',
-        phoneticSymbolUS: '',
-        fullDesc: '',
-        zhDesc: '',
-        frequency: 0,
-        frequency2: '',
-        examination: '',
-        splitWord: '',
-        splitWordDesc: '',
-        level: '',
-        status: 1
+        Id: undefined,
+				Trans:'',
+        Word: '',
+				Tags:'',
+        EtymaId: 0,
+        Desc: '',
+        Extention: '',
+        PhoneticSymbolUK: '',
+        PhoneticSymbolUS: '',
+        FullDesc: '',
+        ZhDesc: '',
+        Frequency: 0,
+        Frequency2: '',
+        Examination: '',
+        plitWord: '',
+        SplitWordDesc: '',
+        Level: '',
+        Status: 1
       }
     },
     handleCreate() {
@@ -304,8 +329,8 @@ export default {
         if (valid) {
           this.loading = true
           baseapi.post(api.wordAPI,this.temp).then(response => {
-            if (response.data.id > 0) {
-              this.list.unshift(this.temp)
+            if (response.data.Id > 0) {
+              this.list.unshift(response.data);
               this.dialogFormVisible = false
               this.$notify({
                 title: '成功',
@@ -331,9 +356,9 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           baseapi.post(api.wordAPI,this.temp).then(response => {
-            if (response.data.id > 0) {
+            if (response.data.Id > 0) {
               for (const v of this.list) {
-                if (v.id === this.temp.id) {
+                if (v.Id === this.temp.Id) {
                   const index = this.list.indexOf(v)
                   this.list.splice(index, 1, this.temp)
                   break
@@ -354,14 +379,39 @@ export default {
       })
     },
     handleDelete(row) {
-      this.$notify({
-        title: '成功',
-        message: '删除成功',
-        type: 'success',
-        duration: 2000
-      })
-      const index = this.list.indexOf(row)
-      this.list.splice(index, 1)
+			debugger;
+		 this.$confirm('确认是否删除?', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+						type: 'warning'
+					}).then(() => {
+						 const index = this.list.indexOf(row)
+						this.list.splice(index, 1)
+					  this.$notify({
+					     title: '成功',
+					     message: '删除成功',
+					     type: 'success',
+					     duration: 2000
+					   })
+					}).catch(() => {
+						 this.$notify({
+						   title: '失败',
+						   message: '删除失败',
+						   type: 'error',
+						   duration: 2000
+						 })      
+					});
+			// baseapi.delete(api.wordAPI,row.Id).then(response => {
+			//   this.$notify({
+			//      title: '成功',
+			//      message: '删除成功',
+			//      type: 'success',
+			//      duration: 2000
+			//    })
+			// 	 const index = this.list.indexOf(row)
+			// 	 this.list.splice(index, 1)
+			// })
+			     
     },
     handleFetchPv(pv) {
       fetchPv(pv).then(response => {
